@@ -20,8 +20,10 @@ try{
     echo $Exception->getMessage( ).' : '.$Exception->getCode( );
 }
 
-$dirsource    = '/home/ubuntu/tri2/vidéos/';
-//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+//$dirsource    = '/home/ubuntu/tri/toRestore/';
+//$dest         = '/home/ubuntu/tri/oridir/';
+
+$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
 $dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
 $files = scandir($dirsource);
 
@@ -44,12 +46,18 @@ foreach ($files as $file){
 
         if ($rows->rowCount() == 1) {
             $row = $rows->fetchAll();
-            print_r($row);
+            $bname = basename($row[0]['s_path']);
+            $oldFile = $dirsource.$file;
+            $newFile = $dest.$bname;
+            if (copy( $oldFile, $newFile)){
+                echo "Copy OK";
+            }else{
+                echo "COPY KO";
+            }
         } elseif ($rows->rowCount() == 0) {
             echo "0 ligne";
         } else {
-            $row = $rows->fetchAll();
-            print_r($row);
+            echo $rows->rowCount().' lignes'."\n";
         }
 
         echo "\n";
