@@ -15,11 +15,16 @@ $VALEUR_mot_de_passe='alaidin';
 $ret= array();
 $ret['single'] = array();
 $ret['doublon'] = array();
+$ret['total'] = array();
+$nb = 0;
 
-function testFile($dirsource, $dest, $file, $pdo, &$ret){
+function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb){
     $fileSize = filesize($dirsource.$file);
     $fileDet = explode('.', $file);
     $fileExt = $fileDet[1];
+
+    echo $nb."\n";
+    $nb = $nb +1;
 
     if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
         return false;
@@ -29,9 +34,13 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret){
 
         if (!array_key_exists($fileExt, $ret['doublon']))
             $ret['doublon'][$fileExt] = 0;
+
+        if (!array_key_exists($fileExt, $ret['total']))
+            $ret['total'][$fileExt] = 0;
     }
 
-    echo $file."\n";
+    //echo $nb."\n";
+    //$nb = $nb +1;
 
     $sql = "SELECT s_path
             FROM `total-refontedam`.image_file imf, `total-refontedam`.container co, `total-refontedam`.image_infofr info
@@ -40,7 +49,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret){
               AND right(co.s_reference,3) = '".$fileExt."'
               AND i_filesize = ".$fileSize;
 
-    $rows = $pdo->query($sql);
+    try{
+	$rows = $pdo->query($sql);
 
     if ($rows->rowCount() == 1) {
 //        $row = $rows->fetchAll();
@@ -54,13 +64,22 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret){
 //        }
 
         $ret['single'][$fileExt] = $ret['single'][$fileExt] +1;
-
     } elseif ($rows->rowCount() > 1) {
         $ret['doublon'][$fileExt] = $ret['doublon'][$fileExt] +1;
     }
+}catch( PDOException $Exception ) {
+    // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+    // String.
+    echo $Exception->getMessage( ).' : '.$Exception->getCode( )."\n";
+$log = $dirsource.$file.'##'.$Exception->getMessage( ).' : '.$Exception->getCode( )."\n";
+    file_put_contents('/home/ubuntu/log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
 }
 
-function _readDir($dirsource, $dest, $pdo, &$ret){
+
+   $ret['total'][$fileExt] = $ret['total'][$fileExt] +1;
+}
+
+function _readDir($dirsource, $dest, $pdo, &$ret, &$nb){
     $files = scandir($dirsource);
 
     foreach ($files as $file){
@@ -68,9 +87,9 @@ function _readDir($dirsource, $dest, $pdo, &$ret){
         if ($file == '..') continue;
 
         if (!is_dir($dirsource.$file)) {
-            testFile($dirsource,$dest,$file, $pdo, $ret);
+            testFile($dirsource,$dest,$file, $pdo, $ret, $nb);
         }else{
-            _readDir($dirsource.$file.'/', $dest, $pdo, $ret);
+            _readDir($dirsource.$file.'/', $dest, $pdo, $ret, $nb);
         }
     }
 }
@@ -84,11 +103,13 @@ try{
 }
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-//$dest         = '/home/ubuntu/tri/oridir/';
+$dirsource = '/home/ubuntu/restore/';
+$dest         = '/home/ubuntu/tri/oridir/';
 
-$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
+//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
 
-_readDir($dirsource, $dest, $pdo, $ret);
+_readDir($dirsource, $dest, $pdo, $ret, $nb);
 
+echo "\n";
 print_r($ret);
