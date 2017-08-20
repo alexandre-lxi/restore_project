@@ -27,6 +27,12 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
     echo $nb."\n";
     $nb = $nb + 1;
 
+    if (($nb % 1000) ==0){
+        //file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        die();
+    }
+
     if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
         return false;
     } else {
@@ -59,15 +65,31 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
         if (count($rows) == 1) {
-//        $row = $rows->fetchAll();
-//        $bname = basename($row[0]['s_path']);
-//        $oldFile = $dirsource.$file;
-//        $newFile = $dest.$bname;
-//        if (copy( $oldFile, $newFile)){
-//            echo "Copy OK";
-//        }else{
-//            echo "COPY KO";
-//        }
+            $fname = $rows[0]->s_path;
+            $bname = basename($fname);
+            $dname = $dest.dirname($fname).'/';
+
+            if (!file_exists($dname)){
+                if (!mkdir($dname, 0777, true)) {
+                    die('Echec lors de la création des répertoires...');
+                }
+            }
+
+//            echo $fname."\n";
+//            echo $bname."\n";
+//            echo $dname."\n";
+
+            $oldFile = $dirsource.$file;
+            $newFile = $dname.$bname;
+
+//            echo $oldFile."\n";
+//            echo $newFile."\n";
+
+            if (!copy( $oldFile, $newFile)){
+                $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
+                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+                //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+            }
 
             $ret['single'][$fileExt] = $ret['single'][$fileExt] + 1;
         } elseif (count($rows) > 1) {
@@ -78,7 +100,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
         // String.
         echo $Exception->getMessage().' : '.$Exception->getCode()."\n";
         $log = $dirsource.$file.'##'.$fileExt.'##'.$fileSize.'##'.$Exception->getMessage().' : '.$Exception->getCode()."\n";
-        file_put_contents('/home/ubuntu/log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
+        file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+        //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
     }
 
     $ret['total'][$fileExt] = $ret['total'][$fileExt] + 1;
@@ -109,13 +132,13 @@ try {
 }
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/restore/';
-$dest = '/home/ubuntu/tri/oridir/';
+$dirsource = '/home/ubuntu/restore/toAnalyse/';
+$dest = '/home/ubuntu/restore/toAnalyse/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
+//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
 
 _readDir($dirsource, $dest, $pdo, $ret, $nb);
 
-echo "\n";
-print_r($ret);
+file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n", FILE_APPEND);
+//file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n", FILE_APPEND);
