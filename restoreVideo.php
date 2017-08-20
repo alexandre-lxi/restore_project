@@ -20,8 +20,8 @@ try{
     echo $Exception->getMessage( ).' : '.$Exception->getCode( );
 }
 
-//$dir    = '/home/ubuntu/';
-$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+$dirsource    = '/home/ubuntu/tri2/vidéos/';
+//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
 $dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
 $files = scandir($dirsource);
 
