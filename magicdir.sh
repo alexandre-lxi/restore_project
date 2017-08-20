@@ -260,15 +260,22 @@ fi
 
 # Définition des répertoires (à adapter si besoin) :
 TXT="${DIR}/txt"
-PDF="${DIR}/pdf"
-AUDIO="${DIR}/musique"
-VIDEO="${DIR}/videos"
-IMG="${DIR}/images"
-ARCHIVES="${DIR}/archives"
-DOCS="${DIR}/office"
+PDF="${DIR}/toRestore"
+AUDIO="${DIR}/toRestore"
+VIDEO="${DIR}/toRestore"
+IMG="${DIR}/toRestore"
+ARCHIVES="${DIR}/toRestore"
+DOCS="${DIR}/toRestore"
 TEX="${DIR}/documents"
 MISC="${DIR}/divers"
 BIN="${DIR}/executables"
+
+# PDF="${DIR}/pdf"
+#AUDIO="${DIR}/musique"
+#VIDEO="${DIR}/videos"
+#IMG="${DIR}/images"
+#ARCHIVES="${DIR}/archives"
+#DOCS="${DIR}/office"
 
 # Création des répertoires de tri dans le dossier cible
 createdirs
