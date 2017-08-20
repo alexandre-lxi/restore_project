@@ -109,11 +109,11 @@ try {
 }
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-//$dirsource = '/home/ubuntu/restore/';
-//$dest = '/home/ubuntu/tri/oridir/';
+$dirsource = '/home/ubuntu/restore/';
+$dest = '/home/ubuntu/tri/oridir/';
 
-$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
+//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/dest/';
 
 _readDir($dirsource, $dest, $pdo, $ret, $nb);
 
