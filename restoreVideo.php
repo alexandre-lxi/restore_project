@@ -28,8 +28,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
     $nb = $nb + 1;
 
     if (($nb % 5000) ==0){
-        //file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
-        file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        //file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
 //        die();
     }
 
@@ -86,8 +86,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
 
             if (!copy( $oldFile, $newFile)){
                 $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
-                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
                 //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
             }
 
             $ret['single'][$fileExt] = $ret['single'][$fileExt] + 1;
@@ -99,8 +99,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
         // String.
         echo $Exception->getMessage().' : '.$Exception->getCode()."\n";
         $log = $dirsource.$file.'##'.$fileExt.'##'.$fileSize.'##'.$Exception->getMessage().' : '.$Exception->getCode()."\n";
-        file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
         //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+        file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
     }
 
     $ret['total'][$fileExt] = $ret['total'][$fileExt] + 1;
@@ -131,13 +131,13 @@ try {
 }
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/restore/toAnalyse/';
-$dest = '/home/ubuntu/restore/newdir';
+//$dirsource = '/home/ubuntu/restore/toAnalyse/';
+//$dest = '/home/ubuntu/restore/newdir';
 
-//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
+$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
 
 _readDir($dirsource, $dest, $pdo, $ret, $nb);
 
-file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n", FILE_APPEND);
-//file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n", FILE_APPEND);
+//file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n", FILE_APPEND);
+file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n", FILE_APPEND);
