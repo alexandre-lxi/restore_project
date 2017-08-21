@@ -58,7 +58,7 @@ function getId3Cover($filename, $dst)
         fclose($fp);
     } else {
         ztrace("getId3Cover did NOT retreive cover, copy icon");
-        $rtn = copy(realpath("./ico")."/wav.jpg", $dst);
+        $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/wav.jpg", $dst);
     }
 }
 
