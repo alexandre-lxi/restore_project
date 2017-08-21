@@ -28,16 +28,16 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
     $nb = $nb + 1;
 
     if (($nb % 5000) ==0){
-        file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
-        //file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
-//        die();
+        //file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
+        die();
     }
 
     if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
         return false;
     } else {
-        if (!array_key_exists($fileExt, $ret['single']))
-            $ret['single'][$fileExt] = 0;
+//        if (!array_key_exists($fileExt, $ret['single']))
+//            $ret['single'][$fileExt] = 0;
 
         if (!array_key_exists($fileExt, $ret['doublon']))
             $ret['doublon'][$fileExt] = 0;
@@ -64,43 +64,62 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-        if (count($rows) == 1) {
-            $fname = $rows[0]->i_autocode.$rows[0]->s_fileformat;
-            $dname = $dest.'/oridir/';
-
-            if (!file_exists($dname)){
-                if (!mkdir($dname, 0777, true)) {
-                    die('Echec lors de la création des répertoires...');
-                }
-            }
-
-//            echo $fname."\n";
-//            echo $bname."\n";
-//            echo $dname."\n";
-
+//        if (count($rows) == 1) {
+//            $fname = $rows[0]->i_autocode.$rows[0]->s_fileformat;
+//            $dname = $dest.'/oridir/';
+//
+//            if (!file_exists($dname)){
+//                if (!mkdir($dname, 0777, true)) {
+//                    die('Echec lors de la création des répertoires...');
+//                }
+//            }
+//
+////            echo $fname."\n";
+////            echo $bname."\n";
+////            echo $dname."\n";
+//
+//            $oldFile = $dirsource.$file;
+//            $newFile = $dname.$fname;
+//
+////            echo $oldFile."\n";
+////            echo $newFile."\n";
+//
+//            if (!copy( $oldFile, $newFile)){
+//                $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
+//                //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+//                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+//            }
+//
+//            $ret['single'][$fileExt] = $ret['single'][$fileExt] + 1;
+//        } else
+            if (count($rows) > 1) {
             $oldFile = $dirsource.$file;
-            $newFile = $dname.$fname;
 
-//            echo $oldFile."\n";
-//            echo $newFile."\n";
-
-            if (!copy( $oldFile, $newFile)){
-                $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
-                //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            }
-
-            $ret['single'][$fileExt] = $ret['single'][$fileExt] + 1;
-        } elseif (count($rows) > 1) {
             $ret['doublon'][$fileExt] = $ret['doublon'][$fileExt] + 1;
+
+            foreach ($rows as $row){
+                $fname = $row->i_autocode.$row->s_fileformat;
+
+                $sql = "insert into restore_dbl values (:i_code, :s_format, :fname, :oldfile, :restore)";
+                $req = $pdo->prepare($sql);
+                
+                $req->bindValue(':i_code', $row->i_autocode, PDO::PARAM_INT);
+                $req->bindValue(':s_format', $row->s_fileformat, PDO::PARAM_STR);
+                $req->bindValue(':fname', $fname, PDO::PARAM_STR);
+                $req->bindValue(':oldfile', $oldFile, PDO::PARAM_STR);
+                $req->bindValue(':restore', false, PDO::PARAM_BOOL);
+
+                $req->execute();
+
+            }
         }
     } catch (PDOException $Exception) {
         // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
         // String.
         echo $Exception->getMessage().' : '.$Exception->getCode()."\n";
         $log = $dirsource.$file.'##'.$fileExt.'##'.$fileSize.'##'.$Exception->getMessage().' : '.$Exception->getCode()."\n";
-        //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
         file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+        //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
     }
 
     $ret['total'][$fileExt] = $ret['total'][$fileExt] + 1;
@@ -131,13 +150,13 @@ try {
 }
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-//$dirsource = '/home/ubuntu/restore/toAnalyse/';
-//$dest = '/home/ubuntu/restore/newdir';
+$dirsource = '/home/ubuntu/restore/toAnalyse/';
+$dest = '/home/ubuntu/restore/newdir';
 
-$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
+//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
+//$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
 
 _readDir($dirsource, $dest, $pdo, $ret, $nb);
 
-//file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n", FILE_APPEND);
-file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n", FILE_APPEND);
+file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n", FILE_APPEND);
+//file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n", FILE_APPEND);
