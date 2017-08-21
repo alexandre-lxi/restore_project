@@ -36,7 +36,7 @@ WHERE co.i_autocode = imf.i_foreigncode
     $nb = 0;
 
     foreach ($rows as $row){
-        $fname = $dirsource.$row->filename;
+            $fname = $dirsource.$row->filename;
 
         if (!file_exists($fname)){
             $sql = "update container set b_isonline = 0 where i_autocode = :id";
