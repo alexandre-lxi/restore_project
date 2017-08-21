@@ -17,10 +17,14 @@ try {
 
     $dirsource = '/home/ubuntu/restore/newdir/oridir/';
     $files = scandir($dirsource);
+    $nb = 0;
 
     foreach ($files as $file) {
         if ($file == '.') continue;
         if ($file == '..') continue;
+
+        $nb++;
+        echo $nb."\n";
 
         $fileDet = explode('.', $file);
         $fileCode = $fileDet[0];
