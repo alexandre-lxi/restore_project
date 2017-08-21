@@ -5,6 +5,7 @@
  * Date: 21/08/17
  * Time: 09:01
  */
+include("/var/www/utils/getid3/getid3/getid3.php");
 
 $VALEUR_hote = 'localhost';
 $VALEUR_port = '3306';
