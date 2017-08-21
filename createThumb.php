@@ -445,40 +445,42 @@ function convertFile($infile, $outfile, $param)
             }
             else	// new method
             {
-                if($inData['ID_VIDEO_WIDTH'] > zMAX_VIDEO_WIDTH && $inData['ID_VIDEO_HEIGHT'])	// we choose to resize if video width is larger than 400px
-                {
-                    $ratio						= $inData['ID_VIDEO_WIDTH'] / $inData['ID_VIDEO_HEIGHT'];
-                    $inData['ID_VIDEO_WIDTH'] 	= zMAX_VIDEO_WIDTH;
-                    $inData['ID_VIDEO_HEIGHT']	= round($inData['ID_VIDEO_WIDTH'] / $ratio);
-                }
-                if($inData['ID_VIDEO_WIDTH']%2)
-                    $inData['ID_VIDEO_WIDTH'] = $inData['ID_VIDEO_WIDTH'] - 1;	// only even numbers
-                if($inData['ID_VIDEO_HEIGHT']%2)
-                    $inData['ID_VIDEO_HEIGHT'] = $inData['ID_VIDEO_HEIGHT'] - 1;	// only even numbers
-                //$tc 		= round($inData['ID_LENGTH'] / 2);
-                if(!isset($param['capturetime']))
-                    $tc 	= $inData['ID_LENGTH'] > 10 ? 10 : round($inData['ID_LENGTH'] / 2);
-                else
-                    $tc		= $param['capturetime'];
+                try {
+                    if ($inData['ID_VIDEO_WIDTH'] > zMAX_VIDEO_WIDTH && $inData['ID_VIDEO_HEIGHT'])    // we choose to resize if video width is larger than 400px
+                    {
+                        $ratio = $inData['ID_VIDEO_WIDTH'] / $inData['ID_VIDEO_HEIGHT'];
+                        $inData['ID_VIDEO_WIDTH'] = zMAX_VIDEO_WIDTH;
+                        $inData['ID_VIDEO_HEIGHT'] = round($inData['ID_VIDEO_WIDTH'] / $ratio);
+                    }
+                    if ($inData['ID_VIDEO_WIDTH'] % 2)
+                        $inData['ID_VIDEO_WIDTH'] = $inData['ID_VIDEO_WIDTH'] - 1;    // only even numbers
+                    if ($inData['ID_VIDEO_HEIGHT'] % 2)
+                        $inData['ID_VIDEO_HEIGHT'] = $inData['ID_VIDEO_HEIGHT'] - 1;    // only even numbers
+                    //$tc 		= round($inData['ID_LENGTH'] / 2);
+                    if (!isset($param['capturetime']))
+                        $tc = $inData['ID_LENGTH'] > 10 ? 10 : round($inData['ID_LENGTH'] / 2);
+                    else
+                        $tc = $param['capturetime'];
 
-                $convert 	= "ffmpeg -i \"".$infile."\" -ss ".$tc." -vframes 1 -s ".$inData['ID_VIDEO_WIDTH']."x".$inData['ID_VIDEO_HEIGHT']." out%d.jpg";
-                $curdir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project";
-                $rndir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project/tmp/".rand(1000,9999);
-                ztrace("try to create $rndir");
-                if(!mkdir($rndir,0777,true))
-                    ztrace("unable to create $rndir");
-                chdir($rndir);
-                ztrace($convert);
-                system($convert);
-                if(file_exists($rndir."/out1.jpg"))
-                {
-                    $rtn = rename($rndir."/out1.jpg", $outfile);
-                    ztrace("rename ".$rndir."/out1.jpg to "."\"".$outfile."\" , res: " . $rtn);
-                    chdir($curdir);
-                    rmdir($rndir);
+                    $convert = "ffmpeg -i \"".$infile."\" -ss ".$tc." -vframes 1 -s ".$inData['ID_VIDEO_WIDTH']."x".$inData['ID_VIDEO_HEIGHT']." out%d.jpg";
+                    $curdir = "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project";
+                    $rndir = "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project/tmp/".rand(1000, 9999);
+                    ztrace("try to create $rndir");
+                    if (!mkdir($rndir, 0777, true))
+                        ztrace("unable to create $rndir");
+                    chdir($rndir);
+                    ztrace($convert);
+                    system($convert);
+                    if (file_exists($rndir."/out1.jpg")) {
+                        $rtn = rename($rndir."/out1.jpg", $outfile);
+                        ztrace("rename ".$rndir."/out1.jpg to "."\"".$outfile."\" , res: ".$rtn);
+                        chdir($curdir);
+                        rmdir($rndir);
+                    } else
+                        ztrace(" ## Unable to create thumb image from video");
+                }catch (Exception $e){
+
                 }
-                else
-                    ztrace(" ## Unable to create thumb image from video");
             }
             break;
         case 'mp3':
