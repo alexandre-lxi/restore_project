@@ -530,7 +530,7 @@ try {
         WHERE co.i_autocode = imf.i_foreigncode
           AND co.i_autocode = info.i_foreigncode
           and imf.s_fileformat is not NULL
-          and co.i_autocode BETWEEN  53116 and 53200
+          and co.i_autocode > 50000
               order by 1 desc";
 
 //ztrace($sql);
