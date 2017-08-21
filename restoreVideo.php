@@ -27,10 +27,10 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
     echo $nb."\n";
     $nb = $nb + 1;
 
-    if (($nb % 1000) ==0){
+    if (($nb % 5000) ==0){
         //file_put_contents('/var/www/project/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
         file_put_contents('/home/ubuntu/log.txt', json_encode($ret)."\n"."\n", FILE_APPEND);
-        die();
+//        die();
     }
 
     if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
@@ -50,7 +50,7 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
     //$nb = $nb +1;
 
     try {
-        $sql = "SELECT s_path
+        $sql = "SELECT co.i_autocode, imf.s_fileformat
             FROM `total-refontedam`.image_file imf, `total-refontedam`.container co, `total-refontedam`.image_infofr info
             WHERE co.i_autocode = imf.i_foreigncode
               AND co.i_autocode = info.i_foreigncode
@@ -65,9 +65,8 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
         if (count($rows) == 1) {
-            $fname = $rows[0]->s_path;
-            $bname = basename($fname);
-            $dname = $dest.dirname($fname).'/';
+            $fname = $rows[0]->i_autocode.$rows[0]->s_fileformat;
+            $dname = $dest.'/oridir/';
 
             if (!file_exists($dname)){
                 if (!mkdir($dname, 0777, true)) {
@@ -80,7 +79,7 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
 //            echo $dname."\n";
 
             $oldFile = $dirsource.$file;
-            $newFile = $dname.$bname;
+            $newFile = $dname.$fname;
 
 //            echo $oldFile."\n";
 //            echo $newFile."\n";
@@ -133,7 +132,7 @@ try {
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 $dirsource = '/home/ubuntu/restore/toAnalyse/';
-$dest = '/home/ubuntu/restore/toAnalyse/newdir';
+$dest = '/home/ubuntu/restore/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
 //$dest = '/home/alex/Documents/IRIS/Clients/kwk/total/restore';
