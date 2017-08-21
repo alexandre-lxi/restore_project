@@ -64,7 +64,7 @@ function getId3Cover($filename, $dst)
 function ProcessStichelbautWebImage($srcfile, $dstfile, $newsize, $w,$h,$d)
 {
     global	$config;
-    $profile 	= str_replace("\\", "/",realpath("./")) ."/icc/sRGBColorSpaceProfile.icm";
+    $profile 	= "/var/www/utils/icc/sRGBColorSpaceProfile.icm";
     $dim	 	= $newsize;
     $q			= $config['jpeg_web_quality'];
     if($w > $h)
@@ -427,8 +427,8 @@ function convertFile($infile, $outfile, $param)
             {
                 $tc = intval($inData['ID_LENGTH']) / 2;
                 $convert = "mplayer -ss ".$tc." -vo jpeg -nosound -frames 1 \"".$infile."\"";
-                $curdir	= realpath("./");
-                $rndir	= realpath("./account/pictures/tmp") . "/".rand(1000,9999);
+                $curdir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project";
+                $rndir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project/tmp/".rand(1000,9999);
                 ztrace("try to create $rndir");
                 if(!mkdir($rndir))
                     ztrace("unable to create $rndir");
@@ -462,10 +462,10 @@ function convertFile($infile, $outfile, $param)
                     $tc		= $param['capturetime'];
 
                 $convert 	= "ffmpeg -i \"".$infile."\" -ss ".$tc." -vframes 1 -s ".$inData['ID_VIDEO_WIDTH']."x".$inData['ID_VIDEO_HEIGHT']." out%d.jpg";
-                $curdir	= realpath("./");
-                $rndir	= realpath("./account/pictures/tmp") . "/".rand(1000,9999);
+                $curdir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project";
+                $rndir	= "/var/www/projects/total-1410-refontedam/restoreDir/scrypt/restore_project/tmp/".rand(1000,9999);
                 ztrace("try to create $rndir");
-                if(!mkdir($rndir))
+                if(!mkdir($rndir,0777,true))
                     ztrace("unable to create $rndir");
                 chdir($rndir);
                 ztrace($convert);
