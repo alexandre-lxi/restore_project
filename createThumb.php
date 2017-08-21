@@ -16,9 +16,9 @@ $VALEUR_mot_de_passe = 'alaidin';
 //$dest = '/home/ubuntu/restore/toAnalyse/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$oridir = '/home/alex/Documents/IRIS/Clients/kwk/total/restore/oridir/';
-$thumbdir = '/home/alex/Documents/IRIS/Clients/kwk/total/restore/thumbdir/';
-$webdir = '/home/alex/Documents/IRIS/Clients/kwk/total/restore/webdir/';
+$oridir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/oridir/';
+$thumbdir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/thumbdir/';
+$webdir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/webdir/';
 
 define("COLORSPACE_RGB", "RGB");
 define("COLORSPACE_CMYK","CMYK");
