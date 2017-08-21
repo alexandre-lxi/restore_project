@@ -40,6 +40,26 @@ function getFileExtension($file, $withdot=false)
         return strtolower(substr($file, strrpos($file,".")+1));
 }
 
+function getId3Cover($filename, $dst)
+{
+    ztrace("getId3Cover : ".$filename." , ".$dst);
+    $data = array();
+    $getID3 = new getID3();
+    $fileinfo = $getID3->analyze($filename);
+    if (isset($fileinfo ['id3v2']['APIC'][0]['data'])) {
+        if (function_exists("ztrace")) {
+            ztrace("getId3Cover retreived cover, write it in ".$dst);
+        }
+        $picture = $fileinfo['id3v2']['APIC'][0]['data']; // binary image data
+        $fp = fopen($dst, "w");
+        fwrite($fp, $picture);
+        fclose($fp);
+    } else {
+        ztrace("getId3Cover did NOT retreive cover, copy icon");
+        $rtn = copy(realpath("./ico")."/wav.jpg", $dst);
+    }
+}
+
 function ProcessStichelbautWebImage($srcfile, $dstfile, $newsize, $w,$h,$d)
 {
     global	$config;
@@ -496,10 +516,9 @@ function convertFile($infile, $outfile, $param)
             //	$cmd = "convert -resize ".$param['newsize']."x".$param['newsize']." ".realpath("./ico")."/unknown.jpg ".$outfile);
             //	ztrace($convert);
             //	system($convert);
-            $rtn = copy(realpath("./ico")."/unknown.jpg", $outfile);
-            ztrace("copy ".realpath("./ico")."/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
+            $rtn = copy("/var/www//projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
+            ztrace("copy /var/www//projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
             ztrace("Extension non référencée" .$fileExtension);
-            include_once("api.util_mail.php");
         /*fastMail("Extension non référencée sur ".$_SERVER['HTTP_HOST'].": $infile",
         "Fichier concerné:\n\n $infile \n\n".$fileExtension."\n\n".print_r($_SESSION), "debugmaload.com","dsnook@maload.com");	*/
     }
@@ -513,7 +532,8 @@ try {
         FROM image_file imf, container co, image_infofr info
         WHERE co.i_autocode = imf.i_foreigncode
           AND co.i_autocode = info.i_foreigncode
-            and imf.s_fileformat is not NULL
+          and imf.s_fileformat is not NULL
+          and co.i_auticode BETWEEN  53116 and 53200
               order by 1 desc";
 
 //ztrace($sql);
