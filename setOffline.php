@@ -6,17 +6,17 @@
  * Time: 09:01
  */
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = 'localhost';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-//$dirsource = '/home/ubuntu/restore/toAnalyse/';
+$dirsource = '/var/www/tmp_total/newdir/oridir/';
 //$dest = '/home/ubuntu/restore/toAnalyse/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/restore/oridir/';
+//$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/restore/oridir/';
 
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -24,9 +24,9 @@ try {
     $sql = "SELECT co.i_autocode, concat(co.i_autocode , imf.s_fileformat) filename
 FROM image_file imf, `total-refontedam`.container co, `total-refontedam`.image_infofr info
 WHERE co.i_autocode = imf.i_foreigncode
-  AND co.i_autocode = info.i_foreigncode
-  and co.b_isonline = 1
-  and imf.s_fileformat is not NULL ";
+AND co.i_autocode = info.i_foreigncode
+AND co.b_isonline = 1
+AND imf.s_fileformat IS NOT NULL ";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -35,18 +35,22 @@ WHERE co.i_autocode = imf.i_foreigncode
 
     $nb = 0;
 
-    foreach ($rows as $row){
-            $fname = $dirsource.$row->filename;
+    foreach ($rows as $row) {
+        $fname = $dirsource.$row->filename;
 
-        if (!file_exists($fname)){
-            $sql = "update container set b_isonline = 0 where i_autocode = :id";
+        if (!file_exists($fname)) {
+            $sql = "UPDATE container SET b_isonline = 0 WHERE i_autocode = :id";
             $req = $pdo->prepare($sql);
             $req->bindValue(':id', $row->i_autocode, pdo::PARAM_INT);
-            //$req->execute();
+            $req->execute();
 
-            $log = "update container set b_isonline = 1 where i_autocode = ".$row->i_autocode;
-            //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            file_put_contents('/var/www/rollback.sql', $log, FILE_APPEND);
+            $log = "UPDATE container SET b_isonline = 1 WHERE i_autocode = ".$row->i_autocode.";\n";
+//file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/tmp_total/rollback.sql', $log, FILE_APPEND);
+        } else {
+            $log = "exist = ".$row->i_autocode.";\n";
+//file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/tmp_total/execute.sql', $log, FILE_APPEND);
         }
         $nb++;
     }
