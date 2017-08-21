@@ -268,9 +268,9 @@ function convertFile($infile, $outfile, $param)
         $inData = getImageInfo($infile);
         //mail('dsnook@maload.com', 'image', print_r($inData,true));
     } else if (isVideo($infile)) {
-        //$inData = getVideoInfo($infile);
+        $inData = getVideoInfo($infile);
         //mail('dsnook@maload.com', 'video', print_r($inData,true));
-        return false;
+        //return false;
     } else if (isAudio($infile)) {
         $inData = getAudioInfo($infile);
         //	mail('dsnook@maload.com', 'audio', print_r($inData,true));
@@ -464,8 +464,8 @@ function convertFile($infile, $outfile, $param)
         case 'wav':
         case 'm4a':
         case 'aif':
-            $rtn = copy(realpath("./ico")."/wav.jpg", $outfile);
-            ztrace("copy ".realpath("./ico")."/wav.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
+            $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/wav.jpg", $outfile);
+            ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/wav.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
             break;
         case 'xls':
         case 'doc':
@@ -479,20 +479,20 @@ function convertFile($infile, $outfile, $param)
         case 'swf':
         case 'exe':
         case 'zip':
-            if (file_exists(realpath("./ico")."/".$fileExtension.".jpg")) {
-                $rtn = copy(realpath("./ico")."/".$fileExtension.".jpg", $outfile);
-                ztrace("copy ".realpath("./ico")."/".$fileExtension.".jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
+            if (file_exists("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg")) {
+                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg", $outfile);
+                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
             } else {
-                $rtn = copy(realpath("./ico")."/unknown.jpg", $outfile);
-                ztrace("copy ".realpath("./ico")."/unknown.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
+                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
+                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
             }
             break;
         default:
             //	$cmd = "convert -resize ".$param['newsize']."x".$param['newsize']." ".realpath("./ico")."/unknown.jpg ".$outfile);
             //	ztrace($convert);
             //	system($convert);
-            $rtn = copy("/var/www//projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
-            ztrace("copy /var/www//projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
+            $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
+            ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
             ztrace("Extension non référencée".$fileExtension);
             include_once("api.util_mail.php");
         /*fastMail("Extension non référencée sur ".$_SERVER['HTTP_HOST'].": $infile",

@@ -276,9 +276,9 @@ function convertFile($infile, $outfile, $param)
     }
     else if(isVideo($infile))
     {
-        //$inData = getVideoInfo($infile);
+        $inData = getVideoInfo($infile);
         //mail('dsnook@maload.com', 'video', print_r($inData,true));
-        return false;
+        //return false;
     }
     else if(isAudio($infile))
     {
@@ -485,10 +485,9 @@ function convertFile($infile, $outfile, $param)
             break;
         case 'wav':
         case 'm4a':
-        case 'aif':
-            $rtn = copy(realpath("./ico")."/wav.jpg", $outfile);
-            ztrace("copy ".realpath("./ico")."/wav.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
-            break;
+        $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/wav.jpg", $outfile);
+        ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/wav.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
+        break;
         case 'xls':
         case 'doc':
         case 'ppt':
@@ -501,15 +500,12 @@ function convertFile($infile, $outfile, $param)
         case 'swf':
         case 'exe':
         case 'zip':
-            if(file_exists(realpath("./ico")."/".$fileExtension.".jpg"))
-            {
-                $rtn = copy(realpath("./ico")."/".$fileExtension.".jpg", $outfile);
-                ztrace("copy ".realpath("./ico")."/".$fileExtension.".jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
-            }
-            else
-            {
-                $rtn = copy(realpath("./ico")."/unknown.jpg", $outfile);
-                ztrace("copy ".realpath("./ico")."/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
+            if (file_exists("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg")) {
+                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg", $outfile);
+                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
+            } else {
+                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
+                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
             }
             break;
         default:
