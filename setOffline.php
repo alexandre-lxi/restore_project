@@ -42,8 +42,11 @@ WHERE co.i_autocode = imf.i_foreigncode
             $sql = "update container set b_isonline = 0 where i_autocode = :id";
             $req = $pdo->prepare($sql);
             $req->bindValue(':id', $row->i_autocode, pdo::PARAM_INT);
-            print_r($req->queryString."\n");
             //$req->execute();
+
+            $log = "update container set b_isonline = 1 where i_autocode = ".$row->i_autocode;
+            //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/rollback.sql', $log, FILE_APPEND);
         }
         $nb++;
     }
