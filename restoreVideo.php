@@ -102,7 +102,7 @@ function testFile($dirsource, $dest, $file, $pdo, &$ret, &$nb)
 
                 $sql = "insert into restore_dbl values (:i_code, :s_format, :fname, :oldfile, :restore)";
                 $req = $pdo->prepare($sql);
-                
+
                 $req->bindValue(':i_code', $row->i_autocode, PDO::PARAM_INT);
                 $req->bindValue(':s_format', $row->s_fileformat, PDO::PARAM_STR);
                 $req->bindValue(':fname', $fname, PDO::PARAM_STR);
