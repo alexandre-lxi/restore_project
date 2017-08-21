@@ -6,7 +6,7 @@
  * Time: 09:01
  */
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = 'localhost';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -16,9 +16,13 @@ $VALEUR_mot_de_passe = 'alaidin';
 //$dest = '/home/ubuntu/restore/toAnalyse/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
-$oridir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/oridir/';
+/*$oridir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/oridir/';
 $thumbdir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/thumbdir/';
-$webdir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/webdir/';
+$webdir = '/var/www/projects/total-1410-refontedam/restoreDir/newdir/webdir/';*/
+
+$oridir = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
+$thumbdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/';
+$webdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/webdir/';
 
 define("COLORSPACE_RGB", "RGB");
 define("COLORSPACE_CMYK","CMYK");
@@ -26,6 +30,7 @@ define("COLORSPACE_GRAY","GRAY");
 define ("zMAX_VIDEO_WIDTH", 640);
 define ("zMAX_VIDEO_BITRATE", "700k");
 define ("zMAX_AUDIOFLV_BITRATE", "-ar 44100 -ab 64");
+define("zTOOLPATH", "/var/www/utils/");
 
 function getFileExtension($file, $withdot=false)
 {
@@ -144,7 +149,6 @@ function getVideoInfo($infile)
     $info	= midentify($infile);
     $data 	= array();
     */
-    define("zTOOLPATH", "/var/www/utils/");
 
     $cmd = zTOOLPATH."midentify '".$infile."'";
     exec($cmd,$info);
@@ -225,7 +229,7 @@ function getImageInfo($file)
 }
 
 function ztrace($log){
-    print_r($log."\n");
+    echo ($log."\n");
 }
 
 function convertFile($infile, $outfile, $param)
@@ -252,8 +256,9 @@ function convertFile($infile, $outfile, $param)
     }
     else if(isVideo($infile))
     {
-        $inData = getVideoInfo($infile);
+        //$inData = getVideoInfo($infile);
         //mail('dsnook@maload.com', 'video', print_r($inData,true));
+        return false;
     }
     else if(isAudio($infile))
     {
@@ -505,40 +510,44 @@ try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "SELECT co.i_autocode, concat(co.i_autocode , imf.s_fileformat) filename
-FROM image_file imf, `total-refontedam`.container co, `total-refontedam`.image_infofr info
-WHERE co.i_autocode = imf.i_foreigncode
-  AND co.i_autocode = info.i_foreigncode  
-  and imf.s_fileformat is not NULL 
-  and co.i_autocode = 56679";
+        FROM image_file imf, container co, image_infofr info
+        WHERE co.i_autocode = imf.i_foreigncode
+          AND co.i_autocode = info.i_foreigncode
+            and imf.s_fileformat is not NULL
+              order by 1 desc";
+
+//ztrace($sql);
 
     $req = $pdo->prepare($sql);
     $req->execute();
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
+//    print_r($rows);
 
     $nb = 0;
 
     foreach ($rows as $row){
         $fname = $oridir.$row->filename;
 
+
         if (file_exists($fname)){
             $fthumb = $thumbdir.$row->i_autocode.".jpg";
             $fweb = $webdir.$row->i_autocode.".jpg";
 
-            ztrace($fname."#".$fthumb."#".$fweb);
+            ztrace($fname."=>".$fthumb."=>".$fweb);
 
-//            if (!file_exists($fthumb)){
-//                $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
-//                $success = convertFile($fname, $fweb, $param);        // create web image
-//                $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
-//                $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
-//                //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
-//            }
+            if (!file_exists($fthumb)){
+                $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
+                $success = convertFile($fname, $fweb, $param);        // create web image
+                $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
+                $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
+                //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
+}
         }
         else {
-            $log = $fname." introuvable !";
+           $log = $fname." introuvable ! \n";
             //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            file_put_contents('/var/www/log.sql', $log, FILE_APPEND);
+            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/log.txt', $log, FILE_APPEND);
         }
         $nb++;
     }
