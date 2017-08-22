@@ -25,6 +25,10 @@ define ("zMAX_VIDEO_BITRATE", "700k");
 define ("zMAX_AUDIOFLV_BITRATE", "-ar 44100 -ab 64");
 define("zTOOLPATH", "/var/www/utils/");
 
+function ztrace($log){
+    echo ($log."\n");
+}
+
 function getFileExtension($file, $withdot=false)
 {
     if($withdot)
