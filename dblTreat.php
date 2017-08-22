@@ -13,6 +13,14 @@ $VALEUR_mot_de_passe = 'alaidin';
 
 $dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
+function getFileExtension($file, $withdot=false)
+{
+    if($withdot)
+        return strtolower(substr($file, strrpos($file,".")));
+    else
+        return strtolower(substr($file, strrpos($file,".")+1));
+}
+
 function isImage($file)
 {
     if(isset($_SERVER['WINDIR']))
