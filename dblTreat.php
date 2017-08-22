@@ -250,13 +250,9 @@ try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
 
-    $sql = "select
-      db.i_code, db.oldfile, db.restore, imf.s_filename, co.s_reference, imf.i_width, imf.i_height, imf.i_filesize,
-      co.i_autocode, co.s_reference, co.b_isintrash, co.dt_created
-    from `total-refontedam`.restore_dbl db, `total-refontedam`.image_file imf, `total-refontedam`.container co
-    where co.i_autocode = imf.i_foreigncode
-      and co.i_autocode = db.i_code
-      and co.i_autocode not in (select i_code from restore_dbl where restore = 1)
+    $sql = "select distinct i_code
+    from restore_dbl 
+    where i_code not in (select i_code from restore_dbl where restore = 1)
       and i_code = 34000";
 
     $req = $pdo->prepare($sql);
