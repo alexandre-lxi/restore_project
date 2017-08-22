@@ -284,7 +284,7 @@ try {
                 {
                     $inData = getImageInfo($filename);
 
-                    if (($inData['WIDTH'] = $fname->i_widht) && ($inData['WIDTH'] = $fname->i_height)){
+                    if (($inData['WIDTH'] = $fname->i_width) && ($inData['WIDTH'] = $fname->i_height)){
                         echo $row->i_code . " ". $filename;
                         print_r($inData);
                     }
