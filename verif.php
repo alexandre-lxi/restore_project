@@ -37,7 +37,7 @@ order by 1";
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
     foreach ($rows as $row) {
-        $oldFile = str_replace('/home/ubuntu/restore/toAnalyse/', 'pictures/', $row->oldfile);
+        $fname = str_replace('/home/ubuntu/restore/toAnalyse/', 'pictures/', $row->oldfile);
 
         echo "<table>";
         echo "<tr><td><img src='".$fname."' style='width: 500px;height: auto;'></td><td>".$row->i_code." : ".$row->s_filename."</td></tr>";
