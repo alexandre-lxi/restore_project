@@ -253,7 +253,7 @@ try {
     $sql = "select distinct i_code
     from restore_dbl 
     where i_code not in (select i_code from restore_dbl where restore = 1)
-      and i_code = 34000";
+      and i_code = 4867";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -265,7 +265,7 @@ try {
 
     foreach ($rows as $row) {
         if (true){
-            $sql = "SELECT distinct db.i_code, db.oldfile 
+            $sql = "SELECT distinct db.i_code, db.oldfile, imf.i_width, imf.i_height 
             FROM `total-refontedam`.restore_dbl db, `total-refontedam`.image_file imf, `total-refontedam`.container co
             WHERE co.i_autocode = imf.i_foreigncode
               AND co.i_autocode = db.i_code
@@ -284,12 +284,12 @@ try {
                 {
                     $inData = getImageInfo($filename);
 
-                    echo $row->i_code . " ". $filename;
-                    print_r($inData);
+                    if (($inData['WIDTH'] = $fname->i_widht) && ($inData['WIDTH'] = $fname->i_height)){
+                        echo $row->i_code . " ". $filename;
+                        print_r($inData);
+                    }
                 }
             }
-
-
         }
 
         if (false) {
