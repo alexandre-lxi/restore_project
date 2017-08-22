@@ -287,7 +287,16 @@ try {
                     $inData = getImageInfo($filename);
 
                     if (($inData['WIDTH'] == $fname->i_width) && ($inData['HEIGHT'] == $fname->i_height)){
-                        print_r($inData);
+                        if (array_key_exists($filename, $isTreat)) {
+                            $isTreat[$filename] = $isTreat[$filename] + 1;;
+                        } else {
+                            $isTreat[$filename] = 1;
+                            $sql = "UPDATE restore_dbl SET restore = 1 WHERE oldfile = :oldf and i_code = :icode";
+                            $req = $pdo->prepare($sql);
+                            $req->bindValue(':oldf', $row->oldfile, PDO::PARAM_STR);
+                            $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+                            $req->execute();
+                        }
                     }
                 }
             }
@@ -327,7 +336,6 @@ try {
     echo "\n\n";
     print_r($isTreat);
 
-    echo $nb;
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
