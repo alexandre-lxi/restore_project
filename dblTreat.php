@@ -26,8 +26,8 @@ define ("zMAX_AUDIOFLV_BITRATE", "-ar 44100 -ab 64");
 define("zTOOLPATH", "/var/www/utils/");
 
 function ztrace($log){
-    echo ($log."\n");
-//    return true;
+//    echo ($log."\n");
+    return true;
 }
 
 function getFileExtension($file, $withdot=false)
@@ -286,7 +286,7 @@ try {
                 {
                     $inData = getImageInfo($filename);
 
-                    if (($inData['WIDTH'] == $fname->i_width) && ($inData['WIDTH'] == $fname->i_height)){
+                    if (($inData['WIDTH'] == $fname->i_width) && ($inData['HEIGHT'] == $fname->i_height)){
                         print_r($inData);
                     }
                 }
