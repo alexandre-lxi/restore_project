@@ -530,7 +530,7 @@ try {
     $nb = 0;
 
     foreach ($rows as $row) {
-        $oldFile = $row->oldfile;
+        $oldFile = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->oldfile);
         $newFile = $dest.'/oridir/'.$row->fname;
         $thumbFile = $dest.'/thumbdir/'.$row->i_code.'.jpg';
         $webFile = $dest.'/webdir/'.$row->i_code.'.jpg';
