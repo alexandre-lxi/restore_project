@@ -38,7 +38,7 @@ order by 1";
 
     foreach ($rows as $row) {
         $fname = $row->oldfile;
-        //$fname = '../../iris/restore/2017/'.basename($fname);
+        $fname = 'pictures/'.basename($fname);
 
         echo "<table>";
         echo "<tr><td><img src='".$fname."' style='width: 500px;height: auto;'></td><td>".$row->i_code." : ".$row->s_filename."</td></tr>";
