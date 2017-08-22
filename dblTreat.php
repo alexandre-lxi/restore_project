@@ -282,7 +282,7 @@ try {
             $fnames = $req->fetchAll(PDO::FETCH_OBJ);
 
             foreach ($fnames as $fname) {
-                $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $fname->odlfile);
+                $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $fname->oldfile);
 
                 if(isImage($filename) || isPdf($filename))
                 {
