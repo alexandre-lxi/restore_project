@@ -26,7 +26,8 @@ define ("zMAX_AUDIOFLV_BITRATE", "-ar 44100 -ab 64");
 define("zTOOLPATH", "/var/www/utils/");
 
 function ztrace($log){
-    echo ($log."\n");
+//    echo ($log."\n");
+    return true;
 }
 
 function getFileExtension($file, $withdot=false)
@@ -250,13 +251,13 @@ try {
 
 
     $sql = "select
-      db.i_code, db.oldfile, db.restore, imf.s_filename, co.s_reference, imf.i_width, imf.i_height, imf.i_filesize /1024/1024 fs,
+      db.i_code, db.oldfile, db.restore, imf.s_filename, co.s_reference, imf.i_width, imf.i_height, imf.i_filesize,
       co.i_autocode, co.s_reference, co.b_isintrash, co.dt_created
     from `total-refontedam`.restore_dbl db, `total-refontedam`.image_file imf, `total-refontedam`.container co
     where co.i_autocode = imf.i_foreigncode
       and co.i_autocode = db.i_code
       and co.i_autocode not in (select i_code from restore_dbl where restore = 1)
-      limit 10";
+      and i_code = 34000";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -268,15 +269,31 @@ try {
 
     foreach ($rows as $row) {
         if (true){
-            $fname = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->oldfile);
+            $sql = "SELECT DISTINCT imf.s_filename
+            FROM `total-refontedam`.restore_dbl db, `total-refontedam`.image_file imf, `total-refontedam`.container co
+            WHERE co.i_autocode = imf.i_foreigncode
+              AND co.i_autocode = db.i_code
+              AND i_code = :icode";
 
-            if(isImage($fname) || isPdf($fname))
-            {
-                $inData = getImageInfo($fname);
+            $req = $pdo->prepare($sql);
+            $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+            $req->execute();
 
-                echo $row->i_code . " ". $fname;
-                print_r($inData);
+            $fnames = $req->fetchAll(PDO::FETCH_OBJ);
+
+            foreach ($fnames as $fname) {
+                $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->oldfile);
+
+                if(isImage($fname) || isPdf($fname))
+                {
+                    $inData = getImageInfo($fname);
+
+                    echo $row->i_code . " ". $fname;
+                    print_r($inData);
+                }
             }
+
+
         }
 
         if (false) {
