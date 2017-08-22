@@ -14,8 +14,8 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-$dirsource = '/home/ubuntu/restore/toAnalyse/';
-$dest = '/home/ubuntu/restore/newdir';
+$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
+$dest = '/var/www/projects/total-1410-refontedam/restoreDir/newdir';
 
 define("COLORSPACE_RGB", "RGB");
 define("COLORSPACE_CMYK","CMYK");
@@ -520,7 +520,7 @@ function convertFile($infile, $outfile, $param)
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "SELECT * FROM restore_dbl WHERE restore = 1 AND is_restored = 0";
+    $sql = "SELECT * FROM restore_dbl WHERE restore = 1 AND is_restored = 0 limit 2";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -534,21 +534,54 @@ try {
         $newFile = $dest.'/oridir/'.$row->fname;
         $thumbFile = $dest.'/thumbdir/'.$row->i_code.'.jpg';
         $webFile = $dest.'/webdir/'.$row->i_code.'.jpg';
+        $oldthumbfile =   '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/'.$row->i_code.'.jpg';
 
         echo $oldFile."\n";
         echo $newFile."\n";
         echo $thumbFile."\n";
         echo $webFile."\n";
-                
 
-        /*if (!copy($oldFile, $newFile)) {
+        if (!copy($oldFile, $newFile)) {
             $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
             //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-        }*/
-    }
+            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
+        }else{
+            if (file_exists($oldFile)){
+                ztrace($newFile."=>".$thumbFile."=>".$webFile);
 
-    echo $nb;
+                if (!file_exists($oldthumbfile)){
+                    $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
+                    $success = convertFile($newFile, $webFile, $param);        // create web image
+                    $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
+                    $success = convertFile($newFile, $thumbFile, $param);    // create thumbnail image
+                    //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
+
+
+                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':i_code', $row->i_code, PDO::PARAM_INT);
+                    $req->bindValue(':hasThumb', $success, PDO::PARAM_BOOL);
+                    $req->execute();
+
+                    $sql = "update restore_dbl set is_restored = 1 where i_code = :icode";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+                    $req->execute();
+                }else{
+                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':i_code', $row->i_code, PDO::PARAM_INT);
+                    $req->bindValue(':hasThumb', true, PDO::PARAM_BOOL);
+                    $req->execute();
+
+                    $sql = "update restore_dbl set is_restored = 1 where i_code = :icode";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+                    $req->execute();
+                }
+            }
+        }
+    }
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
