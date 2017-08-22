@@ -269,7 +269,7 @@ try {
 
     foreach ($rows as $row) {
         if (true){
-            $sql = "SELECT DISTINCT imf.s_filename
+            $sql = "SELECT distinct db.i_code, db.oldfile 
             FROM `total-refontedam`.restore_dbl db, `total-refontedam`.image_file imf, `total-refontedam`.container co
             WHERE co.i_autocode = imf.i_foreigncode
               AND co.i_autocode = db.i_code
@@ -282,13 +282,13 @@ try {
             $fnames = $req->fetchAll(PDO::FETCH_OBJ);
 
             foreach ($fnames as $fname) {
-                $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->oldfile);
+                $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $fname->odlfile);
 
-                if(isImage($fname) || isPdf($fname))
+                if(isImage($filename) || isPdf($filename))
                 {
-                    $inData = getImageInfo($fname);
+                    $inData = getImageInfo($filename);
 
-                    echo $row->i_code . " ". $fname;
+                    echo $row->i_code . " ". $filename;
                     print_r($inData);
                 }
             }
