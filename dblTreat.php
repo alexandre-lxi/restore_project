@@ -293,8 +293,8 @@ try {
                             $isTreat[$filename] = 1;
                             $sql = "UPDATE restore_dbl SET restore = 1 WHERE oldfile = :oldf and i_code = :icode";
                             $req = $pdo->prepare($sql);
-                            $req->bindValue(':oldf', $row->oldfile, PDO::PARAM_STR);
-                            $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+                            $req->bindValue(':oldf', $fname->oldfile, PDO::PARAM_STR);
+                            $req->bindValue(':icode', $fname->i_code, PDO::PARAM_INT);
                             $req->execute();
                         }
                     }
