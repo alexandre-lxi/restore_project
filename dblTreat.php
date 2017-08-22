@@ -26,8 +26,8 @@ define ("zMAX_AUDIOFLV_BITRATE", "-ar 44100 -ab 64");
 define("zTOOLPATH", "/var/www/utils/");
 
 function ztrace($log){
-//    echo ($log."\n");
-    return true;
+    echo ($log."\n");
+//    return true;
 }
 
 function getFileExtension($file, $withdot=false)
@@ -280,12 +280,13 @@ try {
             foreach ($fnames as $fname) {
                 $filename = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $fname->oldfile);
 
+                echo $row->i_code . " ". $filename."\n";
+
                 if(isImage($filename) || isPdf($filename))
                 {
                     $inData = getImageInfo($filename);
 
                     if (($inData['WIDTH'] == $fname->i_width) && ($inData['WIDTH'] == $fname->i_height)){
-                        echo $row->i_code . " ". $filename;
                         print_r($inData);
                     }
                 }
