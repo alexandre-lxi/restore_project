@@ -249,6 +249,14 @@ function getImageInfo($file)
 function testFile($dirsource, $dest, $file, $pdo)
 {
     $infile = $dirsource.$file;
+    $fileExt = getFileExtension($infile,true);
+
+    if (($fileExt == '.txt') || ($fileExt == '.TX?') || ($fileExt == '.php') || ($fileExt == '.java')|| ($fileExt == '.h')
+        || ($fileExt == '.html') || ($fileExt == '.xml') || ($fileExt == '.c') || ($fileExt == '.f') || ($fileExt == '.jsp')
+        || ($fileExt == '.sh    ')) {
+        return false;
+    }
+
     $inData = array();
 
     if(isImage($infile) || isPdf($infile))
@@ -279,12 +287,8 @@ function testFile($dirsource, $dest, $file, $pdo)
     if(!isset($inData['COLORSPACE']))
         $inData['COLORSPACE'] = '';
 
-    $fileExt = '.'.$inData['EXTENSION'];
-    $fileSize = $inData['FILESIZE'];
 
-    if (($fileExt == '.txt') || ($fileExt == '.TX?') || ($fileExt == '.php') || ($fileExt == '.java')|| ($fileExt == '.h')) {
-        return false;
-    }
+    $fileSize = $inData['FILESIZE'];
 
     try {
         $sql = "SELECT co.i_autocode, imf.s_fileformat
