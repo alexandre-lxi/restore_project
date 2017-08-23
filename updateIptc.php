@@ -62,6 +62,9 @@ and id = 86552
 
         $liptc = $iptc->readIPTC();
 
+        if ($liptc == false)
+            continue;
+
         $sql = "insert into restore_file_iptc (rfid, ip_name, ip_urgency, ip_category, ip_supcategories, ip_instruction, ip_created, ip_byline, ip_bylinetitle, ip_city, ip_state, ip_country_code, ip_country, ip_reference, ip_headline, ip_credits, ip_source, ip_copyright, ip_caption, ip_captionwriter2, ip_captionwriter) 
           values (:rfid, :ip_name, :ip_urgency, :ip_category, :ip_supcategories, :ip_instruction, :ip_created, :ip_byline, :ip_bylinetitle, :ip_city, :ip_state, :ip_country_code, :ip_country, :ip_reference, :ip_headline, :ip_credits, :ip_source, :ip_copyright, :ip_caption, :ip_captionwriter2, :ip_captionwriter)";
 
