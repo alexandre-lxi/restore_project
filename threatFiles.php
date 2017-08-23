@@ -264,10 +264,10 @@ function testFile($dirsource, $dest, $file, $pdo)
         $inData = getAudioInfo($infile);
     }
 
-    if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
-        $inData['FILESIZE'] = filesize($file);
     if(!isset($inData['FILESIZE']))
         $inData['FILESIZE'] = 0;
+    if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
+        $inData['FILESIZE'] = filesize($file);
     if(!isset($inData['WIDTH']))
         $inData['WIDTH'] = 0;
     if(!isset($inData['HEIGHT']))
