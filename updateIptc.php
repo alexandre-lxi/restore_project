@@ -8,7 +8,7 @@
 
 include "iptc.php";
 
-$VALEUR_hote = 'localhost';
+$VALEUR_hote = 'prod.kwk.eu.com';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -42,6 +42,7 @@ try {
     $sql = 'SELECT *
         FROM restore_files
         WHERE s_format = "jpg"
+and id = 86552
             LIMIT 100';
 
 //ztrace($sql);
@@ -55,6 +56,8 @@ try {
     $iptc = new iptc();
 
     foreach ($rows as $row){
+	echo $row->fname;
+
         $iptc->setImg($row->fname);
 
         $liptc = $iptc->readIPTC();
@@ -62,16 +65,18 @@ try {
         $sql = "insert into restore_file_iptc (rfid, ip_name, ip_urgency, ip_category, ip_supcategories, ip_instruction, ip_created, ip_byline, ip_bylinetitle, ip_city, ip_state, ip_country_code, ip_country, ip_reference, ip_headline, ip_credits, ip_source, ip_copyright, ip_caption, ip_captionwriter2, ip_captionwriter) 
           values (:rfid, :ip_name, :ip_urgency, :ip_category, :ip_supcategories, :ip_instruction, :ip_created, :ip_byline, :ip_bylinetitle, :ip_city, :ip_state, :ip_country_code, :ip_country, :ip_reference, :ip_headline, :ip_credits, :ip_source, :ip_copyright, :ip_caption, :ip_captionwriter2, :ip_captionwriter)";
 
-        $req = $pdo->prepare();
+        $req = $pdo->prepare($sql);
         $req->bindValue(':rfid', $row->id, PDO::PARAM_INT);
 
         foreach ($cds as $cd) {
-            $req->bindValue(':'.$cd, $liptc[$cd], PDO::PARAM_STR);
+	    if ($cd != 'ip_keywords'){
+                 $req->bindValue(':'.$cd, $liptc[$cd], PDO::PARAM_STR);
+	    }
         }
 
         $req->execute();
 
-        $sql = 'SELECT max(id) FROM restore_file_iptc';
+        $sql = 'SELECT max(id) id FROM restore_file_iptc';
         $req = $pdo->prepare($sql);
         $req->execute();
         $idiptc = $req->fetchAll(PDO::FETCH_OBJ);

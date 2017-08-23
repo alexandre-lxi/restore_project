@@ -55,12 +55,14 @@ class iptc
         $tblIPTC = iptcparse($this->h_iptcData);
 
         $lesIptc = array();
+	$lesIptc['ip_keywords'] = array();
         $this->_initIptcArray($lesIptc);
         while ((is_array($tblIPTC)) && (list($codeIPTC, $valeurIPTC) = each($tblIPTC))) {
             $codeIPTC = str_replace("2#", "", $codeIPTC);
 
             if (($codeIPTC != "000") && ($codeIPTC != "140")) {
                 while (list($index,) = each($valeurIPTC)) {
+echo $index."\n";
                     if ($codeIPTC == "025" || $codeIPTC == "020") {
                         if (isset($valeurIPTC[$index]))
                             $lesIptc[$this->_getIptcLabel($codeIPTC)] .= $valeurIPTC[$index].";";
@@ -71,7 +73,7 @@ class iptc
                 }
             }
         }
-        $lesIptc["s_keywords"] = explode(";", $lesIptc["s_keywords"]);
+        $lesIptc["ip_keywords"] = explode(";", $lesIptc["ip_keywords"]);
         //$lesIptc["s_supcategories"] = explode(";",$lesIptc["s_supcategories"]);
         if (is_array($lesIptc)) return $lesIptc; else return false;
     }
