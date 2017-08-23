@@ -266,6 +266,8 @@ function testFile($dirsource, $dest, $file, $pdo)
 
     if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
         $inData['FILESIZE'] = filesize($file);
+    if(!isset($inData['FILESIZE']))
+        $inData['FILESIZE'] = 0;
     if(!isset($inData['WIDTH']))
         $inData['WIDTH'] = 0;
     if(!isset($inData['HEIGHT']))
@@ -277,7 +279,7 @@ function testFile($dirsource, $dest, $file, $pdo)
     if(!isset($inData['COLORSPACE']))
         $inData['COLORSPACE'] = '';
 
-    $fileExt = $inData['EXTENSION'];
+    $fileExt = '.'.$inData['EXTENSION'];
     $fileSize = $inData['FILESIZE'];
 
     if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
@@ -289,7 +291,7 @@ function testFile($dirsource, $dest, $file, $pdo)
             FROM `total-refontedam`.image_file imf, `total-refontedam`.container co, `total-refontedam`.image_infofr info
             WHERE co.i_autocode = imf.i_foreigncode
               AND co.i_autocode = info.i_foreigncode
-              AND right(co.s_reference,3) = :extension
+              AND imf.s_fileformat = :extension
               AND i_filesize = :size";
 
         $req = $pdo->prepare($sql);
