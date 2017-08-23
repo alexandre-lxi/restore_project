@@ -60,9 +60,9 @@ class iptc
         if (!is_array($tblIPTC))
             return false;
 
-        print_r($lesIptc);
-        print_r($tblIPTC);
-
+        foreach ($lesIptc as $item) {
+            print_r($item);
+        }
 //        while ((is_array($tblIPTC)) && (list($codeIPTC, $valeurIPTC) = each($tblIPTC))) {
 //
 //
