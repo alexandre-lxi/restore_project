@@ -83,20 +83,14 @@ function ProcessStichelbautWebImage($srcfile, $dstfile, $newsize, $w,$h,$d)
 
 function isAudio($file)
 {
-    if(isset($_SERVER['WINDIR']))
-    {
-        return getFileExtension($file)=="mp3" || getFileExtension($file)=="m4a";
-    }
+
     $info = exec("file -bi '".$file."'");
     return strstr($info, "audio")!==false || getFileExtension($file)=="mp3" || getFileExtension($file)=="m4a" || getFileExtension($file)=="aif";
 }
 
 function isImage($file)
 {
-    if(isset($_SERVER['WINDIR']))
-    {
-        return getFileExtension($file)=="jpg" || getFileExtension($file)=="tif";
-    }
+
     $info = exec("file -bi '".$file."'");
     return strstr($info, "image")!==false || getFileExtension($file)=="eps" || getFileExtension($file)=="tga";
 }
@@ -114,16 +108,14 @@ function isPdf($file)
 {
     $info 	= exec("file -bi '".$file."'");
     $pdf	= strstr($info, "pdf")!==false;
-    if(isset($_SERVER['WINDIR']))
-        $pdf	= (getFileExtension($file)=="pdf" );
+
     return $pdf;										// NB: .ai are known as pdf file
 }
 function isSwf($file)
 {
     $info 	= exec("file -bi '".$file."'");
     $swf	= strstr($info, "x-shockwave-flash")!==false;
-    if(isset($_SERVER['WINDIR']))
-        $swf	= (getFileExtension($file)=="swf" );
+
     return $swf;
 }
 

@@ -262,12 +262,19 @@ function testFile($dirsource, $dest, $file, $pdo)
     {
         $inData = getAudioInfo($infile);
     }
-    else
-    {
-        $inData = array();
-        $inData['FILESIZE'] = filesize($infile);
-        $inData['EXTENSION'] = getFileExtension($infile);
-    }
+
+    if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
+        $inData['FILESIZE'] = filesize($file);
+    if(!isset($inData['WIDTH']))
+        $inData['WIDTH'] = 0;
+    if(!isset($inData['HEIGHT']))
+        $inData['HEIGHT'] = 0;
+    if(!isset($inData['LENGTH']))
+        $inData['LENGTH'] = 0;
+    if(!isset($inData['EXTENSION']))
+        $inData['EXTENSION'] = getFileExtension($file);
+    if(!isset($inData['COLORSPACE']))
+        $inData['COLORSPACE'] = '';
 
     $fileExt = $inData['EXTENSION'];
     $fileSize = $inData['FILESIZE'];
@@ -291,51 +298,40 @@ function testFile($dirsource, $dest, $file, $pdo)
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-        if (count($rows) == 1) {
-//            $fname = $rows[0]->i_autocode.$rows[0]->s_fileformat;
-//            $dname = $dest.'/oridir/';
-//
-//            if (!file_exists($dname)){
-//                if (!mkdir($dname, 0777, true)) {
-//                    die('Echec lors de la création des répertoires...');
-//                }
-//            }
-//
-//            $oldFile = $dirsource.$file;
-//            $newFile = $dname.$fname;
-//
-////            echo $oldFile."\n";
-////            echo $newFile."\n";
-//
-//            if (!copy( $oldFile, $newFile)){
-//                $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
-//                //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-//                file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-//            }
-//
-//            $ret['single'][$fileExt] = $ret['single'][$fileExt] + 1;
+        $oldFile = $dirsource.$file;
 
+        $sql = "insert INTO restore_files(fname, s_format, fsize, width, height, length, colorspace)
+                    VALUES (:fname, :s_format, :fsize, :width, :height, :length, :colorspace)";
+        $req = $pdo->prepare($sql);
 
+        $req->bindValue(':fname', $oldFile, PDO::PARAM_STR);
+        $req->bindValue(':s_format', $inData['EXTENSION'], PDO::PARAM_STR);
+        $req->bindValue(':fsize', $inData['FILESIZE'], PDO::PARAM_INT);
+        $req->bindValue(':width', $inData['WIDTH'], PDO::PARAM_INT);
+        $req->bindValue(':height', $inData['HEIGHT'], PDO::PARAM_INT);
+        $req->bindValue(':length', $inData['LENGTH'], PDO::PARAM_INT);
+        $req->bindValue(':colorspace', $inData['COLORSPACE'], PDO::PARAM_STR);
 
-        } elseif (count($rows) > 1) {
-            $oldFile = $dirsource.$file;
+        $req->execute();
 
-            foreach ($rows as $row){
-                $fname = $row->i_autocode.$row->s_fileformat;
+        if (count($rows) == 1){
+            $sql = "select id from restore_files where fname = :fname";
+            $req = $pdo->prepare($sql);
+            $req->bindValue(':fname', $oldFile, PDO::PARAM_STR);
+            $req->execute();
+            $id = $req->fetchAll(PDO::FETCH_OBJ);
 
-                $sql = "insert into restore_dbl values (:i_code, :s_format, :fname, :oldfile, :restore)";
-                $req = $pdo->prepare($sql);
+            $sql = "INSERT INTO restore_file_co(rf_code, co_code, is_restored) VALUES (:rf_code, :co_code, :is_restored)";
+            $req = $pdo->prepare($sql);
 
-                $req->bindValue(':i_code', $row->i_autocode, PDO::PARAM_INT);
-                $req->bindValue(':s_format', $row->s_fileformat, PDO::PARAM_STR);
-                $req->bindValue(':fname', $fname, PDO::PARAM_STR);
-                $req->bindValue(':oldfile', $oldFile, PDO::PARAM_STR);
-                $req->bindValue(':restore', false, PDO::PARAM_BOOL);
+            $req->bindValue(':rf_code', $id[0]->id, PDO::PARAM_STR);
+            $req->bindValue(':co_code', $rows[0]->i_autocode, PDO::PARAM_INT);
+            $req->bindValue(':is_restored', true, PDO::PARAM_BOOL);
 
-                $req->execute();
+            $req->execute();
 
-            }
         }
+
     } catch (PDOException $Exception) {
         echo $Exception->getMessage().' : '.$Exception->getCode()."\n";
     }
