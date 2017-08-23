@@ -15,10 +15,10 @@ $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
 
-$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
+//$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-//$dirsource = '/home/ubuntu/restore/toAnalyse/';
+$dirsource = '/home/ubuntu/restore/toAnalyse/recup_dir.8/';
 $dest = '/home/ubuntu/restore/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
@@ -249,6 +249,7 @@ function getImageInfo($file)
 function testFile($dirsource, $dest, $file, $pdo)
 {
     $infile = $dirsource.$file;
+    $inData = array();
 
     if(isImage($infile) || isPdf($infile))
     {
