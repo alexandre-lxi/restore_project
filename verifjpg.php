@@ -6,20 +6,22 @@
  * Time: 18:47
  */
 
+include 'iptc.php';
 
 echo "<html>";
 echo "<body>";
 
+
+
 $fname = 'pictures/'.$_GET['img'];
 $size = getimagesize($fname, $info);
 
-//print_r($info);
+$iptc = new iptc();
+$iptc->setImg($fname);
 
-if(isset($info['APP13']))
-{
-    $iptc = iptcparse($info['APP13']);
-    var_dump($iptc);
-}
-else {echo "noiptc";}
+$liptc = $iptc->readIPTC();
+
+print_r($liptc);
+
 echo "</body>";
 echo "</html>";
