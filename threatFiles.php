@@ -282,7 +282,7 @@ function testFile($dirsource, $dest, $file, $pdo)
     $fileExt = '.'.$inData['EXTENSION'];
     $fileSize = $inData['FILESIZE'];
 
-    if (($fileExt == 'txt') || ($fileExt == 'TX?')) {
+    if (($fileExt == '.txt') || ($fileExt == '.TX?') || ($fileExt == '.php') || ($fileExt == '.java')|| ($fileExt == '.h')) {
         return false;
     }
 
