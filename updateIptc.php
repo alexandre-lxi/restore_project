@@ -41,10 +41,9 @@ try {
 
     $sql = 'SELECT *
         FROM restore_files
-        WHERE s_format = "jpg"
-        and id = 86552
+        WHERE s_format in ("jpg","png")
         and id not in (select rfid from restore_file_iptc )
-            LIMIT 100';
+            ';
 
 //ztrace($sql);
 
