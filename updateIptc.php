@@ -57,7 +57,7 @@ try {
     $iptc = new iptc();
 
     foreach ($rows as $row){
-	echo $row->fname;
+	echo $row->fname."\n";
 
         $iptc->setImg($row->fname);
 
