@@ -358,6 +358,11 @@ function _readDir($dirsource, $dest, $pdo)
 
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+    $req = "truncate table restore_file_co;";
+    $pdo->exec($req);
+    $req = "truncate table restore_files;";
+    $pdo->exec($req);
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
