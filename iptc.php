@@ -66,10 +66,12 @@ class iptc
 
             if (($codeIPTC != "000") && ($codeIPTC != "140")){
                 foreach ($valeurIPTC as $iptcVal) {
-                    if ($codeIPTC == "025" || $codeIPTC == "020") {
-                        $lesIptc[$this->_getIptcLabel($codeIPTC)] .= $iptcVal.";";
-                    } else {
-                        $lesIptc[$this->_getIptcLabel($codeIPTC)] .= $iptcVal;//.$retourLigne;
+                    if ($this->_getIptcLabel($codeIPTC) ) {
+                        if ($codeIPTC == "025" || $codeIPTC == "020") {
+                            $lesIptc[$this->_getIptcLabel($codeIPTC)] .= $iptcVal.";";
+                        } else {
+                            $lesIptc[$this->_getIptcLabel($codeIPTC)] .= $iptcVal;//.$retourLigne;
+                        }
                     }
                 }
             }
@@ -92,7 +94,7 @@ class iptc
         if (isset($this->h_codesIptc2[$code]))
             return $this->h_codesIptc2[$code];
         else {
-            return "";
+            return false;
         }
     }
 }
