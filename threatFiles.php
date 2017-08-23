@@ -257,6 +257,17 @@ function testFile($dirsource, $dest, $file, $pdo)
         return false;
     }
 
+    $sql = "select * from restore_files where fname = :fname";
+    $req = $pdo->prepare($sql);
+    $req->bindValue(':fname', $infile, PDO::PARAM_STR);
+    $req->execute();
+
+    $rows = $req->fetchAll(PDO::FETCH_OBJ);
+
+    if (count($rows)>0){
+        return false;
+    }
+
     $inData = array();
 
     if(isImage($infile) || isPdf($infile))
