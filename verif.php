@@ -27,7 +27,7 @@ from restore_dbl db, image_file imf, container co
 where co.i_autocode = imf.i_foreigncode
   and co.i_autocode = db.i_code
 and is_restored = 0 and restore = 1
-and co.dt_created BETWEEN '2016-01-01' and '2017-01-01'
+and co.dt_created BETWEEN '2004-01-01' and '2009-01-01'
 order by 1";
 
     $req = $pdo->prepare($sql);

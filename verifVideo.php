@@ -6,8 +6,17 @@
 </head>
 <body>
 
-<video width="400" controls>
-    <?php echo '<source src="pictures/"'._GET['vid'].' type="video/mp4">'; ?>
+<?php 
+echo "pictures/".$_GET['vid'];
+?>
+
+<br>
+
+<video width="600" controls>
+    <?php 	
+$src = "pictures/".$_GET['vid']	;
+echo '<source src="'.$src.'" >'; ?>
+	
 </video>
 </body>
 </html>

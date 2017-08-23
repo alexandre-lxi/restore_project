@@ -18,7 +18,7 @@ $VALEUR_mot_de_passe = 'alaidin';
 //$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/restore/toAnalyse/recup_dir.8/';
+$dirsource = '/home/ubuntu/restore/toAnalyse/';
 $dest = '/home/ubuntu/restore/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
