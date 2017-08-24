@@ -251,9 +251,13 @@ try {
 
 
     $sql = "select distinct i_code
-    from restore_dbl 
-    where i_code not in (select i_code from restore_dbl where restore = 1)
-      and i_code = 4867";
+     from restore_dbl db, image_file imf, container co
+        where co.i_autocode = imf.i_foreigncode
+          and co.i_autocode = db.i_code
+              and dt_created<='2017-01-01'
+                and co.i_autocode not in (select i_code from restore_dbl where restore = 1)
+                  and oldfile not in (select distinct oldfile from restore_dbl where db.restore = 1)";
+
 
     $req = $pdo->prepare($sql);
     $req->execute();

@@ -30,7 +30,7 @@ try {
         $sql = "select co.i_autocode, i_filesize, co.s_reference
                 from container co, image_file imf
                 where co.i_autocode = imf.i_foreigncode
-                and s_fileformat in ('.docx', '.pptx', '.doc', '.ppt', '.xls','.xlsx')
+                and s_fileformat = concat('.', :sformat)
                 and i_filesize = :fsize
                 and co.i_autocode not in (select co_code from restore_file_co)";
 
