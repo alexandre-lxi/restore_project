@@ -17,8 +17,8 @@ try {
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('docx')
-      and fsize = 0";
+      WHERE s_format in ('tif')
+      ";
 
     $req = $pdo->prepare($sql);
     $req->execute();
