@@ -18,8 +18,7 @@ try {
     $sql = "SELECT *
       FROM restore_files
       WHERE s_format in ('docx', 'pptx', 'doc', 'ppt', 'xls','xlsx')
-      and is_restored = 0
-      limit 100";
+      and is_restored = 0";
 
     $req = $pdo->prepare($sql);
     $req->execute();
