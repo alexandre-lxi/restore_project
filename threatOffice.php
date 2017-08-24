@@ -35,6 +35,7 @@ try {
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
+        $req->bindValue('sformat', $row->s_format, PDO::PARAM_STR);
         $req->execute();
 
         $cos = $req->fetchAll(PDO::FETCH_OBJ);
