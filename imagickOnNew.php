@@ -498,7 +498,6 @@ $lpixels = array(
     '10'=>array(150,185),
 );
 
-$files = scandir($olddname);
 
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -510,6 +509,7 @@ try {
 
     $sqlSel = "select id, fname from restore_files where s_format in('jpg','png','psd','tif','jpeg','png','gif','eps','pdf','ai')";
     $reqSel = $pdo->prepare($sqlSel);
+    $reqSel->execute();
 
     $rows = $reqSel->fetchAll(PDO::FETCH_OBJ);
 
