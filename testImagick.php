@@ -475,43 +475,7 @@ function convertFile($infile, $outfile, $param)
                 }
             }
             break;
-        case 'mp3':
-            getId3Cover($infile, $outfile);
-            break;
-        case 'wav':
-        case 'm4a':
-            $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/wav.jpg", $outfile);
-            ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/wav.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
-            break;
-        case 'xls':
-        case 'doc':
-        case 'ppt':
-        case 'pptx':
-        case 'docx':
-        case 'dotx':
-        case 'potx':
-        case 'xlsx':
-        case 'qxd':
-        case 'swf':
-        case 'exe':
-        case 'zip':
-            if (file_exists("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg")) {
-                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg", $outfile);
-                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/".$fileExtension.".jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
-            } else {
-                $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
-                ztrace("copy /var/www/projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn ? 'ok' : 'failed!'));
-            }
-            break;
-        default:
-            //	$cmd = "convert -resize ".$param['newsize']."x".$param['newsize']." ".realpath("./ico")."/unknown.jpg ".$outfile);
-            //	ztrace($convert);
-            //	system($convert);
-            $rtn = copy("/var/www//projects/total-1410-refontedam/back/ico/unknown.jpg", $outfile);
-            ztrace("copy /var/www//projects/total-1410-refontedam/back/ico/unknown.jpg to ".$outfile." : ".($rtn?'ok':'failed!'));
-            ztrace("Extension non référencée" .$fileExtension);
-        /*fastMail("Extension non référencée sur ".$_SERVER['HTTP_HOST'].": $infile",
-        "Fichier concerné:\n\n $infile \n\n".$fileExtension."\n\n".print_r($_SESSION), "debugmaload.com","dsnook@maload.com");	*/
+
     }
     return file_exists($outfile);
 }
@@ -548,8 +512,13 @@ if ($success){
     );
 
     foreach ($lpixels as $lpixel) {
+        print $lpixel;
+
         $shnew = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
-        $shold = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
+        $shold = $img2->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
+
+        print_r($shnew);
+        print_r($shold);
 
 
         if ($shold == $shnew){
