@@ -14,7 +14,7 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-$olddname = '/home/ubuntu/restore/olddir/';
+$olddname = '/home/ubuntu/restore/olddir/thumdir/';
 
 $img = new Imagick();
 
