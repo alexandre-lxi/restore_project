@@ -45,6 +45,9 @@ try {
         if ($file == '.') continue;
         if ($file == '..') continue;
 
+        if (is_dir($dirsource.$file))
+            continue;
+
         echo $file."\n";
 
         $fname = $olddname.$file;
