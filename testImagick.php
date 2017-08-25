@@ -529,50 +529,34 @@ $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
 
 if ($success){
     $img = new Imagick();
+    $img2 = new Imagick();
 
     $img->readImage($fthumb);
-    $shnew = $img->getImagePixelColor(10,10)->getColorAsString();
-    $shnew2 = $img->getImagePixelColor(25,25)->getColorAsString();
-$shnew3 = $img->getImagePixelColor(75,75)->getColorAsString();
-$shnew4 = $img->getImagePixelColor(125,125)->getColorAsString();
+    $img2->readImage($oldfname);
 
+    $lpixels = array(
+        '1'=>array(5,5),
+        '2'=>array(25,25),
+        '3'=>array(75,75),
+        '4'=>array(150,150),
+        '5'=>array(200,200),
+        '6'=>array(100,100),
+        '7'=>array(30,30),
+        '8'=>array(80,80),
+        '9'=>array(1,1),
+        '10'=>array(180,180),
+    );
 
+    foreach ($lpixels as $lpixel) {
+        $shnew = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
+        $shold = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
+        
 
-    $img->readImage($oldfname);
-    $shold = $img->getImagePixelColor(10,10)->getColorAsString();
-    $shold2 = $img->getImagePixelColor(25,25)->getColorAsString();
-$shold3 = $img->getImagePixelColor(75,75)->getColorAsString();
-$shold4 = $img->getImagePixelColor(125,125)->getColorAsString();
-
-    echo $fthumb."\n";
-    echo $oldfname."\n";
-
-
-
-    if ($shold == $shnew){
-        echo "OK"."\n";
-    }else{
-        echo "KO"."\n";
+        if ($shold == $shnew){
+            $lpixel["TEST"] = "OK";
+        }else{
+            $lpixel["TEST"] = "KO";
+        }
     }
-
-if ($shold2 == $shnew2){
-        echo "OK"."\n";
-    }else{
-        echo "KO"."\n";
-    }
-
-if ($shold3 == $shnew3){
-        echo "OK"."\n";
-    }else{
-        echo "KO"."\n";
-    }
-
-if ($shold4 == $shnew4){
-        echo "OK"."\n";
-    }else{
-        echo "KO"."\n";
-    }
-
-
 
 }
