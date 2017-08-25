@@ -216,6 +216,9 @@ function getImageInfo($file)
         else if(strstr(strtolower($data['COLORSPACE']),"gray")!==false)
             $data['COLORSPACE'] = 'GRAY';
     }
+else  $data['COLORSPACE'] = 'RGB';
+
+
     if($data['FILESIZE']==0 || !strlen($data['FILESIZE']))
         $data['FILESIZE'] = filesize($file);
     if(!isset($data['WIDTH']))
@@ -514,11 +517,12 @@ function convertFile($infile, $outfile, $param)
 }
 
 //$fname = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/recup_dir.1/f0190168.jpg';
-$fname  = '/home/ubuntu/restore/toAnalyse/recup_dir.1/f0190168.jpg';
+$fname  = '/home/ubuntu/restore/toAnalyse/recup_dir.1/f1038368.png';
 //$fthumb = '/var/www/projects/total-1410-refontedam/restoreDir/new5151.jpg';
-$fthumb = '/home/ubuntu/restore/tmpdir/new5151.jpg';
+$fthumb = '/home/ubuntu/restore/tmpdir/new23413.jpg';
 
-$oldfname = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/5151.jpg';
+//$oldfname = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/5151.jpg';
+$oldfname = '/home/ubuntu/restore/olddir/23413.jpg';
 
 $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
 $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
@@ -527,20 +531,48 @@ if ($success){
     $img = new Imagick();
 
     $img->readImage($fthumb);
-    $shnew = $img->getImageSignature();
+    $shnew = $img->getImagePixelColor(10,10)->getColorAsString();
+    $shnew2 = $img->getImagePixelColor(25,25)->getColorAsString();
+$shnew3 = $img->getImagePixelColor(75,75)->getColorAsString();
+$shnew4 = $img->getImagePixelColor(125,125)->getColorAsString();
+
+
 
     $img->readImage($oldfname);
-    $shold = $img->getImageSignature();
+    $shold = $img->getImagePixelColor(10,10)->getColorAsString();
+    $shold2 = $img->getImagePixelColor(25,25)->getColorAsString();
+$shold3 = $img->getImagePixelColor(75,75)->getColorAsString();
+$shold4 = $img->getImagePixelColor(125,125)->getColorAsString();
 
     echo $fthumb."\n";
-    echo  $shnew."\n";
     echo $oldfname."\n";
-    echo $shold."\n";
+
+
 
     if ($shold == $shnew){
         echo "OK"."\n";
     }else{
         echo "KO"."\n";
     }
+
+if ($shold2 == $shnew2){
+        echo "OK"."\n";
+    }else{
+        echo "KO"."\n";
+    }
+
+if ($shold3 == $shnew3){
+        echo "OK"."\n";
+    }else{
+        echo "KO"."\n";
+    }
+
+if ($shold4 == $shnew4){
+        echo "OK"."\n";
+    }else{
+        echo "KO"."\n";
+    }
+
+
 
 }

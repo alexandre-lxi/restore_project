@@ -17,7 +17,7 @@ try {
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('tif')
+      WHERE s_format in ('tif','eps','psd','ai','fla')
       ";
 
     $req = $pdo->prepare($sql);
