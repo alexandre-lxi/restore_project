@@ -513,10 +513,12 @@ function convertFile($infile, $outfile, $param)
     return file_exists($outfile);
 }
 
-$fname = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/recup_dir.1/f0190168.jpg';
-$fthumb = '/var/www/projects/total-1410-refontedam/restoreDir/new5151.jpg';
+//$fname = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/recup_dir.1/f0190168.jpg';
+$fname  = '/home/ubuntu/restore/toAnalyse/recup_dir.1/f0190168.jpg';
+//$fthumb = '/var/www/projects/total-1410-refontedam/restoreDir/new5151.jpg';
+$fthumb = '/home/ubuntu/restore/tmpdir/new5151.jpg';
 
-$oldfname = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/5151.jpg'
+$oldfname = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/5151.jpg';
 
 $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
 $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
