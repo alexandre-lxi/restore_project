@@ -535,27 +535,27 @@ if ($success){
     $img2->readImage($oldfname);
 
     $lpixels = array(
-        '1'=>array(5,5),
-        '2'=>array(25,25),
-        '3'=>array(75,75),
-        '4'=>array(150,150),
-        '5'=>array(200,200),
-        '6'=>array(100,100),
-        '7'=>array(30,30),
-        '8'=>array(80,80),
-        '9'=>array(1,1),
-        '10'=>array(180,180),
+        '1'=>array(5,5,"TEST"=>),
+        '2'=>array(25,25,"TEST"=>),
+        '3'=>array(75,75,"TEST"=>),
+        '4'=>array(150,150,"TEST"=>),
+        '5'=>array(200,200,"TEST"=>),
+        '6'=>array(100,100,"TEST"=>),
+        '7'=>array(30,30,"TEST"=>),
+        '8'=>array(80,80,"TEST"=>),
+        '9'=>array(1,1,"TEST"=>),
+        '10'=>array(180,180,"TEST"=>),
     );
 
     foreach ($lpixels as $lpixel) {
         $shnew = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
         $shold = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColorAsString();
-        
+
 
         if ($shold == $shnew){
-            $lpixel["TEST"] = "OK";
+            echo "OK\n";
         }else{
-            $lpixel["TEST"] = "KO";
+            echo "KO\n";
         }
     }
 
