@@ -523,7 +523,7 @@ try {
         $name = explode('.', $name);
         $name = $name[0];
 
-        $fthumb = $tmpdname.$name.'jpg';
+        $fthumb = $tmpdname.$name.'.jpg';
 
         try {
             $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
