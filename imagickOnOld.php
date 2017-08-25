@@ -47,7 +47,7 @@ try {
 
         echo $file."\n";
 
-        $fname = $olddname.$files;
+        $fname = $olddname.$file;
         $icode = explode('.', $file);
         $icode = $icode[0];
 
