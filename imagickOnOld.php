@@ -16,10 +16,7 @@ $VALEUR_mot_de_passe = 'alaidin';
 
 $olddname = '/home/ubuntu/restore/olddir/';
 
-
 $img = new Imagick();
-
-$img->readImage($fthumb);
 
 $lpixels = array(
     '1'=>array(5,15),
