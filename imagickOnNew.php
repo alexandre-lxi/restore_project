@@ -41,22 +41,20 @@ try {
 
     $req = $pdo->prepare($sql);
 
-    foreach ($files as $file) {
-        if ($file == '.') continue;
-        if ($file == '..') continue;
+    $sqlSel = "select id, fname from restore_files";
+    $reqSel = $pdo->prepare($sqlSel);
 
-        if (is_dir($olddname.$file))
-            continue;
+    $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-        echo $file."\n";
+    foreach ($rows as $row) {
+        echo $row->fname."\n";
 
-        $fname = $olddname.$file;
-        $icode = explode('.', $file);
-        $icode = $icode[0];
+        $fname = $row->fname;
+        $icode = $row->id;
 
         $img->readImage($fname);
 
-        $req->bindValue(':fname', $file, PDO::PARAM_STR);
+        $req->bindValue(':fname', $fname, PDO::PARAM_STR);
         $req->bindValue(':icode', $icode, PDO::PARAM_INT);
 
         $cnt = 1;
