@@ -54,27 +54,32 @@ try {
         $icode = explode('.', $file);
         $icode = $icode[0];
 
-        $img->readImage($fname);
+        try {
+            $img->readImage($fname);
 
-        $req->bindValue(':fname', $file, PDO::PARAM_STR);
-        $req->bindValue(':icode', $icode, PDO::PARAM_INT);
+            $req->bindValue(':fname', $file, PDO::PARAM_STR);
+            $req->bindValue(':icode', $icode, PDO::PARAM_INT);
 
-        $cnt = 1;
+            $cnt = 1;
 
-        foreach ($lpixels as $lpixel) {
-            $shnew = $img->getImagePixelColor($lpixel[0],$lpixel[1])->getColor();
+            foreach ($lpixels as $lpixel) {
+                $shnew = $img->getImagePixelColor($lpixel[0], $lpixel[1])->getColor();
 
-            $req->bindValue(':p'.$cnt.'_a', $shnew['a'], PDO::PARAM_INT);
-            $req->bindValue(':p'.$cnt.'_r', $shnew['r'], PDO::PARAM_INT);
-            $req->bindValue(':p'.$cnt.'_g', $shnew['g'], PDO::PARAM_INT);
-            $req->bindValue(':p'.$cnt.'_b', $shnew['b'], PDO::PARAM_INT);
+                $req->bindValue(':p'.$cnt.'_a', $shnew['a'], PDO::PARAM_INT);
+                $req->bindValue(':p'.$cnt.'_r', $shnew['r'], PDO::PARAM_INT);
+                $req->bindValue(':p'.$cnt.'_g', $shnew['g'], PDO::PARAM_INT);
+                $req->bindValue(':p'.$cnt.'_b', $shnew['b'], PDO::PARAM_INT);
 
-            $cnt++;
+                $cnt++;
+            }
+
+            $img->clear();
+
+            $req->execute();
+        }catch(Exception $e){
+            continue;
         }
 
-        $img->clear();
-
-        $req->execute();
     }
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
