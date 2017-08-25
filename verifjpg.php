@@ -73,5 +73,11 @@ $liptc = $iptc->readIPTC();
 
 </table>
 
+<?php
+
+
+
+?>
+
 </body>
 </html>
