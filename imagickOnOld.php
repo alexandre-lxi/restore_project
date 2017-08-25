@@ -72,6 +72,8 @@ try {
             $cnt++;
         }
 
+        $img->clear();
+
         $req->execute();
     }
 } catch (PDOException $Exception) {
