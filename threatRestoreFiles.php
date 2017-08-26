@@ -12,6 +12,12 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
+$vals[1] = array(
+    'r'=> array('min'=>0,'max'=>0),
+    'g'=> array('min'=>0,'max'=>0),
+    'b'=> array('min'=>0,'max'=>0));
+$tCols[1] = array('p1_r','p1_g','p1_b');
+
 
 function getFileExtension($file, $withdot=false)
 {
@@ -66,7 +72,7 @@ try {
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('jpg')
+      WHERE s_format in ('mp4')
         and id not in (select rf_code from restore_file_co2)
       limit 100
       ";
@@ -80,8 +86,7 @@ try {
     $sqlCo = "select *
                 from image_file imf, container co, image_infofr info
                 where co.i_autocode = imf.i_foreigncode
-                  and co.i_autocode = info.i_foreigncode
-                  and b_isintrash = 0
+                  and co.i_autocode = info.i_foreigncode                  
                   and i_filesize = :fsize
                   and s_fileformat = :fformat";
     $reqCo = $pdo->prepare($sqlCo);
@@ -100,15 +105,17 @@ try {
 
         echo $row->fname."\n";
 
-        if (isImage($row->fname)) {
-            if (count($rowsCo) == 1) {
-                $rowCo = $rowsCo[0];
+        if (count($rowsCo) == 1) {
+            $rowCo = $rowsCo[0];
 
+            if (isImage($row->fname) || isPdf($row->fname)) {
                 if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
                     $reqInsetCo->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
                     $reqInsetCo->bindValue(':cocode', $rowCo->i_autocode, PDO::PARAM_INT);
 
                     echo "Insert co rfcode:".$row->id." cocode:".$rowCo->i_autocode."\n";
+
+                    //$reqInsetCo->execute();
                 } else {
                     $reqInsetCoAn->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
                     $reqInsetCoAn->bindValue(':cocode', $rowCo->i_autocode, PDO::PARAM_INT);
@@ -117,15 +124,39 @@ try {
                     $reqInsetCoAn->bindValue(':reason', $reason, PDO::PARAM_INT);
 
                     echo "Insert coan rfcode:".$row->id." cocode:".$rowCo->i_autocode." reason: ".$reason."\n";
-                }
-            } elseif (count($rowsCo) > 1) {
-                echo 'CNT: '.count($rowsCo) ;
 
-                foreach ($rowsCo as $rowCo) {
-                    var_dump($rowCo);
+                    //$reqInsetCoAn->execute();
                 }
             }
+            if (isVideo($row->fname)){
+                if (($rowCo->f_length == $row->length)) {
+                    $reqInsetCo->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                    $reqInsetCo->bindValue(':cocode', $rowCo->i_autocode, PDO::PARAM_INT);
+
+                    echo "Insert co rfcode:".$row->id." cocode:".$rowCo->i_autocode."\n";
+
+                    //$reqInsetCo->execute();
+                } else {
+                    $reqInsetCoAn->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                    $reqInsetCoAn->bindValue(':cocode', $rowCo->i_autocode, PDO::PARAM_INT);
+
+                    $reason = 'Count=1#Length='.$row->length.'-'.$rowCo->f_length;
+                    $reqInsetCoAn->bindValue(':reason', $reason, PDO::PARAM_INT);
+
+                    echo "Insert coan rfcode:".$row->id." cocode:".$rowCo->i_autocode." reason: ".$reason."\n";
+
+                    //$reqInsetCoAn->execute();
+                }
+            }
+        } elseif (count($rowsCo) > 1) {
+            echo 'CNT: '.count($rowsCo);
+
+            foreach ($rowsCo as $rowCo) {
+                print_r($rowCo);
+            }
         }
+
+
 
     }
 
