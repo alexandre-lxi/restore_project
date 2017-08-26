@@ -508,7 +508,7 @@ try {
     $req = $pdo->prepare($sql);
 
     $sqlSel = "select id, fname from restore_files where s_format in('jpg','png','tif','jpeg','png','gif','eps','pdf','ai')
-      and id >= 158000
+      and id = 78
       order by 1 desc";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
@@ -531,7 +531,8 @@ try {
             continue;
 
         try {
-            $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
+            //$success = convertFile($fname, $fthumb, $param);    // create thumbnail image
+            $success = true;
 
             if ($success) {
 

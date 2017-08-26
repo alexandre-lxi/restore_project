@@ -276,7 +276,7 @@ function threatImage()
 }
 
 
-if (controlPixels(42,	58912)){
+if (controlPixels(78,	5204)){
     echo " OK\n";
 }else{
     echo " KO\n";
