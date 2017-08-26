@@ -212,7 +212,7 @@ try {
                     foreach ($rowsCoVi as $rowCoVi) {
                         insertCoAn($reqInsetCo, $row->id, $rowCoVi->i_autocode, $reason, true);
                     }
-                }else (count($rowsCoVi) > 1){
+                }else{
                     $reason = 'VIDEO#BySizeAndLength#0';
                     foreach ($rowsCoVi as $rowCoVi) {
                         insertCoAn($reqInsetCo, $row->id, $rowCoVi->i_autocode, $reason, true);
