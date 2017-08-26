@@ -189,7 +189,7 @@ try {
                       and i_height = :height
                       and ceil(f_length) = :length
                       and s_fileformat = :fformat";
-                $reqCoVi = $pdo->prepare($sqlCo);
+                $reqCoVi = $pdo->prepare($sqlCoVi);
 
                 $reqCoVi->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
                 $reqCoVi->bindValue(':width', $row->width, PDO::PARAM_INT);
