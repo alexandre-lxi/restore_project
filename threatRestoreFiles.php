@@ -43,13 +43,6 @@ function isVideo($file)
     $info = exec("file -bi '".$file."'");
     return strstr($info, "video")!==false ||  (getFileExtension($file)=="mov") ||  (getFileExtension($file)=="flv") || (getFileExtension($file)=="wmv") || (getFileExtension($file)=="mpg") || (getFileExtension($file)=="mpeg");// <== this is because FLV are not yet recognized
 }
-function isVideoExt($file)
-{
-    $loff = array('avi','mpg', 'mpeg', 'm2v', 'wmv', 'mov', 'flv', 'mp4');
-    $ext = getFileExtension($file);
-
-    return in_array($ext, $loff);
-}
 function isText($file)
 {
     $info = exec("file -bi '".$file."'");
@@ -104,25 +97,26 @@ function insertCoAn($req, $rfcode, $cocode, $reason, $isrestored = false){
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
+    $sql = "SELECT *
+      FROM restore_files
+      WHERE id not in (select rf_code from restore_file_co2)
+      limit 1000
+      ";
+
+    $req = $pdo->prepare($sql);
+    $req->execute();
+
+    $rows = $req->fetchAll(PDO::FETCH_OBJ);
+    $nb = 0;
+
     $sqlCo = "select *
                 from image_file imf, container co, image_infofr info
                 where co.i_autocode = imf.i_foreigncode
                   and co.i_autocode = info.i_foreigncode                  
-                  and co.i_autocode not in (select co_code from restore_file_co2)
-                  limit 100";
+                  and i_filesize = :fsize
+                  and s_fileformat = :fformat
+                  and co.i_autocode not in (select co_code from restore_file_co2)";
     $reqCo = $pdo->prepare($sqlCo);
-    $coRows = $reqCo->fetchAll(PDO::FETCH_OBJ);
-
-    print_r($coRows);
-
-    $sqlRf = "SELECT *
-      FROM restore_files
-      WHERE fsize = :fsize
-      and s_format = :fformat";
-
-    $reqRf = $pdo->prepare($sqlRf);
-
-    $nb = 0;
 
     $sqlInsertCo = "insert IGNORE into restore_file_co2 (rf_code, co_code, is_restored) values (:rfcode, :cocode, false)";
     $reqInsetCo = $pdo->prepare($sqlInsertCo);
@@ -130,102 +124,100 @@ try {
     $sqlInsertCoAn = "insert IGNORE into restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) values (:rfcode, :cocode, :isrestored, :reason)";
     $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
 
-    foreach ($coRows as $coRow){
-        echo $coRow->s_filename;
+    foreach ($rows as $row){
+        $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
+        $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+        $reqCo->execute();
+        $rowsCo = $reqCo->fetchAll(PDO::FETCH_OBJ);
 
-        $fformat = explode('.',$coRow->s_format);
-        $fformat = $fformat[1];
+        echo $row->fname."\n";
 
-        $reqRf->bindValue(':fsize', $coRows->fsize, PDO::PARAM_INT);
-        $reqRf->bindValue(':fformat', $fformat, PDO::PARAM_STR);
-        $reqRf->execute();
-        $rfRows = $reqRf->fetchAll(PDO::FETCH_OBJ);
+        if (count($rowsCo) == 1) {
+            $rowCo = $rowsCo[0];
 
-        echo $coRow->i_autocode."\n";
-
-        if (count($rfRows) == 1) {
-            $rfRow = $rfRows[0];
-
-            if (isImage($rfRow->fname) || isPdf($rfRow->fname)) {
-                if (($coRow->i_width == $rfRow->width) && ($coRow->i_height == $rfRow->height)) {
-                    insertCo($reqInsetCo, $rfRow->id, $coRow->i_autocode);
+            if (isImage($row->fname) || isPdf($row->fname)) {
+                if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
+                    insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
                 } else {
-                    $reason = 'IMAGE#Count=1#With='.$rfRow->width.'-'.$coRow->i_width.'#Height='.$rfRow->height.'-'.$coRow->i_height;
-                    insertCoAn($reqInsetCoAn, $rfRow->id, $coRow->i_autocode, $reason);
+                    $reason = 'IMAGE#Count=1#With='.$row->width.'-'.$rowCo->i_width.'#Height='.$row->height.'-'.$rowCo->i_height;
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
                 }
             }
 
-            if (isOffice($rfRow->fname)) {
-                insertCo($reqInsetCo, $rfRow->id, $coRow->i_autocode);
+            if (isOffice($row->fname)) {
+                insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
             }
 
-            if (isVideo($rfRow->fname)){
-                if ((ceil($coRow->f_length) == ceil($rfRow->length))) {
-                    insertCo($reqInsetCo, $rfRow->id, $coRow->i_autocode);
+            if (isVideo($row->fname)){
+                if ((ceil($rowCo->f_length) == ceil($row->length))) {
+                    insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
                 } else {
-                    $reason = 'VIDEO#Count=1#Length='.$rfRow->length.'-'.$coRow->f_length;
-                    insertCoAn($reqInsetCoAn, $rfRow->id, $coRow->i_autocode, $reason);
+                    $reason = 'VIDEO#Count=1#Length='.$row->length.'-'.$rowCo->f_length;
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
                 }
             }
-        } elseif (count($coRows) > 1) { //si multi
-            echo 'CNT: '.count($coRows);
+        } elseif (count($rowsCo) > 1) { //si multi
+            echo 'CNT: '.count($rowsCo);
 
-            foreach ($rfRows as $rfRow) {
-                if (isImage($rfRow->fname)) {
+            if (isImage($row->fname)) {
+                foreach ($rowsCo as $rowCo) {
                     $reason = 'IMAGE#Multi';
-                    insertCoAn($reqInsetCoAn, $rfRow->id, $coRow->i_autocode, $reason);
-                }
-                if (isOffice($rfRow->fname)) {
-
-                        $reason = 'OFFICE#Multi';
-                        insertCoAn($reqInsetCoAn, $rfRow->id, $coRow->i_autocode, $reason);
-
-                }
-
-                if (isVideo($rfRow->fname)) {
-                        $reason = 'VIDEO#Multi';
-                        insertCoAn($reqInsetCoAn, $rfRow->id, $coRow->i_autocode, $reason);
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
                 }
             }
+
+            if (isOffice($row->fname)) {
+                foreach ($rowsCo as $rowCo) {
+                    $reason = 'OFFICE#Multi';
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                }
+            }
+
+            if (isVideo($row->fname)) {
+                foreach ($rowsCo as $rowCo) {
+                    $reason = 'VIDEO#Multi';
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                }
+            }
+
         } else { //Si 0
-            if (isVideo($coRow->s_filename)) {
-                echo $coRow->s_filename;
-//                $sqlCoVi = "select *
-//                    from image_file imf, container co, image_infofr info
-//                    where co.i_autocode = imf.i_foreigncode
-//                      and co.i_autocode = info.i_foreigncode
-//                      and i_width = :width
-//                      and i_height = :height
-//                      and ceil(f_length) = :length
-//                      and s_fileformat = :fformat";
-//                $reqCoVi = $pdo->prepare($sqlCoVi);
-//
-//                $reqCoVi->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
-//                $reqCoVi->bindValue(':width', $row->width, PDO::PARAM_INT);
-//                $reqCoVi->bindValue(':height', $row->height, PDO::PARAM_INT);
-//                $reqCoVi->bindValue(':length', ceil($row->length), PDO::PARAM_INT);
-//
-//                $reqCoVi->execute();
-//
-//                $rowsCoVi = $reqCoVi->fetchAll(PDO::FETCH_OBJ);
-//
-//                if (count($rowsCoVi) == 1){
-//                    $rowCoVi = $rowsCoVi[0];
-//
-//                    insertCo($reqInsetCo, $row->id, $rowCoVi->i_autocode);
-//                    $reason = 'VIDEO#BySizeAndLength#';
-//                    insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
-//                }elseif (count($rowsCoVi) > 1){
-//                    $reason = 'VIDEO#BySizeAndLength#Multi';
-//                    foreach ($rowsCoVi as $rowCoVi) {
-//                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
-//                    }
-//                }else{
-//                    $reason = 'VIDEO#BySizeAndLength#0';
-//                    foreach ($rowsCoVi as $rowCoVi) {
-//                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
-//                    }
-//                }
+            if (isVideo($row->fname)) {
+                $sqlCoVi = "select *
+                    from image_file imf, container co, image_infofr info
+                    where co.i_autocode = imf.i_foreigncode
+                      and co.i_autocode = info.i_foreigncode                  
+                      and i_width = :width
+                      and i_height = :height
+                      and ceil(f_length) = :length
+                      and s_fileformat = :fformat";
+                $reqCoVi = $pdo->prepare($sqlCoVi);
+
+                $reqCoVi->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+                $reqCoVi->bindValue(':width', $row->width, PDO::PARAM_INT);
+                $reqCoVi->bindValue(':height', $row->height, PDO::PARAM_INT);
+                $reqCoVi->bindValue(':length', ceil($row->length), PDO::PARAM_INT);
+
+                $reqCoVi->execute();
+
+                $rowsCoVi = $reqCoVi->fetchAll(PDO::FETCH_OBJ);
+
+                if (count($rowsCoVi) == 1){
+                    $rowCoVi = $rowsCoVi[0];
+
+                    insertCo($reqInsetCo, $row->id, $rowCoVi->i_autocode);
+                    $reason = 'VIDEO#BySizeAndLength#';
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                }elseif (count($rowsCoVi) > 1){
+                    $reason = 'VIDEO#BySizeAndLength#Multi';
+                    foreach ($rowsCoVi as $rowCoVi) {
+                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                    }
+                }else{
+                    $reason = 'VIDEO#BySizeAndLength#0';
+                    foreach ($rowsCoVi as $rowCoVi) {
+                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                    }
+                }
             }
         }
     }
