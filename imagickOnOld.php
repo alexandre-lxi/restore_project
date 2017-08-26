@@ -63,7 +63,10 @@ try {
             $cnt = 1;
 
             foreach ($lpixels as $lpixel) {
+                print_r($lpixel);
+
                 $shnew = $img->getImagePixelColor($lpixel[0], $lpixel[1])->getColor();
+                print_r($img->getImagePixelColor($lpixel[0], $lpixel[1])->getColorAsString());
 
                 $req->bindValue(':p'.$cnt.'_a', $shnew['a'], PDO::PARAM_INT);
                 $req->bindValue(':p'.$cnt.'_r', $shnew['r'], PDO::PARAM_INT);
