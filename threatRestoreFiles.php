@@ -73,25 +73,72 @@ function threatImage(){
 
 }
 
-function insertCo($req, $rfcode, $cocode){
-    $req->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
-    $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+function insertCo($rfcode, $cocode){
 
-    echo "Insert co rfcode:".$rfcode." cocode:".$cocode."\n";
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
 
-    $req->execute();
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "select * from from restore_file_co2 where co_code = :cocode";
+        $req = $pdo->prepare($sql);
+        $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $req->execute();
+        $vals = $req->fetchAll(PDO::FETCH_OBJ);
+        if (count($vals) == 0) {
+
+
+            $sqlInsertCo = "INSERT IGNORE INTO restore_file_co2 (rf_code, co_code, is_restored) VALUES (:rfcode, :cocode, FALSE)";
+            $reqInsetCo = $pdo->prepare($sqlInsertCo);
+
+            $reqInsetCo->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
+            $reqInsetCo->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+            $reqInsetCo->execute();
+        }
+
+        echo "Insert co rfcode:".$rfcode." cocode:".$cocode."\n";
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+
+
 }
 
-function insertCoAn($req, $rfcode, $cocode, $reason, $isrestored = false){
-    $req->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
-    $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
-    $req->bindValue(':reason', $reason, PDO::PARAM_STR);
-    $req->bindValue(':isrestored', $isrestored, PDO::PARAM_BOOL);
+function insertCoAn($rfcode, $cocode, $reason, $isrestored = false){
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sqlInsertCoAn = "insert IGNORE into restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) values (:rfcode, :cocode, :isrestored, :reason)";
+        $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
+
+        $reqInsetCoAn->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
+        $reqInsetCoAn->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $reqInsetCoAn->bindValue(':reason', $reason, PDO::PARAM_STR);
+        $reqInsetCoAn->bindValue(':isrestored', $isrestored, PDO::PARAM_INT);
 
 
-    echo "Insert coAn rfcode:".$rfcode." cocode:".$cocode." reason: ".$reason."\n";
+        echo "Insert coAn rfcode:".$rfcode." cocode:".$cocode." reason: ".$reason."\n";
 
-    $req->execute();
+        $reqInsetCoAn->execute();
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+
+
 }
 
 try {
@@ -118,11 +165,9 @@ try {
                   and co.i_autocode not in (select co_code from restore_file_co2)";
     $reqCo = $pdo->prepare($sqlCo);
 
-    $sqlInsertCo = "insert IGNORE into restore_file_co2 (rf_code, co_code, is_restored) values (:rfcode, :cocode, false)";
-    $reqInsetCo = $pdo->prepare($sqlInsertCo);
 
-    $sqlInsertCoAn = "insert IGNORE into restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) values (:rfcode, :cocode, :isrestored, :reason)";
-    $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
+
+
 
     foreach ($rows as $row){
         $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
@@ -137,7 +182,7 @@ try {
 
             if (isImage($row->fname) || isPdf($row->fname)) {
                 if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
-                    insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
+                    insertCo($row->id, $rowCo->i_autocode);
                 } else {
                     $reason = 'IMAGE#Count=1#With='.$row->width.'-'.$rowCo->i_width.'#Height='.$row->height.'-'.$rowCo->i_height;
                     insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
@@ -145,38 +190,43 @@ try {
             }
 
             if (isOffice($row->fname)) {
-                insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
+                insertCo( $row->id, $rowCo->i_autocode);
             }
 
             if (isVideo($row->fname)){
                 if ((ceil($rowCo->f_length) == ceil($row->length))) {
-                    insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
+                    insertCo( $row->id, $rowCo->i_autocode);
                 } else {
                     $reason = 'VIDEO#Count=1#Length='.$row->length.'-'.$rowCo->f_length;
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                    insertCoAn( $row->id, $rowCo->i_autocode, $reason);
                 }
             }
         } elseif (count($rowsCo) > 1) { //si multi
             echo 'CNT: '.count($rowsCo);
 
             if (isImage($row->fname)) {
+
                 foreach ($rowsCo as $rowCo) {
                     $reason = 'IMAGE#Multi';
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+
+                    if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
+                        insertCoAn( $row->id, $rowCo->i_autocode, $reason, 3);
+                        insertCo( $row->id, $rowCo->i_autocode);
+                    }
                 }
             }
 
             if (isOffice($row->fname)) {
                 foreach ($rowsCo as $rowCo) {
                     $reason = 'OFFICE#Multi';
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                    insertCoAn( $row->id, $rowCo->i_autocode, $reason);
                 }
             }
 
             if (isVideo($row->fname)) {
                 foreach ($rowsCo as $rowCo) {
                     $reason = 'VIDEO#Multi';
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                    insertCoAn( $row->id, $rowCo->i_autocode, $reason);
                 }
             }
 
@@ -204,18 +254,18 @@ try {
                 if (count($rowsCoVi) == 1){
                     $rowCoVi = $rowsCoVi[0];
 
-                    insertCo($reqInsetCo, $row->id, $rowCoVi->i_autocode);
+                    insertCo( $row->id, $rowCoVi->i_autocode);
                     $reason = 'VIDEO#BySizeAndLength#';
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                    insertCoAn( $row->id, $rowCoVi->i_autocode, $reason, 3);
                 }elseif (count($rowsCoVi) > 1){
                     $reason = 'VIDEO#BySizeAndLength#Multi';
                     foreach ($rowsCoVi as $rowCoVi) {
-                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                        insertCoAn( $row->id, $rowCoVi->i_autocode, $reason );
                     }
                 }else{
                     $reason = 'VIDEO#BySizeAndLength#0';
                     foreach ($rowsCoVi as $rowCoVi) {
-                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
+                        insertCoAn( $row->id, $rowCoVi->i_autocode, $reason);
                     }
                 }
             }
