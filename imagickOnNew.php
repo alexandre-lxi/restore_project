@@ -536,7 +536,7 @@ try {
 
             if ($success) {
 
-                $img->readImage($fname);
+                $img->readImage($fthumb);
                 $req->bindValue(':rfcode', $icode, PDO::PARAM_INT);
 
                 $cnt = 1;
