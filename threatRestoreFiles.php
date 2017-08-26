@@ -119,6 +119,8 @@ try {
                     echo "Insert coan rfcode:".$row->id." cocode:".$rowCo->i_autocode." reason: ".$reason."\n";
                 }
             } elseif (count($rowsCo) > 1) {
+                echo 'CNT: '.count($rowsCo) ;
+
                 foreach ($rowsCo as $rowCo) {
                     var_dump($rowCo);
                 }
