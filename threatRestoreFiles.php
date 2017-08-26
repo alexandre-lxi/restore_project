@@ -109,7 +109,7 @@ try {
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
     $nb = 0;
 
-    $sqlCo = "select *
+    $sqlCo = "select co.i_autocode, imf.i_width, imf.i_height, imf.f_length
                 from image_file imf, container co, image_infofr info
                 where co.i_autocode = imf.i_foreigncode
                   and co.i_autocode = info.i_foreigncode                  
