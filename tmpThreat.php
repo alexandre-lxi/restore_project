@@ -41,7 +41,7 @@ try {
 
 
     foreach ($rows as $row) {
-        $vid = $row->fname,
+        $vid = $row->fname;
 
         if (file_exists($vid)) {
 
