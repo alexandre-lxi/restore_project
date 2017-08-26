@@ -49,7 +49,7 @@ try {
                 $req->execute();
             }
 
-            echo $vid." pagecount = ".$pagecount." width = ".$width." height = ".$height."\n";
+            echo $vid." width = ".$width." height = ".$height."\n";
 
 
 

@@ -13,6 +13,14 @@ $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
 
+function getFileExtension($file, $withdot=false)
+{
+    if($withdot)
+        return strtolower(substr($file, strrpos($file,".")));
+    else
+        return strtolower(substr($file, strrpos($file,".")+1));
+}
+
 function isAudio($file)
 {
     $info = exec("file -bi '".$file."'");
@@ -49,12 +57,16 @@ function isSwf($file)
     return $swf;
 }
 
+function threatImage(){
+
+}
+
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('pdf')
+      WHERE s_format in ('jpg')
         and id not in (select rf_code from restore_file_co2)
       limit 100
       ";
@@ -86,6 +98,8 @@ try {
         $reqCo->execute();
         $rowsCo = $reqCo->fetchAll(PDO::FETCH_OBJ);
 
+        echo $row->fname."\n";
+
         if (isImage($row->fname)) {
             if (count($rowsCo) == 1) {
                 $rowCo = $rowsCo[0];
@@ -105,7 +119,9 @@ try {
                     echo "Insert coan rfcode:".$row->id." cocode:".$rowCo->i_autocode." reason: ".$reason."\n";
                 }
             } elseif (count($rowsCo) > 1) {
-                echo count($rowsCo)."\n";
+                foreach ($rowsCo as $rowCo) {
+                    var_dump($rowCo);
+                }
             }
         }
 
