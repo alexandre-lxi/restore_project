@@ -46,7 +46,12 @@ try {
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
+    $nb = 1;
+
     foreach ($rows as $row) {
+        echo $nb."\n";
+        $nb++;
+
         for ($i =1; $i <= 10; $i++){
             $rcol = $tCols[$i][0];
             $rval = $row->$rcol;
