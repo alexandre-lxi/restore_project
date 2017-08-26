@@ -23,15 +23,6 @@ try {
       WHERE s_format in ('mov','mp4','mpg','mpeg','m2v','wmv','flv')
       ";
 
-//    'avi':
-//		case 'mpg':
-//		case 'mpeg':
-//		case 'm2v':
-//		case 'wmv':
-//		case 'mov':
-//		case 'flv':
-//		case 'mp4':
-
     $req = $pdo->prepare($sql);
     $req->execute();
 
@@ -52,9 +43,11 @@ try {
                 $video_attributes = _get_video_attributes($vid, $ffmpeg_path);
                 $length = ((($video_attributes['hours'] * 3600) + ($video_attributes['mins'] * 60) + $video_attributes['secs'])*100) + $video_attributes['ms'];
 
-                $sql = 'update restore_files set length = :length/100 where id=:id';
+                $sql = 'update restore_files set length = :length/100, width= :width, height= :height where id=:id';
                 $req = $pdo->prepare($sql);
                 $req->bindValue(':length', $length, PDO::PARAM_INT);
+                $req->bindValue(':width', $video_attributes['width'], PDO::PARAM_INT);
+                $req->bindValue(':height', $video_attributes['height'], PDO::PARAM_INT);
                 $req->bindValue(':id', $row->id, PDO::PARAM_INT);
                 $req->execute();
 
@@ -74,22 +67,38 @@ function _get_video_attributes($video, $ffmpeg) {
     $command = $ffmpeg . ' -i ' . $video . ' -vstats 2>&1';
     $output = shell_exec($command);
 
+    $regex_sizes = "/Video: ([^,]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; // or : $regex_sizes = "/Video: ([^\r\n]*), ([^,]*), ([0-9]{1,4})x([0-9]{1,4})/"; (code from @1owk3y)
+    if (preg_match($regex_sizes, $output, $regs)) {
+        $codec = $regs [1] ? $regs [1] : null;
+        $width = $regs [3] ? $regs [3] : null;
+        $height = $regs [4] ? $regs [4] : null;
+    }else{
+        $codec = '';
+        $width = 0;
+        $height = 0;
+    }
+
     $regex_duration = "/Duration: ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}).([0-9]{1,2})/";
     if (preg_match($regex_duration, $output, $regs)) {
-        $hours = $regs [1] ? $regs [1] : null;
-        $mins = $regs [2] ? $regs [2] : null;
-        $secs = $regs [3] ? $regs [3] : null;
-        $ms = $regs [4] ? $regs [4] : null;
-
-        return array(
-            'hours' => $hours,
-            'mins' => $mins,
-            'secs' => $secs,
-            'ms' => $ms
-        );
+        $hours = $regs [1] ? $regs [1] : 0;
+        $mins = $regs [2] ? $regs [2] : 0;
+        $secs = $regs [3] ? $regs [3] : 0;
+        $ms = $regs [4] ? $regs [4] : 0;
+    }else{
+        $hours = 0;
+        $mins = 0;
+        $secs = 0;
+        $ms = 0;
     }
-    else
-        return false;
+
+    return array('codec' => $codec,
+        'width' => $width,
+        'height' => $height,
+        'hours' => $hours,
+        'mins' => $mins,
+        'secs' => $secs,
+        'ms' => $ms
+    );
 
 }
 
