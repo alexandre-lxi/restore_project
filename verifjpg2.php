@@ -30,7 +30,7 @@ echo "<html>";
 
 
 $fname = 'pictures/tmpdir/'.$_GET['imgtmp'];
-$fname2 = 'pictures/olddir/'.$_GET['imgold'];
+$fname2 = 'pictures/olddir/thumbdir/'.$_GET['imgold'];
 
 
 ?>
