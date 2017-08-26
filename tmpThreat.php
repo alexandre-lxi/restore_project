@@ -20,8 +20,7 @@ try {
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('mov')
-      limit 50
+      WHERE s_format in ('mov','mp4','mpg','mpeg','m2v','wmv','flv')
       ";
 
 //    'avi':
@@ -58,6 +57,8 @@ try {
                 $req->bindValue(':length', $length, PDO::PARAM_INT);
                 $req->bindValue(':id', $row->id, PDO::PARAM_INT);
                 $req->execute();
+
+		echo $row->id.' '.$length."\n";
 
             }
         }
