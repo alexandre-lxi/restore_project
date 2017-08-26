@@ -16,62 +16,51 @@ $ffmpeg_path = 'ffmpeg'; //or: /usr/bin/ffmpeg , or /usr/local/bin/ffmpeg - depe
 $vid = 'PATH/TO/VIDEO'; //Replace here!
 
 try {
-//    $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
-//
-//    $sql = "SELECT *
-//      FROM restore_files
-//      WHERE s_format in ('mp4')
-//      ";
-//
-//    $req = $pdo->prepare($sql);
-//    $req->execute();
-//
-//    $rows = $req->fetchAll(PDO::FETCH_OBJ);
-//    $nb = 0;
+    $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+    $sql = "SELECT *
+      FROM restore_files
+      WHERE s_format in ('mov')
+      limit 50
+      ";
+
+//    'avi':
+//		case 'mpg':
+//		case 'mpeg':
+//		case 'm2v':
+//		case 'wmv':
+//		case 'mov':
+//		case 'flv':
+//		case 'mp4':
+
+    $req = $pdo->prepare($sql);
+    $req->execute();
+
+    $rows = $req->fetchAll(PDO::FETCH_OBJ);
+    $nb = 0;
 
 
-//    foreach ($rows as $row){
-//        $fs = filesize($row->fname);
-//
-//        if ($fs > 0){
-//            $sql = "update restore_files set fsize = :fsize where id = :id";
-//
-//            $req = $pdo->prepare($sql);
-//            $req->bindValue(':fsize', $fs, PDO::PARAM_INT);
-//            $req->bindValue(':id', $row->id, PDO::PARAM_INT);
-//
-//            $req->execute();
-//        }
-//
-//
-//    }
+    foreach ($rows as $row) {
+        $vid = $row->fname,
 
-    $vid = '/home/ubuntu/restore/toAnalyse/recup_dir.499/f1185824768.mp4'; //Replace here!
+        if (file_exists($vid)) {
 
-    if (file_exists($vid)) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime_type = finfo_file($finfo, $vid); // check mime type
+            finfo_close($finfo);
 
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime_type = finfo_file($finfo, $vid); // check mime type
-        finfo_close($finfo);
+            if (preg_match('/video\/*/', $mime_type)) {
+                $video_attributes = _get_video_attributes($vid, $ffmpeg_path);
+                $length = ((($video_attributes['hours'] * 3600) + ($video_attributes['mins'] * 60) + $video_attributes['secs'])*100) + $video_attributes['ms'];
 
-        if (preg_match('/video\/*/', $mime_type)) {
+                $sql = 'update restore_files set length = :length/100 where id=:id';
+                $req = $pdo->prepare($sql);
+                $req->bindValue(':length', $length, PDO::PARAM_INT);
+                $req->bindValue(':id', $row->id, PDO::PARAM_INT);
+                $req->execute();
 
-            $video_attributes = _get_video_attributes($vid, $ffmpeg_path);
-
-            print_r('Codec: ' . $video_attributes['codec'] . "\n");
-
-            print_r('Dimension: ' . $video_attributes['width'] . ' x ' . $video_attributes['height'] . "\n");
-
-            $length = ($video_attributes['hours']*3600)+($video_attributes['mins']*60)+$video_attributes['secs']+($video_attributes['ms']/100);
-            print_r('Duration: ' .$length. "\n");
-
-            print_r('Size:  ' . _human_filesize(filesize($vid))."\n");
-
-        } else {
-            print_r('File is not a video.');
+            }
         }
-    } else {
-        print_r('File does not exist.');
     }
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
