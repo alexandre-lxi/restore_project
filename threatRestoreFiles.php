@@ -230,7 +230,7 @@ try {
 
         } else { //Si 0
             if (isVideo($row->fname)) {
-                $sqlCoVi = "select *
+                $sqlCoVi = "select co.i_autocode, imf.i_width, imf.i_height, imf.f_length
                     from image_file imf, container co, image_infofr info
                     where co.i_autocode = imf.i_foreigncode
                       and co.i_autocode = info.i_foreigncode                  
