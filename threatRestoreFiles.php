@@ -117,10 +117,10 @@ try {
                   and s_fileformat = :fformat";
     $reqCo = $pdo->prepare($sqlCo);
 
-    $sqlInsertCo = "insert into restore_file_co2 (rf_code, co_code, is_restored) values (:rfcode, :cocode, false)";
+    $sqlInsertCo = "insert IGNORE into restore_file_co2 (rf_code, co_code, is_restored) values (:rfcode, :cocode, false)";
     $reqInsetCo = $pdo->prepare($sqlInsertCo);
 
-    $sqlInsertCoAn = "insert into restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) values (:rfcode, :cocode, :isrestored, :reason)";
+    $sqlInsertCoAn = "insert IGNORE into restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) values (:rfcode, :cocode, :isrestored, :reason)";
     $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
 
     foreach ($rows as $row){
