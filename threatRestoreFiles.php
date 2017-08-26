@@ -181,7 +181,7 @@ try {
 
         } else { //Si 0
             if (isVideo($row->fname)) {
-                $sqlCo = "select *
+                $sqlCoVi = "select *
                     from image_file imf, container co, image_infofr info
                     where co.i_autocode = imf.i_foreigncode
                       and co.i_autocode = info.i_foreigncode                  
@@ -189,17 +189,19 @@ try {
                       and i_height = :height
                       and ceil(f_length) = :length
                       and s_fileformat = :fformat";
-                $reqCo = $pdo->prepare($sqlCo);
+                $reqCoVi = $pdo->prepare($sqlCo);
 
-                $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
-                $reqCo->bindValue(':width', $row->width, PDO::PARAM_INT);
-                $reqCo->bindValue(':height', $row->height, PDO::PARAM_INT);
-                $reqCo->bindValue(':length', ceil($row->length), PDO::PARAM_INT);
+                $reqCoVi->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+                $reqCoVi->bindValue(':width', $row->width, PDO::PARAM_INT);
+                $reqCoVi->bindValue(':height', $row->height, PDO::PARAM_INT);
+                $reqCoVi->bindValue(':length', ceil($row->length), PDO::PARAM_INT);
 
-                $reqCo->execute();
+                $reqCoVi->execute();
 
-                if (count($reqCo) == 1){
-                    $rowCo = $rowsCo[0];
+                $rowsCoVi = $reqCoVi->fetchAll(PDO::FETCH_OBJ);
+
+                if (count($rowsCoVi) == 1){
+                    $rowCo = $rowsCoVi[0];
 
                     insertCo($reqInsetCo, $row->id, $rowCo->i_autocode);
                     $reason = 'VIDEO#BySizeAndLength#';
