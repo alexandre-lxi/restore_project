@@ -206,16 +206,16 @@ try {
 
                     insertCo($reqInsetCo, $row->id, $rowCoVi->i_autocode);
                     $reason = 'VIDEO#BySizeAndLength#';
-                    insertCoAn($reqInsetCo, $row->id, $rowCoVi->i_autocode, $reason, true);
+                    insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
                 }elseif (count($rowsCoVi) > 1){
                     $reason = 'VIDEO#BySizeAndLength#Multi';
                     foreach ($rowsCoVi as $rowCoVi) {
-                        insertCoAn($reqInsetCo, $row->id, $rowCoVi->i_autocode, $reason, true);
+                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
                     }
                 }else{
                     $reason = 'VIDEO#BySizeAndLength#0';
                     foreach ($rowsCoVi as $rowCoVi) {
-                        insertCoAn($reqInsetCo, $row->id, $rowCoVi->i_autocode, $reason, true);
+                        insertCoAn($reqInsetCoAn, $row->id, $rowCoVi->i_autocode, $reason, true);
                     }
                 }
             }
