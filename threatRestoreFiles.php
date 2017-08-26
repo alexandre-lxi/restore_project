@@ -165,10 +165,6 @@ try {
                   and co.i_autocode not in (select co_code from restore_file_co2)";
     $reqCo = $pdo->prepare($sqlCo);
 
-
-
-
-
     foreach ($rows as $row){
         $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
         $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
@@ -185,7 +181,7 @@ try {
                     insertCo($row->id, $rowCo->i_autocode);
                 } else {
                     $reason = 'IMAGE#Count=1#With='.$row->width.'-'.$rowCo->i_width.'#Height='.$row->height.'-'.$rowCo->i_height;
-                    insertCoAn($reqInsetCoAn, $row->id, $rowCo->i_autocode, $reason);
+                    insertCoAn( $row->id, $rowCo->i_autocode, $reason);
                 }
             }
 
@@ -212,6 +208,8 @@ try {
                     if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
                         insertCoAn( $row->id, $rowCo->i_autocode, $reason, 3);
                         insertCo( $row->id, $rowCo->i_autocode);
+                    }else{
+                        insertCoAn( $row->id, $rowCo->i_autocode, $reason);
                     }
                 }
             }
