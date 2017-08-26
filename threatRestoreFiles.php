@@ -230,7 +230,7 @@ try {
 
         } else { //Si 0
             if (isVideo($row->fname)) {
-                $sqlCoVi = "select co.i_autocode, imf.i_width, imf.i_height, imf.f_length
+                $sqlCoVi = "select co.i_autocode, imf.i_width, imf.i_height, imf.f_length, co.s_reference
                     from image_file imf, container co, image_infofr info
                     where co.i_autocode = imf.i_foreigncode
                       and co.i_autocode = info.i_foreigncode                  
@@ -257,9 +257,26 @@ try {
                     insertCoAn( $row->id, $rowCoVi->i_autocode, $reason, 3);
                 }elseif (count($rowsCoVi) > 1){
                     $reason = 'VIDEO#BySizeAndLength#Multi';
+
+                    $fileNames = array();
+
                     foreach ($rowsCoVi as $rowCoVi) {
-                        insertCoAn( $row->id, $rowCoVi->i_autocode, $reason );
+                        if (!in_array($rowCoVi->s_reference, $fileNames)) {
+                            $fileNames[] = $rowCoVi->s_reference;
+                        }
                     }
+
+                    foreach ($rowsCoVi as $rowCoVi) {
+                        if (array_count_values($fileNames)==1){
+                            insertCo( $row->id, $rowCoVi->i_autocode);
+                            insertCoAn( $row->id, $rowCoVi->i_autocode, $reason,3 );
+                        }else{
+                            insertCoAn( $row->id, $rowCoVi->i_autocode, $reason );
+                        }
+                    }
+
+
+
                 }else{
                     $reason = 'VIDEO#BySizeAndLength#0';
                     foreach ($rowsCoVi as $rowCoVi) {
