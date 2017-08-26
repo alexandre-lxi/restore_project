@@ -129,6 +129,8 @@ try {
     $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
 
     foreach ($coRows as $coRow){
+        echo $coRow->s_filename;
+
         $fformat = explode('.',$coRow->s_format);
         $fformat = $fformat[1];
 
