@@ -113,6 +113,8 @@ try {
     $reqCo = $pdo->prepare($sqlCo);
     $coRows = $reqCo->fetchAll(PDO::FETCH_OBJ);
 
+    print_r($coRows);
+
     $sqlRf = "SELECT *
       FROM restore_files
       WHERE fsize = :fsize
