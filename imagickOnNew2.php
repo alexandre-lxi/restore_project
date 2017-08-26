@@ -527,15 +527,16 @@ try {
 
         $fthumb = $tmpdname.$name.'.jpg';
 
-        if (file_exists($fthumb))
+        if (!file_exists($fthumb))
             continue;
 
         try {
-            $success = convertFile($fname, $fthumb, $param);    // create thumbnail image
+            //$success = convertFile($fname, $fthumb, $param);    // create thumbnail image
+            $success = true;
 
             if ($success) {
 
-                $img->readImage($fname);
+                $img->readImage($fthumb);
                 $req->bindValue(':rfcode', $icode, PDO::PARAM_INT);
 
                 $cnt = 1;

@@ -80,6 +80,8 @@ function controlPixels($rfcode, $cocode){
         $tCols[$i] = array('p'.$i.'_r','p'.$i.'_g','p'.$i.'_b');
     }
 
+    $taux = 0.1;
+
     try {
         echo "controlPixels rf: ".$rfcode." co: ".$cocode."\n";
 
@@ -123,7 +125,10 @@ function controlPixels($rfcode, $cocode){
             echo $g_rfval ."<=>".$g_coval ."\n";
             echo $b_rfval ."<=>".$b_coval ."\n";
 
-            if (($r_coval == $r_rfval) && ($b_coval == $b_rfval) && ($g_coval == $g_rfval))
+            if (
+                ((($r_coval*(1+$taux))>=$r_rfval) && (($r_coval*(1-$taux))<=$r_rfval)) &&
+                ((($g_coval*(1+$taux))>=$g_rfval) && (($g_coval*(1-$taux))<=$g_rfval)) &&
+                ((($b_coval*(1+$taux))>=$b_rfval) && (($b_coval*(1-$taux))<=$b_rfval)))            
                 $nb ++;
         }
 
