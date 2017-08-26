@@ -36,14 +36,23 @@ try {
         if (file_exists($vid)) {
             $output = shell_exec("pdfinfo ".$vid);
 
-            preg_match('/Pages:\s+([0-9]+)/', $output, $pagecountmatches);
-            $pagecount = $pagecountmatches[1];
-
             preg_match('/Page size:\s+([0-9]{0,5}\.?[0-9]{0,3}) x ([0-9]{0,5}\.?[0-9]{0,3})/', $output, $pagesizematches);
-            $width = round($pagesizematches[1]/2.83);
-            $height = round($pagesizematches[2]/2.83);
+            if (isset($pagesizematches[1])) {
+                $width = round($pagesizematches[1] / 2.83);
+                $height = round($pagesizematches[2] / 2.83);
 
-            echo "pagecount = ".$pagecount." width = ".$width." height = ".$height."\n";
+                $sql = 'update restore_files set width= :width, height= :height where id=:id';
+                $req = $pdo->prepare($sql);
+                $req->bindValue(':width', $width, PDO::PARAM_INT);
+                $req->bindValue(':height', $height, PDO::PARAM_INT);
+                $req->bindValue(':id', $row->id, PDO::PARAM_INT);
+                $req->execute();
+            }
+
+            echo $vid." pagecount = ".$pagecount." width = ".$width." height = ".$height."\n";
+
+
+
         }
     }
 } catch (PDOException $Exception) {
