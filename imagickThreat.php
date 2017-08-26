@@ -20,6 +20,7 @@ $vals[1] = array(
     'b'=> array('min'=>0,'max'=>0));
 $tCols[1] = array('p1_r','p1_g','p1_b');
 $res = array(1=>0);
+$icodes = array();
 
 for ($i =1; $i <= 10; $i++){
     $tCols[$i] = array('p'.$i.'_r','p'.$i.'_g','p'.$i.'_b');
@@ -39,7 +40,7 @@ try {
         $sql .= " and ".$tCols[$i][0]." <> 0 and ".$tCols[$i][1]." <> 0 and ".$tCols[$i][2]." <> 0";
     }
 
-    $sql .= ")";
+    $sql .= ") limit 1000";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -70,7 +71,7 @@ try {
             $vals[$i]['b']['max'] = $bval*(1+ $taux);
         }
 
-        $sql = "SELECT *
+        $sql = "SELECT distinct fname, icode
         FROM restore_ofile_colors where true";
 
         $sql .= " and (";
@@ -87,8 +88,6 @@ try {
         $reqSel->execute();
 
         $rowsSel = $reqSel->fetchAll(PDO::FETCH_OBJ);
-
-
 
         if (count($rowsSel)>0){
             if (isset($res[count($rowsSel)])){

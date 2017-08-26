@@ -73,6 +73,7 @@ $liptc = $iptc->readIPTC();
 
 </table>
 
+<img src="<?php echo $fname ?>">
 <?php
 
 
