@@ -325,7 +325,7 @@ function threatImage()
         FROM restore_files
         WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
         AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps', 'pdf', 'ai')
-        and id BETWEEN 232331 and 257880";
+        and id > 257880";
 
         $req = $pdo->prepare($sql);
         $req->execute();
