@@ -62,7 +62,7 @@ function isSwf($file)
 
 function isOffice($file)
 {
-    $loff = array('docx', 'pptx', 'doc', 'ppt', 'xls', 'xlsx');
+    $loff = array('docx', 'pptx', 'doc', 'ppt', 'xls', 'xlsx', 'pptx');
     $ext = getFileExtension($file);
 
     return in_array($ext, $loff);
@@ -424,8 +424,182 @@ function threatImage()
     }
 }
 
-threatImage();
+function threatVideo()
+{
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "SELECT *
+        FROM restore_files
+        WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
+        AND s_format IN ('fff')
+        and id between 155660 and 206770";
+
+        $req = $pdo->prepare($sql);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+        $nb = 0;
+
+        $sqlCo = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length
+                FROM image_file imf, container co, image_infofr info
+                WHERE co.i_autocode = imf.i_foreigncode
+                  AND co.i_autocode = info.i_foreigncode                  
+                  AND i_filesize = :fsize
+                  AND s_fileformat = :fformat
+                  AND co.i_autocode NOT IN (SELECT co_code FROM restore_file_co2)";
+        $reqCo = $pdo->prepare($sqlCo);
+
+        foreach ($rows as $row) {
+            $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
+            $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+            $reqCo->execute();
+            $rowsCo = $reqCo->fetchAll(PDO::FETCH_OBJ);
+
+            echo $row->fname."\n";
+
+            if (count($rowsCo) == 1) {
+                $rowCo = $rowsCo[0];
+                if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
+                    insertCo($row->id, $rowCo->i_autocode);
+                } else {
+                    if (controlPixels($row->id, $rowCo->i_autocode)==1) {
+                        $reason = 'IMAGE#ControlPixel#OK';
+                        insertCo($row->id, $rowCo->i_autocode);
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason, 3);
+                    } else {
+                        $reason = 'IMAGE#ControlPixel#KO#With='.$row->width.'-'.$rowCo->i_width.'#Height='.$row->height.'-'.$rowCo->i_height;
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                    }
+                }
+            } elseif (count($rowsCo) > 1) { //si multi
+                foreach ($rowsCo as $rowCo) {
+                    $cp = controlPixels($row->id, $rowCo->i_autocode);
+
+                    if ($cp==1) {
+                        $reason = 'IMAGE#Multi#ControPixel#OK';
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason, 3);
+                        insertCo($row->id, $rowCo->i_autocode);
+                    }elseif ($cp==-2) {
+
+                        if (($rowCo->i_width == $row->width) && ($rowCo->i_height == $row->height)) {
+                            $reason = 'IMAGE#Multi#ControPixel#KO';
+                            insertCoAn($row->id, $rowCo->i_autocode, $reason, 3);
+                            insertCo($row->id, $rowCo->i_autocode);
+                        } else {
+                            $reason = 'IMAGE#Multi#ControPixel#KO#Size#KO';
+                            insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                        }
+                    }else{
+                        $reason = 'IMAGE#Multi#ControPixel#KO';
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                    }
+                }
+            } else { //Si 0
+                $fbps= findByPixels($row->id);
+
+                if ((count($fbps)>=1) && (count($fbps)<=5)) {
+                    foreach ($fbps as $fbp) {
+                        $sqlCo2 = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length, i_filesize
+                                FROM image_file imf, container co, image_infofr info
+                                WHERE co.i_autocode = imf.i_foreigncode
+                                  AND co.i_autocode = info.i_foreigncode                  
+                                  AND co.i_autocode = :cocode
+                                  AND co.i_autocode NOT IN (SELECT co_code FROM restore_file_co2)";
+                        $reqCo2 = $pdo->prepare($sqlCo2);
+                        $reqCo2->bindValue(':cocode', $fbp, PDO::PARAM_INT);
+                        $reqCo2->execute();
+                        $co2Vals = $reqCo2->fetchAll(PDO::FETCH_OBJ);
+
+                        if (count($co2Vals)==1){
+                            $co2Val = $co2Vals[0];
+                            $reason = 'IMAGE#FBP#Unique';
+                            insertCoAn($row->id, $co2Val->i_autocode, $reason, 3);
+                            insertCo($row->id, $co2Val->i_autocode);
+                        }
+                    }
+                }
+                if (count($fbps)>5) {
+                    $reason = 'IMAGE#FBP#KO#ANALYSE';
+                    insertCoAn($row->id, 1, $reason);
+                }
+            }
+        }
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+}
+
+
+function threatOffice()
+{
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "SELECT *
+        FROM restore_files
+        WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
+        AND s_format IN ('xls', 'doc','ppt','pptx','docx','dotx','potx','xlsx','qxd','swf','exe','zip')
+        ";
+
+        $req = $pdo->prepare($sql);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+        $nb = 0;
+
+        $sqlCo = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length
+                FROM image_file imf, container co, image_infofr info
+                WHERE co.i_autocode = imf.i_foreigncode
+                  AND co.i_autocode = info.i_foreigncode                  
+                  AND i_filesize = :fsize
+                  AND s_fileformat = :fformat
+                  AND co.i_autocode NOT IN (SELECT co_code FROM restore_file_co2)";
+        $reqCo = $pdo->prepare($sqlCo);
+
+        foreach ($rows as $row) {
+            $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
+            $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+            $reqCo->execute();
+            $rowsCo = $reqCo->fetchAll(PDO::FETCH_OBJ);
+
+            echo $row->fname."\n";
+
+            if (count($rowsCo) == 1) {
+                $rowCo = $rowsCo[0];
+                insertCo($row->id, $rowCo->i_autocode);
+            } elseif (count($rowsCo) > 1) { //si multi
+                foreach ($rowsCo as $rowCo) {  
+                        $reason = 'OFFICE#Multi';
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                }
+            }
+        }
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+}
+
+
+//threatImage();
 //print_r(findByPixels(773));
+threatOffice();
 
 
 //
