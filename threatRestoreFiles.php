@@ -221,9 +221,9 @@ function controlPixels($rfcode, $cocode)
             $b_rfval = $rfvals->$bcol;
             $b_coval = $covals->$bcol;
 
-//            echo $r_rfval."<=>".$r_coval."\n";
-//            echo $g_rfval."<=>".$g_coval."\n";
-//            echo $b_rfval."<=>".$b_coval."\n";
+            echo $r_rfval."<=>".$r_coval."\n";
+            echo $g_rfval."<=>".$g_coval."\n";
+            echo $b_rfval."<=>".$b_coval."\n";
 
             if (
                 ((($r_coval * (1 + $taux)) >= $r_rfval) && (($r_coval * (1 - $taux)) <= $r_rfval)) &&
@@ -447,7 +447,7 @@ function threatVideo()
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
         $nb = 0;
 
-        $sqlCo = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length
+        $sqlCo = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length, co.s_reference
                 FROM image_file imf, container co, image_infofr info
                 WHERE co.i_autocode = imf.i_foreigncode
                   AND co.i_autocode = info.i_foreigncode                  
@@ -475,6 +475,7 @@ function threatVideo()
                 }
             } elseif (count($rowsCo) > 1) { //si multi
                 foreach ($rowsCo as $rowCo) {
+
                     $reason = 'VIDEO#Multi';
                     insertCoAn($row->id, $rowCo->i_autocode, $reason);
                 }
@@ -671,10 +672,70 @@ function threatOfficeAn(){
     }
 }
 
+function threatImageAn(){
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "select DISTINCT rf_code
+                from restore_file_co_analyse2 an
+                where an.reason='OFFICE#Multi'
+                and is_restored = 0";
+
+        $req = $pdo->prepare($sql);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($rows as $row) {
+            $sqlDist = "select distinct s_reference from restore_files rf, restore_file_co_analyse2 an, container co, image_file imf
+                        where rf.id = an.rf_code
+                        and co.i_autocode = an.co_code
+                        and co.i_autocode = imf.i_foreigncode
+                        and b_isintrash = 0 
+                        and an.rf_code = :rfcode";
+
+            $reqDist = $pdo->prepare($sqlDist);
+            $reqDist->bindValue(':rfcode', $row->rf_code, PDO::PARAM_STR);
+            $reqDist->execute();
+
+            if ($reqDist->rowCount() ==1){
+                $sqlInsert = "insert into restore_file_co2
+                            select rf_code, co_code, FALSE 
+                            from restore_file_co_analyse2 an
+                            where rf_code = :rfcode
+                            and exists(select * from container where i_autocode = co_code and b_isintrash =0 )";
+                $reqInsert = $pdo->prepare($sqlInsert);
+                $reqInsert->bindValue(':rfcode', $row->rf_code, PDO::PARAM_INT);
+                $reqInsert->execute();
+
+                $sqlInsert = "update restore_file_co_analyse2
+                            set is_restored = 3
+                            where rf_code = :rfcode";
+                $reqInsert = $pdo->prepare($sqlInsert);
+                $reqInsert->bindValue(':rfcode', $row->rf_code, PDO::PARAM_INT);
+                $reqInsert->execute();
+
+            }
+        }
+
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+}
 
 
 //threatImage();
 //print_r(findByPixels(773));
 //threatOffice();
-threatOfficeAn();
+//threatOfficeAn();
+
+print_r(controlPixels(28704, 46740));
 

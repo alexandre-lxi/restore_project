@@ -33,7 +33,9 @@ $lpixels = array(
     '10'=>array(160,160),
 );
 
-$files = scandir($olddname);
+
+//$files = scandir($olddname);
+$files[] = '46617.jpg';
 
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
