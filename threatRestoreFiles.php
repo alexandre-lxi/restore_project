@@ -387,7 +387,7 @@ function threatImage()
             } else { //Si 0
                 $fbps= findByPixels($row->id);
 
-                if (count($fbps)>0) {
+                if ((count($fbps)>=1) && (count($fbps)<=5)) {
                     foreach ($fbps as $fbp) {
                         $sqlCo2 = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length, i_filesize
                                 FROM image_file imf, container co, image_infofr info
@@ -407,6 +407,10 @@ function threatImage()
                             insertCo($row->id, $co2Val->i_autocode);
                         }
                     }
+                }
+                if (count($fbps)>1) {
+                    $reason = 'IMAGE#FBP#KO#ANALYSE';
+                    insertCoAn($row->id, 1, $reason, 3);
                 }
             }
         }
