@@ -19,6 +19,7 @@ $olddname = '/home/ubuntu/restore/olddir/thumbdir/';
 $img = new Imagick();
 
 
+
 $lpixels = array(
     '1'=>array(30,30),
     '2'=>array(130,160),

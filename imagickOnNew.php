@@ -507,7 +507,7 @@ try {
     $req = $pdo->prepare($sql);
 
     $sqlSel = "select id, fname, width from restore_files where s_format in('jpg','png','tif','jpeg','png','gif','eps','pdf','ai')
-      and id = 46409
+      and id < 150000
       order by 1 desc";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
@@ -525,9 +525,6 @@ try {
         $name = $name[0];
 
         $fthumb = $tmpdname.$name.'.jpg';
-
-        if (!file_exists($fthumb))
-            continue;
 
         try {
             if ($row->width < 280) {
