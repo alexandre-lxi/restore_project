@@ -527,7 +527,7 @@ try {
         $fthumb = $tmpdname.$name.'.jpg';
 
         try {
-            if ($row->width < 280) {
+            if (($row->width < 280) && ($row->width > 0)) {
                 $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
                 shell_exec($nconv);
             }
