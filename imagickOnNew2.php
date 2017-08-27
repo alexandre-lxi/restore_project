@@ -533,7 +533,7 @@ try {
             }
 
             //$success = convertFile($fname, $fthumb, $param);    // create thumbnail image
-            $success = true;
+            $success = file_exists($fthumb);
 
             if ($success) {
 
