@@ -474,10 +474,37 @@ function threatVideo()
                     insertCoAn($row->id, $rowCo->i_autocode, $reason);
                 }
             } elseif (count($rowsCo) > 1) { //si multi
-                foreach ($rowsCo as $rowCo) {
+                $trr = false;
 
-                    $reason = 'VIDEO#Multi';
-                    insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                foreach ($rowsCo as $rowCo) {
+                    if ((ceil($rowCo->f_length*0.95) <= ceil($row->length)) &&
+                        (ceil($rowCo->f_length*1.05) >= ceil($row->length))) {
+                        insertCo($row->id, $rowCo->i_autocode);
+                        $trr = true;
+                    }
+                }
+
+                if (!$trr) {
+                    $srefs = array();
+
+                    foreach ($rowsCo as $rowCo) {
+                        if (!in_array($rowCo->s_regerence, $srefs)) {
+                            $srefs[] = $rowCo->s_regerence;
+                        }
+                    }
+
+                    if (array_count_values($srefs) == 1) {
+                        $reason = 'VIDEO#Multi#OK';
+                        foreach ($rowsCo as $rowCo) {
+                            insertCo($row->id, $rowCo->i_autocode);
+                            insertCoAn($row->id, $rowCo->i_autocode, $reason, 3);
+                        }
+                    } else {
+                        $reason = 'VIDEO#Multi';
+                        foreach ($rowsCo as $rowCo) {
+                            insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                        }
+                    }
                 }
             } else { //Si 0
                 $sqlCoVi = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length, co.s_reference
@@ -503,11 +530,9 @@ function threatVideo()
                     $rowCoVi = $rowsCoVi[0];
 
                     insertCo($row->id, $rowCoVi->i_autocode);
-                    $reason = 'VIDEO#BySizeAndLength#';
+                    $reason = 'VIDEO#BySizeAndLength#OK';
                     insertCoAn($row->id, $rowCoVi->i_autocode, $reason, 3);
                 } elseif (count($rowsCoVi) > 1) {
-                    $reason = 'VIDEO#BySizeAndLength#Multi';
-
                     $fileNames = array();
 
                     foreach ($rowsCoVi as $rowCoVi) {
@@ -519,8 +544,10 @@ function threatVideo()
                     foreach ($rowsCoVi as $rowCoVi) {
                         if (array_count_values($fileNames) == 1) {
                             insertCo($row->id, $rowCoVi->i_autocode);
+                            $reason = 'VIDEO#BySizeAndLength#Multi#OK';
                             insertCoAn($row->id, $rowCoVi->i_autocode, $reason, 3);
                         } else {
+                            $reason = 'VIDEO#BySizeAndLength#Multi';
                             insertCoAn($row->id, $rowCoVi->i_autocode, $reason);
                         }
                     }
@@ -587,8 +614,8 @@ function threatOffice()
                 $srefs = array();
 
                 foreach ($rowsCo as $rowCo) {
-                    if (!in_array($row->s_regerence, $srefs)){
-                        $srefs[] = $row->s_regerence;
+                    if (!in_array($rowCo->s_regerence, $srefs)){
+                        $srefs[] = $rowCo->s_regerence;
                     }
                 }
 
