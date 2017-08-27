@@ -106,9 +106,6 @@ function findByPixels($rfcode)
         }
         $sql .= ") <> 0 ";
 
-
-    print_r($sql);
-
         $req = $pdo->prepare($sql);
         $req->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $req->execute();
@@ -327,8 +324,7 @@ function threatImage()
         $sql = "SELECT *
         FROM restore_files
         WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
-        AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps', 'pdf', 'ai')
-        LIMIT 1000";
+        AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps', 'pdf', 'ai')";
 
         $req = $pdo->prepare($sql);
         $req->execute();
@@ -414,7 +410,7 @@ function threatImage()
                         }
                     }
                 }
-                if (count($fbps)>1) {
+                if (count($fbps)>5) {
                     $reason = 'IMAGE#FBP#KO#ANALYSE';
                     insertCoAn($row->id, 1, $reason, 3);
                 }
@@ -427,8 +423,8 @@ function threatImage()
     }
 }
 
-//threatImage();
-print_r(findByPixels(773));
+threatImage();
+//print_r(findByPixels(773));
 
 
 //
