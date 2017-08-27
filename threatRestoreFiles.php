@@ -412,7 +412,7 @@ function threatImage()
                 }
                 if (count($fbps)>5) {
                     $reason = 'IMAGE#FBP#KO#ANALYSE';
-                    insertCoAn($row->id, 1, $reason, 3);
+                    insertCoAn($row->id, 1, $reason);
                 }
             }
         }
