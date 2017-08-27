@@ -640,6 +640,81 @@ function threatOffice()
     }
 }
 
+function threatOthers()
+{
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "SELECT *
+        FROM restore_files
+        WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
+        AND s_format not IN ('xls', 'doc','ppt','pptx','docx','dotx','potx','xlsx','qxd','swf','exe','zip',
+                             'avi','mpg','mpeg','m2v','wmv','mov','flv','mp4',
+                             'psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps', 'pdf', 'ai')
+        ";
+
+        $req = $pdo->prepare($sql);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+        $nb = 0;
+
+        $sqlCo = "SELECT co.i_autocode, imf.i_width, imf.i_height, imf.f_length, co.s_reference
+                FROM image_file imf, container co, image_infofr info
+                WHERE co.i_autocode = imf.i_foreigncode
+                  AND co.i_autocode = info.i_foreigncode                  
+                  AND i_filesize = :fsize
+                  AND s_fileformat = :fformat
+                  AND co.i_autocode NOT IN (SELECT co_code FROM restore_file_co2)";
+        $reqCo = $pdo->prepare($sqlCo);
+
+        foreach ($rows as $row) {
+            $reqCo->bindValue(':fsize', $row->fsize, PDO::PARAM_INT);
+            $reqCo->bindValue(':fformat', '.'.$row->s_format, PDO::PARAM_STR);
+            $reqCo->execute();
+            $rowsCo = $reqCo->fetchAll(PDO::FETCH_OBJ);
+
+            echo $row->fname."\n";
+
+            if (count($rowsCo) == 1) {
+                $rowCo = $rowsCo[0];
+                insertCo($row->id, $rowCo->i_autocode);
+            } elseif (count($rowsCo) > 1) { //si multi
+                $srefs = array();
+
+                foreach ($rowsCo as $rowCo) {
+                    if (!in_array($rowCo->s_regerence, $srefs)){
+                        $srefs[] = $rowCo->s_regerence;
+                    }
+                }
+
+                if (array_count_values($srefs) == 1){
+                    $reason = 'OFFICE#Multi#OK';
+                    foreach ($rowsCo as $rowCo) {
+                        insertCo($row->id, $rowCo->i_autocode);
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason,3);
+                    }
+                }else{
+                    $reason = 'OFFICE#Multi';
+                    foreach ($rowsCo as $rowCo) {
+                        insertCoAn($row->id, $rowCo->i_autocode, $reason);
+                    }
+                }
+            }
+        }
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+}
+
 function threatOfficeAn(){
     $VALEUR_hote = 'prod.kwk.eu.com';
     $VALEUR_port = '3306';
@@ -763,7 +838,8 @@ function threatImageAn(){
 //print_r(findByPixels(773));
 //threatOffice();
 //threatOfficeAn();
-threatVideo();
+//threatVideo();
+threatOthers();
 
 //print_r(controlPixels(28704, 46740));
 
