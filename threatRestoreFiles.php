@@ -94,6 +94,15 @@ function findByPixels($rfcode)
 
         $sql = "SELECT rfcode , p1_r, p1_g, p1_b, p1_a, p2_r, p2_g, p2_b, p2_a, p3_r, p3_g, p3_b, p3_a, p4_r, p4_g, p4_b, p4_a, p5_r, p5_g, p5_b, p5_a, p6_r, p6_g, p6_b, p6_a, p7_r, p7_g, p7_b, p7_a, p8_r, p8_g, p8_b, p8_a, p9_r, p9_g, p9_b, p9_a, p10_r, p10_g, p10_b, p10_a
         FROM restore_nfile_colors where rfcode = :rfcode";
+        $sql .= " and (";
+
+        for ($i =1; $i <= 10; $i++){
+            $sql .= (($i>1)?" and ":"").$tCols[$i][0]." <> 255 and ".$tCols[$i][1]." <> 255 and ".$tCols[$i][2]." <> 255 ";
+            $sql .= " and ".$tCols[$i][0]." <> 0 and ".$tCols[$i][1]." <> 0 and ".$tCols[$i][2]." <> 0";
+        }
+
+        $sql .= ")";
+
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
@@ -104,7 +113,6 @@ function findByPixels($rfcode)
         $nb = 1;
 
         foreach ($rows as $row) {
-            echo $nb."\n";
             $nb++;
 
             for ($i =1; $i <= 10; $i++){
