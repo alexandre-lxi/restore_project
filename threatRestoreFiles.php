@@ -292,6 +292,13 @@ function insertCoAn($rfcode, $cocode, $reason, $isrestored = false)
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
+        $sqlInsertCoAn = "delete from restore_file_co_analyse2 where rf_code = :rfcode and co_code=:cocode";
+        $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
+        $reqInsetCoAn->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
+        $reqInsetCoAn->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $reqInsetCoAn->execute();
+
+        
         $sqlInsertCoAn = "INSERT IGNORE INTO restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) VALUES (:rfcode, :cocode, :isrestored, :reason)";
         $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
 
@@ -488,8 +495,8 @@ function threatVideo()
                     $srefs = array();
 
                     foreach ($rowsCo as $rowCo) {
-                        if (!in_array($rowCo->s_regerence, $srefs)) {
-                            $srefs[] = $rowCo->s_regerence;
+                        if (!in_array($rowCo->s_reference, $srefs)) {
+                            $srefs[] = $rowCo->s_reference;
                         }
                     }
 
@@ -614,8 +621,8 @@ function threatOffice()
                 $srefs = array();
 
                 foreach ($rowsCo as $rowCo) {
-                    if (!in_array($rowCo->s_regerence, $srefs)){
-                        $srefs[] = $rowCo->s_regerence;
+                    if (!in_array($rowCo->s_reference, $srefs)){
+                        $srefs[] = $rowCo->s_reference;
                     }
                 }
 
@@ -689,8 +696,8 @@ function threatOthers()
                 $srefs = array();
 
                 foreach ($rowsCo as $rowCo) {
-                    if (!in_array($rowCo->s_regerence, $srefs)){
-                        $srefs[] = $rowCo->s_regerence;
+                    if (!in_array($rowCo->s_reference, $srefs)){
+                        $srefs[] = $rowCo->s_reference;
                     }
                 }
 
@@ -838,8 +845,8 @@ function threatImageAn(){
 //print_r(findByPixels(773));
 //threatOffice();
 //threatOfficeAn();
-//threatVideo();
-threatOthers();
+threatVideo();
+//threatOthers();
 
 //print_r(controlPixels(28704, 46740));
 
