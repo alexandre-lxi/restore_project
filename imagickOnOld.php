@@ -18,17 +18,18 @@ $olddname = '/home/ubuntu/restore/olddir/thumbdir/';
 
 $img = new Imagick();
 
+
 $lpixels = array(
-    '1'=>array(5,15),
-    '2'=>array(5,75),
-    '3'=>array(5,185),
-    '4'=>array(75,15),
-    '5'=>array(75,40),
-    '6'=>array(75,100),
-    '7'=>array(75,185),
-    '8'=>array(150,15),
-    '9'=>array(150,75),
-    '10'=>array(150,185),
+    '1'=>array(30,30),
+    '2'=>array(130,160),
+    '3'=>array(230,30),
+    '4'=>array(30,60),
+    '5'=>array(160,130),
+    '6'=>array(230,60),
+    '7'=>array(130,130),
+    '8'=>array(140,140),
+    '9'=>array(150,150),
+    '10'=>array(160,160),
 );
 
 $files = scandir($olddname);
@@ -63,11 +64,7 @@ try {
             $cnt = 1;
 
             foreach ($lpixels as $lpixel) {
-                print_r($lpixel);
-
                 $shnew = $img->getImagePixelColor($lpixel[0], $lpixel[1])->getColor();
-                print_r($img->getImagePixelColor($lpixel[0], $lpixel[1])->getColorAsString());
-
                 $req->bindValue(':p'.$cnt.'_a', $shnew['a'], PDO::PARAM_INT);
                 $req->bindValue(':p'.$cnt.'_r', $shnew['r'], PDO::PARAM_INT);
                 $req->bindValue(':p'.$cnt.'_g', $shnew['g'], PDO::PARAM_INT);

@@ -266,6 +266,8 @@ function convertFile($infile, $outfile, $param)
     else if(file_exists("/html/utils/icc"))
         $profPath = "/html/utils/icc/";
 
+    $profPath = '/home/www/html/utils/icc/';
+
     $sRgbProf = "sRGBColorSpaceProfile.icm";
     $cmykProf = "EuroscaleCoated.icc";
     ztrace("convertFile: " . $infile ." to ".$outfile."\n");

@@ -97,12 +97,17 @@ function findByPixels($rfcode)
         $sql .= " and (";
 
         for ($i =1; $i <= 10; $i++){
-            $sql .= (($i>1)?" and ":"").$tCols[$i][0]." <> 255 and ".$tCols[$i][1]." <> 255 and ".$tCols[$i][2]." <> 255 ";
-            $sql .= " and ".$tCols[$i][0]." <> 0 and ".$tCols[$i][1]." <> 0 and ".$tCols[$i][2]." <> 0";
+            $sql .= (($i>1)?" + ":"").$tCols[$i][0]." + ".$tCols[$i][1]." + ".$tCols[$i][2];
         }
+        $sql .= ") <> 7650 and (";
 
-        $sql .= ")";
+        for ($i =1; $i <= 10; $i++){
+            $sql .= (($i>1)?" + ":"").$tCols[$i][0]." + ".$tCols[$i][1]." + ".$tCols[$i][2];
+        }
+        $sql .= ") <> 0 ";
 
+
+    print_r($sql);
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
@@ -145,6 +150,8 @@ function findByPixels($rfcode)
             }
 
             $sql .= ")";
+
+            print_r($sql);
 
             $reqSel = $pdo->prepare($sql);
             $reqSel->execute();
@@ -217,9 +224,9 @@ function controlPixels($rfcode, $cocode)
             $b_rfval = $rfvals->$bcol;
             $b_coval = $covals->$bcol;
 
-            echo $r_rfval."<=>".$r_coval."\n";
-            echo $g_rfval."<=>".$g_coval."\n";
-            echo $b_rfval."<=>".$b_coval."\n";
+//            echo $r_rfval."<=>".$r_coval."\n";
+//            echo $g_rfval."<=>".$g_coval."\n";
+//            echo $b_rfval."<=>".$b_coval."\n";
 
             if (
                 ((($r_coval * (1 + $taux)) >= $r_rfval) && (($r_coval * (1 - $taux)) <= $r_rfval)) &&
@@ -228,7 +235,7 @@ function controlPixels($rfcode, $cocode)
                 $nb++;
         }
 
-        echo $nb;
+        //echo $nb;
 
         if ($nb >= 9)
             return 1;
@@ -244,7 +251,6 @@ function controlPixels($rfcode, $cocode)
 
 function insertCo($rfcode, $cocode)
 {
-
     $VALEUR_hote = 'prod.kwk.eu.com';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
@@ -421,7 +427,8 @@ function threatImage()
     }
 }
 
-threatImage();
+//threatImage();
+print_r(findByPixels(773));
 
 
 //
