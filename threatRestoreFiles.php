@@ -749,7 +749,8 @@ function threatOfficeAn(){
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
         foreach ($rows as $row) {
-            $sqlDist = "select distinct s_reference from restore_files rf, restore_file_co_analyse2 an, container co, image_file imf
+            $sqlDist = "select distinct replace(replace(replace(s_reference, ' ',''),'-',''),'_','') s_reference 
+                        from restore_files rf, restore_file_co_analyse2 an, container co, image_file imf
                         where rf.id = an.rf_code
                         and co.i_autocode = an.co_code
                         and co.i_autocode = imf.i_foreigncode
