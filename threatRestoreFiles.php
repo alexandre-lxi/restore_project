@@ -846,8 +846,8 @@ function threatImageAn(){
 //print_r(findByPixels(773));
 //threatOffice();
 //threatOfficeAn();
-threatVideo();
+//threatVideo();
 //threatOthers();
-
+threatImageAn();
 //print_r(controlPixels(28704, 46740));
 
