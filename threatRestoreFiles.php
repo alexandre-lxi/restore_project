@@ -273,6 +273,12 @@ function insertCo($rfcode, $cocode)
             $reqInsetCo->execute();
         }
 
+        $sqlInsertCoAn = "delete from restore_file_co_analyse2 where rf_code = :rfcode and co_code=:cocode";
+        $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
+        $reqInsetCoAn->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
+        $reqInsetCoAn->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $reqInsetCoAn->execute();
+
         echo "Insert co rfcode:".$rfcode." cocode:".$cocode."\n";
     } catch (PDOException $Exception) {
         // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
@@ -331,7 +337,7 @@ function threatImage()
         $sql = "SELECT *
         FROM restore_files
         WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
-        AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps', 'pdf', 'ai')
+        AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps',  'ai')
         and id between 155660 and 206770";
 
         $req = $pdo->prepare($sql);
@@ -588,7 +594,7 @@ function threatOffice()
         $sql = "SELECT *
         FROM restore_files
         WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
-        AND s_format IN ('xls', 'doc','ppt','pptx','docx','dotx','potx','xlsx','qxd','swf','exe','zip')
+        AND s_format IN ('xls', 'doc','ppt','pptx','docx','dotx','potx','xlsx','qxd','swf','exe','zip', 'pdf')
         ";
 
         $req = $pdo->prepare($sql);
@@ -844,10 +850,10 @@ function threatImageAn(){
 
 //threatImage();
 //print_r(findByPixels(773));
-//threatOffice();
+threatOffice();
 //threatOfficeAn();
 //threatVideo();
 //threatOthers();
-threatImageAn();
+//threatImageAn();
 //print_r(controlPixels(28704, 46740));
 
