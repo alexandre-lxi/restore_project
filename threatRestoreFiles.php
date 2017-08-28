@@ -298,7 +298,7 @@ function insertCoAn($rfcode, $cocode, $reason, $isrestored = false)
         $reqInsetCoAn->bindValue(':cocode', $cocode, PDO::PARAM_INT);
         $reqInsetCoAn->execute();
 
-        
+
         $sqlInsertCoAn = "INSERT IGNORE INTO restore_file_co_analyse2 (rf_code, co_code, is_restored, reason) VALUES (:rfcode, :cocode, :isrestored, :reason)";
         $reqInsetCoAn = $pdo->prepare($sqlInsertCoAn);
 
@@ -793,8 +793,9 @@ function threatImageAn(){
 
         $sql = "select DISTINCT rf_code
                 from restore_file_co_analyse2 an
-                where an.reason='OFFICE#Multi'
-                and is_restored = 0";
+                where an.reason='IMAGE#Multi#ControPixel#KO'
+                and is_restored = 0
+                and to_restore is null";
 
         $req = $pdo->prepare($sql);
         $req->execute();
