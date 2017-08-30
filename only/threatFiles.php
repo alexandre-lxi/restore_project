@@ -93,7 +93,7 @@ function _readDir($dirsource)
         if ($file == '..') continue;
 
         if (!is_dir($dirsource.$file)) {
-            testFile($file);
+            testFile($dirsource.$file);
         } else {
             _readDir($dirsource.$file.'/');
         }
