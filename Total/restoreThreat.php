@@ -512,7 +512,10 @@ function convertFile($infile, $outfile, $param)
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "SELECT * FROM restore_dbl WHERE restore = 1 AND is_restored = 0 limit 2";
+    $sql = "SELECT * FROM restore_files, restore_file_co2 
+            WHERE rf_code = id
+            
+            and restore_file_co2.is_restored = 0";
 
     $req = $pdo->prepare($sql);
     $req->execute();

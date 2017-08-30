@@ -755,6 +755,7 @@ function threatOfficeAn(){
                         and co.i_autocode = an.co_code
                         and co.i_autocode = imf.i_foreigncode
                         and b_isintrash = 0 
+                        and is_restored = 0
                         and an.rf_code = :rfcode";
 
             $reqDist = $pdo->prepare($sqlDist);
