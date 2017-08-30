@@ -30,10 +30,10 @@ function testFile($file)
 
     $img = new Imagick();
 
+    $img->readImage($file);
 
 
     if ($img->getImageWidth() > $img->getImageHeight()){
-        $img->readImage($file);
         $img->resizeImage(300,0,Imagick::FILTER_LANCZOS,1);
         $img->writeImage($dThumb.$cocode.'jpg');
         $img->clear();
@@ -42,7 +42,6 @@ function testFile($file)
         $img->writeImage($dWeb.$cocode.'jpg');
         $img->clear();
     }else{
-        $img->readImage($file);
         $img->resizeImage(0,300,Imagick::FILTER_LANCZOS,1);
         $img->writeImage($dThumb.$cocode.'jpg');
         $img->clear();
