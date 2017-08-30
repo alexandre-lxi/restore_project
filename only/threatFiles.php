@@ -32,26 +32,27 @@ function testFile($file)
 
     $img->readImage($file);
 
-
+    echo $file."\n";
+    
     if ($img->getImageWidth() > $img->getImageHeight()){
         $img->resizeImage(300,0,Imagick::FILTER_LANCZOS,1);
-        $img->writeImage($dThumb.$cocode.'jpg');
+        $img->writeImage($dThumb.$cocode.'.jpg');
         $img->clear();
         $img->readImage($file);
         $img->resizeImage(1024,0,Imagick::FILTER_LANCZOS,1);
-        $img->writeImage($dWeb.$cocode.'jpg');
+        $img->writeImage($dWeb.$cocode.'.jpg');
         $img->clear();
     }else{
         $img->resizeImage(0,300,Imagick::FILTER_LANCZOS,1);
-        $img->writeImage($dThumb.$cocode.'jpg');
+        $img->writeImage($dThumb.$cocode.'.jpg');
         $img->clear();
         $img->readImage($file);
-        $img->resizeImage(1024,0,Imagick::FILTER_LANCZOS,1);
-        $img->writeImage($dWeb.$cocode.'jpg');
+        $img->resizeImage(0,1024,Imagick::FILTER_LANCZOS,1);
+        $img->writeImage($dWeb.$cocode.'.jpg');
         $img->clear();
     }
 
-    if (file_exists($dWeb.$cocode.'jpg') && file_exists($dThumb.$cocode.'jpg')) {
+    if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
         shell_exec('mv '.$file.' '.$dori.$fname);
 
         if (file_exists($dori.$fname)){
