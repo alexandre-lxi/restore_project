@@ -9,7 +9,7 @@
 //$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/new_onlyfrance/test/';
+$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
 
 
 function testFile($file)
@@ -33,7 +33,7 @@ function testFile($file)
     $img->readImage($file);
 
     echo $file."\n";
-    
+
     if ($img->getImageWidth() > $img->getImageHeight()){
         $img->resizeImage(300,0,Imagick::FILTER_LANCZOS,1);
         $img->writeImage($dThumb.$cocode.'.jpg');
