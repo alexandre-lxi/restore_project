@@ -8,9 +8,9 @@
 
 include "iptc.php";
 
-$VALEUR_hote = 'onlyfrance';
+$VALEUR_hote = 'prod.kwk.eu.com';
 $VALEUR_port = '3306';
-$VALEUR_nom_bd = 'total-refontedam';
+$VALEUR_nom_bd = 'onlyfrance';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
@@ -421,6 +421,7 @@ function _readDir($dirsource, $dest, $pdo)
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
+    _readDir($dirsource, $dest, $pdo);
 //    $req = "truncate table restore_file_co;";
 //    $pdo->exec($req);
 //    $req = "truncate table restore_files;";
@@ -431,4 +432,4 @@ try {
     echo $Exception->getMessage().' : '.$Exception->getCode();
 }
 
-_readDir($dirsource, $dest, $pdo);
+
