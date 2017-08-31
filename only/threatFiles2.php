@@ -11,6 +11,11 @@
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 $dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
 
+function isImage($file)
+{
+    $info = exec("file -bi '".$file."'");
+    return strstr($info, "image")!==false || getFileExtension($file)=="eps" || getFileExtension($file)=="tga";
+}
 
 function testFile($file)
 {
@@ -23,6 +28,9 @@ function testFile($file)
     $dThumb = '/home/ubuntu/new_onlyfrance/pictures/thumbdir/';
     $dWeb = '/home/ubuntu/new_onlyfrance/pictures/webdir/';
     $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
+
+    if (!isImage($file))
+        return false;
 
     $fname = basename($file);
     $cocode = explode('.',$fname);
@@ -101,7 +109,7 @@ function _readDir($dirsource)
         }
 
         $nb++;
-        if ($nb >= 1000)
+        if ($nb >= 2200)
             break;
     }
 }
