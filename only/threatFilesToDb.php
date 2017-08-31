@@ -413,7 +413,7 @@ function _readDir($dirsource, $dest, $pdo)
         if (!is_dir($dirsource.$file)) {
             testFile($dirsource, $dest, $file, $pdo);
         } else {
-            _readDir($file.'/', $dest, $pdo);
+            _readDir($dirsource.$file.'/', $dest, $pdo);
         }
     }
 }
