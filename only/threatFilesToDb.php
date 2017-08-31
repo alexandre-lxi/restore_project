@@ -82,6 +82,7 @@ function isAudio($file)
 function isImage($file)
 {
     $info = exec("file -bi '".$file."'");
+    ztrace($file.': '.$info."\n");
     return strstr($info, "image")!==false || getFileExtension($file)=="eps" || getFileExtension($file)=="tga";
 }
 function isVideo($file)
