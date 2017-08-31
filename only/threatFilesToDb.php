@@ -410,12 +410,10 @@ function _readDir($dirsource, $dest, $pdo)
         if ($file == '.') continue;
         if ($file == '..') continue;
 
-        if (!is_dir($file)) {
-            //testFile($dirsource, $dest, $file, $pdo);
-            echo "File: ".$file."\n";
+        if (!is_dir($dirsource.$file)) {
+            testFile($dirsource, $dest, $file, $pdo);
         } else {
-            //_readDir($file.'/', $dest, $pdo);
-            echo "Dir: ".$file."\n";
+            _readDir($file.'/', $dest, $pdo);
         }
     }
 }
