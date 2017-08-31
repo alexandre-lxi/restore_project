@@ -6,7 +6,6 @@
  * Time: 11:47
  */
 
-include("/var/www/utils/getid3/getid3/getid3.php");
 include "iptc.php";
 
 $VALEUR_hote = 'onlyfrance';
@@ -44,26 +43,6 @@ function getFileExtension($file, $withdot=false)
         return strtolower(substr($file, strrpos($file,".")));
     else
         return strtolower(substr($file, strrpos($file,".")+1));
-}
-
-function getId3Cover($filename, $dst)
-{
-    ztrace("getId3Cover : ".$filename." , ".$dst);
-    $data = array();
-    $getID3 = new getID3();
-    $fileinfo = $getID3->analyze($filename);
-    if (isset($fileinfo ['id3v2']['APIC'][0]['data'])) {
-        if (function_exists("ztrace")) {
-            ztrace("getId3Cover retreived cover, write it in ".$dst);
-        }
-        $picture = $fileinfo['id3v2']['APIC'][0]['data']; // binary image data
-        $fp = fopen($dst, "w");
-        fwrite($fp, $picture);
-        fclose($fp);
-    } else {
-        ztrace("getId3Cover did NOT retreive cover, copy icon");
-        $rtn = copy("/var/www/projects/total-1410-refontedam/back/ico/wav.jpg", $dst);
-    }
 }
 
 function ProcessStichelbautWebImage($srcfile, $dstfile, $newsize, $w,$h,$d)
