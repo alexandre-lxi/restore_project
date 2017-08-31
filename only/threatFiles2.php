@@ -11,6 +11,14 @@
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 $dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
 
+function getFileExtension($file, $withdot=false)
+{
+    if($withdot)
+        return strtolower(substr($file, strrpos($file,".")));
+    else
+        return strtolower(substr($file, strrpos($file,".")+1));
+}
+
 function isImage($file)
 {
     $info = exec("file -bi '".$file."'");
