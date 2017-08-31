@@ -309,9 +309,9 @@ function testFile($dirsource, $dest, $file, $pdo)
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-    if (count($rows)>0){
-        return false;
-    }
+//    if (count($rows)>0){
+//        return false;
+//    }
 
     $inData = array();
 
@@ -407,7 +407,7 @@ function testFile($dirsource, $dest, $file, $pdo)
 function _readDir($dirsource, $dest, $pdo)
 {
     //$files = scandir($dirsource);
-    $files = file('/home/ubuntu/lfiles.txt');
+    $files = file('/home/ubuntu/lfiles.txt', FILE_IGNORE_NEW_LINES);
 
     foreach ($files as $file) {
 //        if ($file == '.') continue;
