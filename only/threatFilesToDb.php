@@ -330,7 +330,7 @@ function testFile($dirsource, $dest, $file, $pdo)
     if(!isset($inData['FILESIZE']))
         $inData['FILESIZE'] = 0;
     if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
-        $inData['FILESIZE'] = filesize($file);
+        $inData['FILESIZE'] = filesize($infile);
     if(!isset($inData['WIDTH']))
         $inData['WIDTH'] = 0;
     if(!isset($inData['HEIGHT']))
@@ -360,13 +360,11 @@ function testFile($dirsource, $dest, $file, $pdo)
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-        $oldFile = $file;
-
         $sql = "insert INTO restore_files2(fname, s_format, fsize, width, height, length, colorspace)
                     VALUES (:fname, :s_format, :fsize, :width, :height, :length, :colorspace)";
         $req = $pdo->prepare($sql);
 
-        $req->bindValue(':fname', $oldFile, PDO::PARAM_STR);
+        $req->bindValue(':fname', $infile, PDO::PARAM_STR);
         $req->bindValue(':s_format', $inData['EXTENSION'], PDO::PARAM_STR);
         $req->bindValue(':fsize', $inData['FILESIZE'], PDO::PARAM_INT);
         $req->bindValue(':width', $inData['WIDTH'], PDO::PARAM_INT);
@@ -378,7 +376,7 @@ function testFile($dirsource, $dest, $file, $pdo)
 
         $sql = "select id from restore_files2 where fname = :fname";
         $req = $pdo->prepare($sql);
-        $req->bindValue(':fname', $oldFile, PDO::PARAM_STR);
+        $req->bindValue(':fname', $infile, PDO::PARAM_STR);
         $req->execute();
         $id = $req->fetchAll(PDO::FETCH_OBJ);
         $id = $id[0]->id;
