@@ -297,7 +297,7 @@ function testFile($dirsource, $dest, $file, $pdo)
 
     if (($fileExt == '.txt') || ($fileExt == '.TX?') || ($fileExt == '.php') || ($fileExt == '.java')|| ($fileExt == '.h')
         || ($fileExt == '.html') || ($fileExt == '.xml') || ($fileExt == '.c') || ($fileExt == '.f') || ($fileExt == '.jsp')
-        || ($fileExt == '.sh    ')) {
+        || ($fileExt == '.sh') || ($fileExt == '.csv') || ($fileExt == '.sql')) {
         return false;
     }
 
@@ -381,7 +381,7 @@ function testFile($dirsource, $dest, $file, $pdo)
         $id = $req->fetchAll(PDO::FETCH_OBJ);
         $id = $id[0]->id;
 
-        updateIPTC($id,$file, $pdo);
+        updateIPTC($id,$infile, $pdo);
 
         if (count($rows) == 1){
             $sql = "INSERT INTO restore_file_co2(rf_code, co_code, is_restored) VALUES (:rf_code, :co_code, :is_restored)";
