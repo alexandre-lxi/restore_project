@@ -411,9 +411,11 @@ function _readDir($dirsource, $dest, $pdo)
         if ($file == '..') continue;
 
         if (!is_dir($file)) {
-            testFile($dirsource, $dest, $file, $pdo);
+            //testFile($dirsource, $dest, $file, $pdo);
+            echo "File: ".$file."\n";
         } else {
-            _readDir($file.'/', $dest, $pdo);
+            //_readDir($file.'/', $dest, $pdo);
+            echo "Dir: ".$file."\n";
         }
     }
 }
