@@ -82,7 +82,6 @@ function isAudio($file)
 function isImage($file)
 {
     $info = exec("file -bi '".$file."'");
-    ztrace($file.': '.$info."\n");
     return strstr($info, "image")!==false || getFileExtension($file)=="eps" || getFileExtension($file)=="tga";
 }
 function isVideo($file)
@@ -327,8 +326,6 @@ function testFile($dirsource, $dest, $file, $pdo)
     {
         $inData = getAudioInfo($infile);
     }
-
-    print_r($inData);
 
     if(!isset($inData['FILESIZE']))
         $inData['FILESIZE'] = 0;
