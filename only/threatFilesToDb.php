@@ -327,6 +327,8 @@ function testFile($dirsource, $dest, $file, $pdo)
         $inData = getAudioInfo($infile);
     }
 
+    print_r($inData);
+
     if(!isset($inData['FILESIZE']))
         $inData['FILESIZE'] = 0;
     if($inData['FILESIZE']==0 || !strlen($inData['FILESIZE']))
