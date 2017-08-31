@@ -18,7 +18,7 @@ $VALEUR_mot_de_passe = 'alaidin';
 //$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/restore/toAnalyse/';
+$dirsource = '/home/ubuntu/restore_onlyfrance/';
 $dest = '/home/ubuntu/restore/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
@@ -291,8 +291,8 @@ function updateIPTC ($id, $fname, $pdo){
 
 function testFile($dirsource, $dest, $file, $pdo)
 {
-    //$infile = $dirsource.$file;
-    $infile = $file;
+    $infile = $dirsource.$file;
+    //$infile = $file;
     $fileExt = getFileExtension($infile,true);
 
     if (($fileExt == '.txt') || ($fileExt == '.TX?') || ($fileExt == '.php') || ($fileExt == '.java')|| ($fileExt == '.h')
@@ -403,18 +403,18 @@ function testFile($dirsource, $dest, $file, $pdo)
 
 function _readDir($dirsource, $dest, $pdo)
 {
-    //$files = scandir($dirsource);
-    $files = file('/home/ubuntu/lfiles.txt', FILE_IGNORE_NEW_LINES);
+    $files = scandir($dirsource);
+    //$files = file('/home/ubuntu/lfiles.txt', FILE_IGNORE_NEW_LINES);
 
     foreach ($files as $file) {
-//        if ($file == '.') continue;
-//        if ($file == '..') continue;
+        if ($file == '.') continue;
+        if ($file == '..') continue;
 
-        //if (!is_dir($file)) {
+        if (!is_dir($file)) {
             testFile($dirsource, $dest, $file, $pdo);
-//        } else {
-//            _readDir($file.'/', $dest, $pdo);
-//        }
+        } else {
+            _readDir($file.'/', $dest, $pdo);
+        }
     }
 }
 
