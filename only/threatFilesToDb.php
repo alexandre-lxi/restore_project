@@ -308,9 +308,9 @@ function testFile($dirsource, $dest, $file, $pdo)
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-//    if (count($rows)>0){
-//        return false;
-//    }
+    if (count($rows)>0){
+        return false;
+    }
 
     $inData = array();
 
