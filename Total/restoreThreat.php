@@ -513,9 +513,9 @@ try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "SELECT * FROM restore_files, restore_file_co2 
-            WHERE rf_code = id
-            
-            and restore_file_co2.is_restored = 0";
+            WHERE rf_code = id            
+            and restore_file_co2.is_restored = 0
+            and to_restore = 1";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -544,7 +544,8 @@ try {
             if (file_exists($oldFile)){
                 ztrace($newFile."=>".$thumbFile."=>".$webFile);
 
-                if (!file_exists($oldthumbfile)){
+                //if (!file_exists($oldthumbfile)){
+                if (true){
                     $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
                     $success = convertFile($newFile, $webFile, $param);        // create web image
                     $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
@@ -552,26 +553,15 @@ try {
                     //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
 
 
-                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
+                    $sql = "update restore_files set is_restored =1, to_restore=0 where id=:id";
                     $req = $pdo->prepare($sql);
-                    $req->bindValue(':i_code', $row->i_code, PDO::PARAM_INT);
-                    $req->bindValue(':hasThumb', $success, PDO::PARAM_BOOL);
+                    $req->bindValue(':id', $row->id, PDO::PARAM_INT);
                     $req->execute();
 
-                    $sql = "update restore_dbl set is_restored = 1 where i_code = :icode";
+                    $sql = "update restore_file_co2 set is_restored = 1 where rf_code = :rfcode and co_code = :cocode";
                     $req = $pdo->prepare($sql);
-                    $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
-                    $req->execute();
-                }else{
-                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
-                    $req = $pdo->prepare($sql);
-                    $req->bindValue(':i_code', $row->i_code, PDO::PARAM_INT);
-                    $req->bindValue(':hasThumb', true, PDO::PARAM_BOOL);
-                    $req->execute();
-
-                    $sql = "update restore_dbl set is_restored = 1 where i_code = :icode";
-                    $req = $pdo->prepare($sql);
-                    $req->bindValue(':icode', $row->i_code, PDO::PARAM_INT);
+                    $req->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                    $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
                     $req->execute();
                 }
             }
