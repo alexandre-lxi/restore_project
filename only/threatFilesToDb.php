@@ -401,7 +401,7 @@ function testFile($dirsource, $dest, $file, $pdo)
 
 function _readDir($dirsource, $dest, $pdo)
 {
-    $files = scandir($dirsource);
+    $files = scandir($dirsource, SCANDIR_SORT_DESCENDING);
     //$files = file('/home/ubuntu/lfiles.txt', FILE_IGNORE_NEW_LINES);
 
     foreach ($files as $file) {
