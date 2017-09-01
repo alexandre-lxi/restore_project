@@ -14,8 +14,7 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
-$dest = '/var/www/projects/total-1410-refontedam/restoreDir/newdir';
+
 
 define("COLORSPACE_RGB", "RGB");
 define("COLORSPACE_CMYK","CMYK");
@@ -510,6 +509,9 @@ function convertFile($infile, $outfile, $param)
 
 
 try {
+    $dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
+    $dest = '/var/www/projects/total-1410-refontedam/restoreDir/newdir';
+
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "SELECT * FROM restore_files, restore_file_co2 
@@ -525,11 +527,11 @@ try {
     $nb = 0;
 
     foreach ($rows as $row) {
-        $oldFile = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->oldfile);
-        $newFile = $dest.'/oridir/'.$row->fname;
-        $thumbFile = $dest.'/thumbdir/'.$row->i_code.'.jpg';
-        $webFile = $dest.'/webdir/'.$row->i_code.'.jpg';
-        $oldthumbfile =   '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/'.$row->i_code.'.jpg';
+        $oldFile = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->fname);
+        $newFile = $dest.'/oridir/'.$row->co_code.'.'.$row->s_format;
+        $thumbFile = $dest.'/thumbdir/'.$row->co_code.'.jpg';
+        $webFile = $dest.'/webdir/'.$row->co_code.'.jpg';
+        $oldthumbfile =   '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/'.$row->co_code.'.jpg';
 
         echo $oldFile."\n";
         echo $newFile."\n";
