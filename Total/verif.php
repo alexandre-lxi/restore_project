@@ -19,16 +19,10 @@ echo "<body>";
 try {
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "
-select
-  db.i_code, db.oldfile, db.restore, imf.s_filename, co.s_reference, imf.i_width, imf.i_height,  imf.i_filesize /1024/1024 fs,
-  co.i_autocode, co.s_reference, co.b_isintrash, co.dt_created
-from restore_dbl db, image_file imf, container co
-where co.i_autocode = imf.i_foreigncode
-  and co.i_autocode = db.i_code
-and is_restored = 0 and restore = 1
-and co.dt_created BETWEEN '2004-01-01' and '2009-01-01'
-order by 1";
+    $sql = "SELECT * FROM restore_files, restore_file_co2
+            WHERE rf_code = id
+            and restore_file_co2.is_restored = 0
+            and to_restore = 0";
 
     $req = $pdo->prepare($sql);
 

@@ -27,6 +27,7 @@ function testFile()
                    FROM onlyfrance.restore_files2 rf, onlyfrance.restore_file_co2 rco
                    WHERE rco.rf_code = rf.id
                    AND rco.is_restored = 0
+                   and rf.to_restore = 1
                    and s_format in ('jpg','png','tif')";
 
         $reqSel = $pdo->prepare($sqlSel);

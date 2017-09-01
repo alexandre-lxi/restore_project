@@ -134,9 +134,9 @@ function controlPixels($rfcode, $cocode)
             $b_rfval = $rfvals->$bcol;
             $b_coval = $covals->$bcol;
 
-            echo "<br>".$r_rfval."<=>".$r_coval."<br>";
-            echo $g_rfval."<=>".$g_coval."<br>";
-            echo $b_rfval."<=>".$b_coval."<br>";
+//            echo "<br>".$r_rfval."<=>".$r_coval."<br>";
+//            echo $g_rfval."<=>".$g_coval."<br>";
+//            echo $b_rfval."<=>".$b_coval."<br>";
 
             if (
                 ((($r_coval * (1 + $taux)) >= $r_rfval) && (($r_coval * (1 - $taux)) <= $r_rfval)) &&
