@@ -10,7 +10,8 @@
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 //$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
-$dirsource = '/home/ubuntu/new_onlyfrance/test/';
+//$dirsource = '/home/ubuntu/new_onlyfrance/test/';
+$dirsource    = '/home/ubuntu/new_onlyfrance/toAnalyse/';
 
 function getFileExtension($file, $withdot=false)
 {
