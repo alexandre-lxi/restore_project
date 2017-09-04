@@ -96,7 +96,31 @@ function testFile($file)
                 // String.
                 echo $Exception->getMessage().' : '.$Exception->getCode();
             }
+
+            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/oridir/'.$fname);
+
+            try {
+                $sql = "update onlyfrance.container co
+                        inner join onlyfrance.restore_file_co rfc on co.i_autocode = rfc.co_code
+                        inner join onlyfrance.restore_container_sav cos on cos.i_autocode = rfc.co_code
+                            set co.b_isonline = 1
+                        where co.b_isonline =0
+                        and cos.b_isonline =1
+                        and rfc.co_code = :cocode";
+
+                $rqt = $pdo->prepare($sql);
+                $rqt->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+                $rqt->execute();
+
+            } catch (PDOException $Exception) {
+                // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+                // String.
+                echo $Exception->getMessage().' : '.$Exception->getCode();
+                die();
             }
+        }
     }
 }
 
@@ -110,15 +134,14 @@ function _readDir($dirsource)
         if ($file == '.') continue;
         if ($file == '..') continue;
 
+        if (!file_exists($dirsource.$file))
+            continue;
+
         if (!is_dir($dirsource.$file)) {
             testFile($dirsource.$file);
         } else {
             _readDir($dirsource.$file.'/');
         }
-
-        $nb++;
-        if ($nb >= 2200)
-            break;
     }
 }
 
