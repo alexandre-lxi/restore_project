@@ -9,7 +9,8 @@
 //$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
-$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
+//$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
+$dirsource = '/home/ubuntu/new_onlyfrance/test/';
 
 function getFileExtension($file, $withdot=false)
 {
@@ -96,7 +97,9 @@ function testFile($file)
                 // String.
                 echo $Exception->getMessage().' : '.$Exception->getCode();
             }
-            }
+
+            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/');
+        }
     }
 }
 
