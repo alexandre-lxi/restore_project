@@ -98,7 +98,7 @@ function testFile($file)
                 echo $Exception->getMessage().' : '.$Exception->getCode();
             }
 
-            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/');
+            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/'.$cocode.'.jpg');
         }
     }
 }
