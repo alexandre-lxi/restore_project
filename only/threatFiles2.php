@@ -10,6 +10,7 @@
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 //$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
+//$dirsource = '/home/ubuntu/new_onlyfrance/test/';
 $dirsource    = '/home/ubuntu/new_onlyfrance/toAnalyse/';
 
 function getFileExtension($file, $withdot=false)
@@ -38,6 +39,8 @@ function testFile($file)
     $dWeb = '/home/ubuntu/new_onlyfrance/pictures/webdir/';
     $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
 
+    $timestart=microtime(true);
+
     if (!isImage($file))
         return false;
 
@@ -50,6 +53,7 @@ function testFile($file)
     $img->readImage($file);
 
     echo $file."\n";
+    echo "Start: ".date("H:i:s", $timestart)."\n";
 
     if ($img->getImageWidth() > $img->getImageHeight()){
         $img->resizeImage(300,0,Imagick::FILTER_LANCZOS,1);
@@ -69,8 +73,14 @@ function testFile($file)
         $img->clear();
     }
 
+    echo "      Resize: ".date("H:i:s", microtime(true)- $timestart)."\n";
+    $timestart=microtime(true);
+
     if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
         shell_exec('mv '.$file.' '.$dori.$fname);
+
+        echo "      Move: ".date("H:i:s", microtime(true)- $timestart)."\n";
+        $timestart=microtime(true);
 
         if (file_exists($dori.$fname)){
             try {
@@ -96,11 +106,19 @@ function testFile($file)
                 // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
                 // String.
                 echo $Exception->getMessage().' : '.$Exception->getCode();
+                die();
             }
+
+            echo "      Insert tables: ".date("H:i:s", microtime(true)- $timestart)."\n";
+            $timestart=microtime(true);
+
 
             shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
             shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
             shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/oridir/'.$fname);
+
+            echo "      WPUT: ".date("H:i:s", microtime(true)- $timestart)."\n";
+            $timestart=microtime(true);
 
             try {
                 $sql = "update onlyfrance.container co
@@ -114,6 +132,8 @@ function testFile($file)
                 $rqt = $pdo->prepare($sql);
                 $rqt->bindValue(':cocode', $cocode, PDO::PARAM_INT);
                 $rqt->execute();
+
+                echo "      Update: ".date("H:i:s", microtime(true)- $timestart);
 
             } catch (PDOException $Exception) {
                 // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
