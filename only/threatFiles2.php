@@ -74,13 +74,11 @@ function testFile($file)
     }
 
     echo "      Resize: ".date("H:i:s", microtime(true)- $timestart)."\n";
-    $timestart=microtime(true);
 
     if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
         shell_exec('mv '.$file.' '.$dori.$fname);
 
         echo "      Move: ".date("H:i:s", microtime(true)- $timestart)."\n";
-        $timestart=microtime(true);
 
         if (file_exists($dori.$fname)){
             try {
@@ -110,7 +108,6 @@ function testFile($file)
             }
 
             echo "      Insert tables: ".date("H:i:s", microtime(true)- $timestart)."\n";
-            $timestart=microtime(true);
 
 
             shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
@@ -118,7 +115,6 @@ function testFile($file)
             shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/oridir/'.$fname);
 
             echo "      WPUT: ".date("H:i:s", microtime(true)- $timestart)."\n";
-            $timestart=microtime(true);
 
             try {
                 $sql = "update onlyfrance.container co
@@ -133,7 +129,7 @@ function testFile($file)
                 $rqt->bindValue(':cocode', $cocode, PDO::PARAM_INT);
                 $rqt->execute();
 
-                echo "      Update: ".date("H:i:s", microtime(true)- $timestart);
+                echo "      Update: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
             } catch (PDOException $Exception) {
                 // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
