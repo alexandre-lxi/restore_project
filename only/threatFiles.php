@@ -129,7 +129,7 @@ function testFile($file)
                 $rqt->bindValue(':cocode', $cocode, PDO::PARAM_INT);
                 $rqt->execute();
 
-                echo "      Update: ".date("H:i:s", microtime(true)- $timestart);
+                echo "      Update: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
             } catch (PDOException $Exception) {
                 // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
