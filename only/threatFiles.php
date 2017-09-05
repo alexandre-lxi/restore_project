@@ -159,10 +159,6 @@ function _readDir($dirsource)
         } else {
             _readDir($dirsource.$file.'/');
         }
-
-        $nb++;
-        if ($nb >= 5)
-            break;
     }
 }
 
