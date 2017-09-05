@@ -2,7 +2,11 @@ select *
 from container co, restore_file_co2 rfc2, restore_files rf
 where rf.id = rfc2.rf_code
 and rfc2.co_code = co.i_autocode
-and s_reference like 'Crash%';
+and s_reference like '20%';
+
+select *
+from container
+where s_reference like 'USA_NY%';
 
 
 select *
