@@ -60,6 +60,7 @@ function testFile($file)
         $req->execute();
         $tmps = $req->fetchAll();
         if (count($tmps)>0) {
+            unlink($file);
             echo "!!!! Code exists !!!!\n\n";
             return false;
         }

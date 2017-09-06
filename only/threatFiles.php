@@ -61,6 +61,7 @@ function testFile($file)
         $tmps = $req->fetchAll();
         if (count($tmps)>0) {
             echo "!!!! Code exists !!!!\n\n";
+            unlink($file);
             return false;
         }
 
