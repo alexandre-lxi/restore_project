@@ -40,6 +40,7 @@ function testFile($file)
     $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
 
     $timestart=microtime(true);
+    echo "Start: ".date("H:i:s", $timestart)."\n";
 
     if (!isImage($file))
         return false;
@@ -48,12 +49,33 @@ function testFile($file)
     $cocode = explode('.',$fname);
     $cocode = $cocode[0];
 
-    $img = new Imagick();
-
-    $img->readImage($file);
-
     echo $file."\n";
-    echo "Start: ".date("H:i:s", $timestart)."\n";
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "select * from onlyfrance.restore_file_co where co_code = :cocode";
+        $req = $pdo->prepare($sql);
+        $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $req->execute();
+        $tmps = $req->fetchAll();
+        if (count($tmps)>0) {
+            echo "!!!! Code exists !!!!\n\n";
+            return false;
+        }
+
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+        die();
+    }
+
+
+    $img = new Imagick();
+    $img->readImage($file);
+    echo "      Readfile: ".date("H:i:s", microtime(true)- $timestart)."\n";
+
 
     if ($img->getImageWidth() > $img->getImageHeight()){
         $img->resizeImage(300,0,Imagick::FILTER_LANCZOS,1);
@@ -75,6 +97,7 @@ function testFile($file)
 
     echo "      Resize: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
+
     if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
         shell_exec('mv '.$file.' '.$dori.$fname);
 
@@ -82,8 +105,6 @@ function testFile($file)
 
         if (file_exists($dori.$fname)){
             try {
-                $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
-
                 $sql = "insert into onlyfrance.restore_files (fname, isOldFile) values(:fname, TRUE )";
                 $rqt = $pdo->prepare($sql);
                 $rqt->bindValue(':fname', $fname, PDO::PARAM_STR);
@@ -108,7 +129,6 @@ function testFile($file)
             }
 
             echo "      Insert tables: ".date("H:i:s", microtime(true)- $timestart)."\n";
-
 
             shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
             shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');

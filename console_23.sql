@@ -6,12 +6,11 @@ and s_reference like '20%';
 
 select *
 from container
-where s_reference like 'USA_NY%';
-
+where s_reference like 'GalaxyTowers_SF137b-3_ss_v02_Panorama2.jpg';
 
 select *
 from container
-where i_autocode = 56916;
+where i_autocode = 344064;
 
 update restore_files2 rf
   inner join  restore_file_co2 rfc  on rf_code = id
