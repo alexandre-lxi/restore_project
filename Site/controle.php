@@ -53,6 +53,16 @@ try{
     <meta charset="UTF-8">
     <title>Controle images</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        $(window).scroll(function () {
+            $('#entete').css({"position":"fixed", "top":"0px", "left":"0px"});
+            if ($(window).scrollTop() == 0)
+            {
+                $('#entete').css({"position":"fixed", "top":"50px", "left":"0px"});
+            }
+        });
+    </script>
+        
 </head>
 <body>
 
