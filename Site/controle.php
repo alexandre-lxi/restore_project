@@ -23,7 +23,19 @@ try{
     $req->execute();
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
-    $row = $rows[0];
+    $rowCo = $rows[0];
+
+
+    $sql = "select rf_code, fname
+            from restore_file_co_analyse2, restore_files
+            where co_code = :cocode
+            and id = rf_code";
+
+    $req = $pdo->prepare($sql);
+    $req->bindValue(':cocode', $rowCo->co_code, PDO::PARAM_INT);
+    $req->execute();
+
+    $rowsRf = $req->fetchAll(PDO::FETCH_OBJ);
 
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
@@ -49,11 +61,25 @@ try{
 
 <div id="main">
     <div id="menu">
-        <img src="<?php echo 'pictures/olddir/thumbdir/'.$row->co_code.'.jpg' ?>">
+        <span> Image à retrouver </span>
+
+        <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
     </div>
 
     <div id="contenu">
-        Contenu
+        <span>Contenu</span>
+
+        <?php
+        foreach ($rowsRf as $rowRf) {
+            $fname = basename($rowRf->fname);
+            $fname = explode('.',$fname);
+            $fname = 'pictures/olddir/'.$fname[0].'.jpg';
+
+            echo '<img src="'.$fname.'"\>'
+        }
+
+        ?>
+
     </div>
 </div>
 
