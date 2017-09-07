@@ -60,10 +60,12 @@ function testFile($file)
     $cocode = $cocode[0];
     $videoDest = $dvideo.$cocode.'.mp4';
 
+    echo $file."\n";
+
     if (file_exists($videoDest))
         return false;
 
-    echo $file."\n";
+
 
     $pdest = getTmpFilePath("mp4");
     $param['s_format'] = 'mp4';
