@@ -24,13 +24,13 @@
     width: 75%;
 }
 
-#contenu .ul{
+.ul{
     display: block;
     margin: 15px 0 50px;
     position: relative;
 }
 
-#contenu .li{
+.li{
     height: 150px;
     left: 0;
     opacity: 1;
