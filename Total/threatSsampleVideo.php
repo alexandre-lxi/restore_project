@@ -6,6 +6,8 @@
  * Time: 11:47
  */
 
+include "videoencoder.php";
+
 //$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
