@@ -65,11 +65,12 @@ try{
 
 </head>
 <body>
-
 <div id="entete">
-    En tête
+    Nom:
+    Next
+</div>
 
-
+<div id="tofind">
     <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
 </div>
 

@@ -2,12 +2,20 @@
     padding:1px 0;
 }
 
-#entete {
+#entete{
+    height: 75px;
+    width: 100%;
+    position: fixed;
+    top:0;
+
+}
+
+#tofind {
     border-bottom-style: solid;
     border-width: 2px;
     text-align:center;
     position: fixed;
-    top: 0;
+    top: 100px;
     width: 100%;
     z-index: 1;
     background: white;
