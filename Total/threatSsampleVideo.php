@@ -38,7 +38,7 @@ function isVideo($file){
 }
 
 
-public function getTmpFilePath($extension)
+function getTmpFilePath($extension)
 {
     return "/var/www/projects/total-1410-refontedam/back/account/pictures/tmp/".md5(time().rand()).".".$extension;
 }
