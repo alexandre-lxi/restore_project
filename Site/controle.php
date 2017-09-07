@@ -16,7 +16,7 @@ try{
             and co_code in (select i_autocode from container where b_isintrash <> 0) 
             group by co_code 
             having count(*)>1
-            order by count(*) desc
+            
             limit 1";
 
     $req = $pdo->prepare($sql);
