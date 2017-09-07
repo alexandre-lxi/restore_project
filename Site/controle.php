@@ -75,7 +75,9 @@ try{
             $fname = explode('.',$fname);
             $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
+            echo '<div syle="width: 200px;">';
             echo '<img style="margin: 5px" src="'.$fname.'"\>';
+            echo '</div>';
         }
 
         ?>
