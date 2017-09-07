@@ -86,7 +86,7 @@ function testFile($file)
 function _readDir($dirsource)
 {
     $files = scandir($dirsource);
-    $files = array('59956.mp4');
+
 
     $nb = 0;
 
