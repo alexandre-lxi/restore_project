@@ -6,12 +6,10 @@
     border-width: 2px;
     text-align:center;
 }
-#main {
-    margin:auto;
-}
+
 #menu  {
     float:left;
-    width:50%;
+    width:25%;
     border-bottom-style: solid;
     border-right-style: solid;
     border-width: 2px;
@@ -19,7 +17,7 @@
 
 #contenu {
     float: right;
-    width: 50%;
+    width: 75%;
 }
 #footer {
     text-align:center;

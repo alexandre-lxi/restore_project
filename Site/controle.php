@@ -67,7 +67,9 @@ try{
     </div>
 
     <div id="contenu">
-        <span >Contenu</span>
+        <div>
+            <span >Contenu</span>
+        </div>
 
         <?php
         foreach ($rowsRf as $rowRf) {
