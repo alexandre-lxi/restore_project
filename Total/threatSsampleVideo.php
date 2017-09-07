@@ -86,6 +86,24 @@ function testFile($file)
 function _readDir($dirsource)
 {
     $files = scandir($dirsource);
+    $files = array('59945.mp4',
+'59946.mp4',
+'59947.mp4',
+'59948.mp4',
+'59949.mp4',
+'59950.mp4',
+'59951.mp4',
+'59952.mp4',
+'59953.mp4',
+'59954.mp4',
+'59955.mp4',
+'59956.mp4',
+'59957.mp4',
+'59958.mp4',
+'59959.mp4',
+'59960.mp4',
+'59961.mp4');
+
 
 
     $nb = 0;
