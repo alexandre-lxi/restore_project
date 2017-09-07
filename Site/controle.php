@@ -75,7 +75,7 @@ try{
             $fname = explode('.',$fname);
             $fname = 'pictures/olddir/'.$fname[0].'.jpg';
 
-            echo '<img src="'.$fname.'"\>'
+            echo '<img src="'.$fname.'"\>';
         }
 
         ?>
