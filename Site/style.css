@@ -25,6 +25,7 @@
     z-index: 1;
     background: white;
     display: block;
+    height: 250px;
 
 }
 
@@ -33,7 +34,7 @@
     display: block;
     margin: 15px 0 50px;
     position: relative;
-    top: 250px;
+    top: 350px;
 }
 
 

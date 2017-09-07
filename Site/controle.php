@@ -78,7 +78,7 @@ try{
             Image recherchée :
         </div>
 
-        <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
+        <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
     </div>
 
 
