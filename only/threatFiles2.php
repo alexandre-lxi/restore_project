@@ -74,7 +74,12 @@ function testFile($file)
 
 
     $img = new Imagick();
-    $img->readImage($file);
+    try {
+        $img->readImage($file);
+    }catch (Exception $e){
+        return false;
+    }
+
     echo "      Readfile: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
 
