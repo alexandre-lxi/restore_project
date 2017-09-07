@@ -61,7 +61,7 @@ try{
         WHERE co.i_autocode = imf.i_foreigncode 
         and  s_fileformat IN ('.avi','.mpg','.mpeg','.m2v','.wmv','.mov','.flv','.mp4')
         and b_isintrash = 0
-        order by 1 desc"
+        order by 1"
     ;
 
     $req = $pdo->prepare($sql);
