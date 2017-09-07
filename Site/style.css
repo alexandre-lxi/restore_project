@@ -3,7 +3,7 @@
 }
 
 #entete{
-    height: 75px;
+    height: 100px;
     width: 100%;
     position: fixed;
     top:0;
@@ -20,7 +20,7 @@
     border-width: 2px;
     text-align:center;
     position: fixed;
-    top: 79px;
+    top: 104px;
     width: 100%;
     z-index: 1;
     background: white;
@@ -43,7 +43,6 @@
 }
 
 .li{
-    height: 150px;
     left: 0;
     opacity: 1;
     top: 0;
