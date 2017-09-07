@@ -67,7 +67,7 @@ try{
     </div>
 
     <div id="contenu">
-        <span>Contenu</span>
+        <span >Contenu</span>
 
         <?php
         foreach ($rowsRf as $rowRf) {
@@ -75,7 +75,7 @@ try{
             $fname = explode('.',$fname);
             $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
-            echo '<img src="'.$fname.'"\>';
+            echo '<img style="margin: 5px" src="'.$fname.'"\>';
         }
 
         ?>
