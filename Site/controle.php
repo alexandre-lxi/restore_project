@@ -49,7 +49,7 @@ try{
 
 <div id="main">
     <div id="menu">
-        <img src="<?php echo 'pictures/olddir/thumbdir/'.$row->co_code.'jpg' ?>">
+        <img src="<?php echo 'pictures/olddir/thumbdir/'.$row->co_code.'.jpg' ?>">
     </div>
 
     <div id="contenu">
