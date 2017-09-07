@@ -73,7 +73,7 @@ try{
         foreach ($rowsRf as $rowRf) {
             $fname = basename($rowRf->fname);
             $fname = explode('.',$fname);
-            $fname = 'pictures/olddir/'.$fname[0].'.jpg';
+            $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
             echo '<img src="'.$fname.'"\>';
         }
