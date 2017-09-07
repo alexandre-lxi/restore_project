@@ -14,7 +14,7 @@ try{
             where is_restored <> 5
             and co_code <> 1
             and RAND() > 0.9
-            and co_code = 23340
+            and rf_code = 23340
             and co_code in (select i_autocode from container where b_isintrash <> 0) 
             group by co_code 
             having count(*)>1
