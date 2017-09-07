@@ -12,13 +12,12 @@ try{
     $sql = "select co_code , count(*)
             from restore_file_co_analyse2
             where is_restored <> 5
-            and co_code <> 1
-            and RAND() > 0.9
+            and co_code <> 1            
             and co_code <50000            
             and co_code in (select i_autocode from container where b_isintrash <> 0) 
             group by co_code 
             having count(*)>1
-            order by 2 desc
+            ORDER BY RAND( )
             limit 1
             ";
 
