@@ -58,7 +58,7 @@ function testFile($file)
     $fname = basename($file);
     $cocode = explode('.',$fname);
     $cocode = $cocode[0];
-    $videoDest = $dvideo.$cocode.'mp4';
+    $videoDest = $dvideo.$cocode.'.mp4';
 
     if (file_exists($videoDest))
         return false;
