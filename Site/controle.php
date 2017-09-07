@@ -57,20 +57,12 @@ try{
 
 <div id="entete">
     En tête
+
+
+    <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
 </div>
 
 <div id="main">
-    <div id="menu">
-        <span> Image à retrouver </span>
-
-        <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
-    </div>
-
-    <div id="contenu">
-        <div>
-            <span >Contenu</span>
-        </div>
-
         <div>
             <ul class="ul">
             <?php
@@ -88,7 +80,6 @@ try{
 
             </ul>
         </div>
-    </div>
 </div>
 
 <div id="footer">
