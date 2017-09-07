@@ -12,8 +12,15 @@ include "videoencoder.php";
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 $dirsource = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
+$dvideo = '/var/www/projects/total-1410-refontedam/back/account/pictures/video/';
 //$dirsource = '/home/ubuntu/new_onlyfrance/test/';
 //$dirsource    = '/home/ubuntu/new_onlyfrance/toAnalyse/';
+
+$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_port = '3306';
+$VALEUR_nom_bd = 'total-refontedam';
+$VALEUR_user = 'alaidin';
+$VALEUR_mot_de_passe = 'alaidin';
 
 function getFileExtension($file, $withdot=false)
 {
@@ -45,79 +52,66 @@ function getTmpFilePath($extension)
     return "/var/www/projects/total-1410-refontedam/back/account/pictures/tmp/".md5(time().rand()).".".$extension;
 }
 
-function testFile($file)
-{
-    $dvideo = '/var/www/projects/total-1410-refontedam/back/account/pictures/video/';
 
-    $timestart=microtime(true);
-    echo "Start: ".date("H:i:s", $timestart)."\n";
+try{
+    $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    if (!isVideo($file))
-        return false;
+    $sql = "SELECT co.i_autocode, s_fileformat
+        FROM container co, image_file imf
+        WHERE co.i_autocode = imf.i_foreigncode 
+        and  s_fileformat IN ('.avi','.mpg','.mpeg','.m2v','.wmv','.mov','.flv','.mp4')
+        order by 1 desc"
+    ;
 
-    $fname = basename($file);
-    $cocode = explode('.',$fname);
-    $cocode = $cocode[0];
-    $videoDest = $dvideo.$cocode.'.mp4';
+    $req = $pdo->prepare($sql);
+    $req->execute();
+    
+    $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-    echo $file."\n";
+    foreach ($rows as $row) {
+        $timestart=microtime(true);
+        echo "Start: ".date("H:i:s", $timestart)."\n";
 
-    if (file_exists($videoDest))
-        return false;
+        $file = $dirsource.$row->i_autocode.$row->s_fileformat;
 
-
-
-    $pdest = getTmpFilePath("mp4");
-    $param['s_format'] = 'mp4';
-    $param['s_vbrate'] = '1200k';
-    $param['s_abrate'] = '128k';
-    $param['s_size'] = '960x540';
-    $enc = new videoEncoder();
-    $param['s_file'] = $file;
-    $param['s_output'] = $pdest;
-    $enc->encode($param['s_file'], $param['s_output'], $param);
-    rename($pdest, $videoDest);
-
-    echo "      Encode: ".date("H:i:s", microtime(true)- $timestart)."\n";
-
-
-}
-
-function _readDir($dirsource)
-{
-    $files = scandir($dirsource);
-    $files = array('59694.mp4',
-'59695.mp4',
-'59696.mp4',
-'59697.mp4',
-'59698.mp4',
-'59755.mp4',
-'59824.mp4',
-'59825.mp4',
-'59826.mp4',
-'59827.mp4',
-'59828.mp4',
-'59829.mp4',
-'59830.mp4',
-'59943.mp4');
-
-
-
-    $nb = 0;
-
-    foreach ($files as $file) {
-        if ($file == '.') continue;
-        if ($file == '..') continue;
-
-        if (!file_exists($dirsource.$file))
+        if (!file_exists($file))
             continue;
 
-        if (!is_dir($dirsource.$file)) {
-            testFile($dirsource.$file);
-        } else {
-            _readDir($dirsource.$file.'/');
-        }
+        if (!isVideo($file))
+            continue;
+
+        $fname = $row->i_autocode.$row->s_fileformat;
+        $cocode = $row->i_autocode;
+        $videoDest = $dvideo.$cocode.'.mp4';
+
+        echo $file."\n";
+
+        if (file_exists($videoDest))
+            continue;
+
+
+
+        $pdest = getTmpFilePath("mp4");
+        $param['s_format'] = 'mp4';
+        $param['s_vbrate'] = '1200k';
+        $param['s_abrate'] = '128k';
+        $param['s_size'] = '960x540';
+        $enc = new videoEncoder();
+        $param['s_file'] = $file;
+        $param['s_output'] = $pdest;
+        $enc->encode($param['s_file'], $param['s_output'], $param);
+        rename($pdest, $videoDest);
+
+        echo "      Encode: ".date("H:i:s", microtime(true)- $timestart)."\n";
     }
+
+} catch (PDOException $Exception) {
+    // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+    // String.
+    echo $Exception->getMessage().' : '.$Exception->getCode();
+    die();
 }
 
-_readDir($dirsource);
+
+
+
