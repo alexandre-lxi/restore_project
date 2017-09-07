@@ -92,7 +92,7 @@ try{
 
                     echo '<li class="li">';
                     echo '<img style="margin: 5px" src="'.$fname.'"\>';
-                    echo '<input type="radio" name="'.$rowRf->rf_code.'">';
+                    echo '<input type="radio" name="list" value="'.$rowRf->rf_code.'">';
                     echo '</li>';
                 }
 
