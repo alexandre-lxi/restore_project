@@ -9,15 +9,16 @@ $VALEUR_mot_de_passe = 'alaidin';
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co_code 
+    $sql = "select co_code , count(*)
             from restore_file_co_analyse2
             where is_restored <> 5
             and co_code <> 1
             and co_code in (select i_autocode from container where b_isintrash <> 0) 
             group by co_code 
             having count(*)>1
-            
-            limit 1";
+            order by 2 desc
+            limit 1
+            ";
 
     $req = $pdo->prepare($sql);
     $req->execute();
