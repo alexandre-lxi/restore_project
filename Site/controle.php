@@ -65,38 +65,43 @@ try{
 
 </head>
 <body>
-<div id="entete">
-    Nom:
-    Next
-</div>
+<form action="action.php" method="post">
 
-<div id="tofind">
-    <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
-</div>
+    <div id="entete">
+        <p>Votre nom : <input type="text" name="name"/></p>
+        <p><input type="submit"></p>
+    </div>
 
-<div id="main">
+    <div id="tofind">
         <div>
-            <ul class="ul">
-            <?php
-            foreach ($rowsRf as $rowRf) {
-                $fname = basename($rowRf->fname);
-                $fname = explode('.',$fname);
-                $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
-
-                echo '<li class="li">';
-                echo '<img style="margin: 5px" src="'.$fname.'"\>';
-                echo '</li>';
-            }
-
-            ?>
-
-            </ul>
+            Image recherchée :
         </div>
-</div>
 
-<div id="footer">
-    Pied de Page
-</div>
+        <img src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
+    </div>
+
+
+    <div id="main">
+            <div>
+                <ul class="ul">
+                <?php
+                foreach ($rowsRf as $rowRf) {
+                    $fname = basename($rowRf->fname);
+                    $fname = explode('.',$fname);
+                    $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+
+                    echo '<li class="li">';
+                    echo '<img style="margin: 5px" src="'.$fname.'"\>';
+                    echo '<input type="radio" name="'.$rowRf->rf_code.'">';
+                    echo '</li>';
+                }
+
+                ?>
+
+                </ul>
+            </div>
+    </div>
+</form>
 
 </body>
 </html>
