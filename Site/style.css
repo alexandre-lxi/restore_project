@@ -7,6 +7,10 @@
     text-align:center;
 }
 
+#main{
+    padding: 0;
+}
+
 #menu  {
     float:left;
     width:25%;

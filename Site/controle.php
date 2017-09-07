@@ -71,19 +71,23 @@ try{
             <span >Contenu</span>
         </div>
 
-        <?php
-        foreach ($rowsRf as $rowRf) {
-            $fname = basename($rowRf->fname);
-            $fname = explode('.',$fname);
-            $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+        <div>
+            <ul>
+            <?php
+            foreach ($rowsRf as $rowRf) {
+                $fname = basename($rowRf->fname);
+                $fname = explode('.',$fname);
+                $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
-            echo '<div syle="width: 200px;">';
-            echo '<img style="margin: 5px" src="'.$fname.'"\>';
-            echo '</div>';
-        }
+                echo '<li>';
+                echo '<img style="margin: 5px" src="'.$fname.'"\>';
+                echo '</li>';
+            }
 
-        ?>
+            ?>
 
+            </ul>
+        </div>
     </div>
 </div>
 
