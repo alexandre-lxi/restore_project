@@ -91,8 +91,12 @@ try{
                     $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
                     echo '<li class="li">';
-                    echo '<img style="margin: 5px" src="'.$fname.'"\>';
-                    echo '<input type="radio" name="list" value="'.$rowRf->rf_code.'">';
+                    echo '<table>';
+                    echo '<tr>';
+                    echo '<td><img style="margin: 5px" src="'.$fname.'"\></td>';
+                    echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
+                    echo '</tr>';
+                    echo '</table>';
                     echo '</li>';
                 }
 
