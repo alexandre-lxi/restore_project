@@ -72,14 +72,14 @@ try{
         </div>
 
         <div>
-            <ul>
+            <ul class="ul">
             <?php
             foreach ($rowsRf as $rowRf) {
                 $fname = basename($rowRf->fname);
                 $fname = explode('.',$fname);
                 $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
 
-                echo '<li>';
+                echo '<li class="li">';
                 echo '<img style="margin: 5px" src="'.$fname.'"\>';
                 echo '</li>';
             }
