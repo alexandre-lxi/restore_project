@@ -11,11 +11,12 @@
 }
 #menu  {
     float:left;
-    width:240px;
+    width:50%;
     background-color:#FF3366;
 }
 #contenu {
-    margin-left:245px;
+    float: right;
+    width: 50%;
     background-color:#9966FF;
 }
 #footer {
