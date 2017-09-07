@@ -81,7 +81,7 @@ function testFile($file)
 
 function _readDir($dirsource)
 {
-    $files = scandir($dirsource, SCANDIR_SORT_DESCENDING);
+    $files = scandir($dirsource);
     $files = array('59573.mp4');
 
     $nb = 0;
