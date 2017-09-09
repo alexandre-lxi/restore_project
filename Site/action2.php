@@ -15,7 +15,6 @@ $VALEUR_mot_de_passe = 'alaidin';
 $name = (isset($_POST['name']))?$_POST['name']:'';
 $cocode = (isset($_POST['cocode']))?$_POST['cocode']:'';
 $rfcode = (isset($_POST['list']))?$_POST['list']:'';
-$ttrfcode=  (isset($_POST['ttrfcode']))?$_POST['ttrfcode']:'';
 
 echo "name:". $name.'<br>';
 echo 'cocode:'.$cocode.'<br>';
@@ -25,7 +24,7 @@ echo 'rfcode:'.$rfcode.'<br>';
 if ($name == ''){
     $error = 'Vous devez vous identifier !';
 
-    header('Location: http://verif.iris-solutions.fr/controle.php?errors='.$error);
+    header('Location: http://verif.iris-solutions.fr/controle2.php?errors='.$error);
     exit();
 }
 
@@ -53,29 +52,17 @@ try{
         $reqRF = $pdo->prepare($sql);
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
-
-        $sql = "update restore_file_co_analyse2 set to_restore=1 where id=:rfcode and co_code=:cocode";
-        $reqRF = $pdo->prepare($sql);
-        $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
-        $reqRF->bindValue(':cocode',$cocode,PDO::PARAM_INT);
-        $reqRF->execute();
-    }else{
-        $sql = "update restore_file_co_analyse2 set to_restore=2 where rf_code=:rfcode  and co_code=:cocode";
-        $reqRF = $pdo->prepare($sql);
-        $reqRF->bindValue(':rfcode',$ttrfcode,PDO::PARAM_INT);
-        $reqRF->bindValue(':cocode',$cocode,PDO::PARAM_INT);
-        $reqRF->execute();
     }
 
 
     $pdo->commit();
-    header('Location: http://verif.iris-solutions.fr/controle.php?name='.$name);
+    header('Location: http://verif.iris-solutions.fr/controle2.php?name='.$name);
 
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
     $pdo->rollBack();
     $error = $Exception->getMessage().' : '.$Exception->getCode();
-    header('Location: http://verif.iris-solutions.fr/controle.php?errors='.$error);
+    header('Location: http://verif.iris-solutions.fr/controle2.php?errors='.$error);
     exit();
 }
