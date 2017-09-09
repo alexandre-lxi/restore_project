@@ -9,13 +9,14 @@ $VALEUR_mot_de_passe = 'alaidin';
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co_code , count(*)
-            from restore_file_co_analyse2
-            where is_restored <> 5
-            and co_code <> 1            
-            and co_code <50000            
-            and co_code in (select i_autocode from container where b_isintrash <> 0) 
-            group by co_code 
+    $sql = "select co2.co_code , count(*)
+            from restore_file_co_analyse2 co2, restore_files rf
+            where co2.rf_code = rf.id
+            and rf.s_format in ('jpg','png')
+            and co2.is_restored <> 5
+            and co2.co_code <> 1
+            and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
+            group by co2.co_code
             having count(*)>1
             ORDER BY RAND( )
             limit 1
