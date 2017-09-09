@@ -53,10 +53,16 @@ try{
         $reqRF = $pdo->prepare($sql);
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
+
+        $sql = "update restore_file_co_analyse2 set to_restore=1 where id=:rfcode and co_code=:cocode";
+        $reqRF = $pdo->prepare($sql);
+        $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
+        $reqRF->bindValue(':cocode',$cocode,PDO::PARAM_INT);
+        $reqRF->execute();
     }else{
         $sql = "update restore_file_co_analyse2 set to_restore=2 where rf_code=:tt  and co_code=:cocode";
         $reqRF = $pdo->prepare($sql);
-        $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
+        $reqRF->bindValue(':rfcode',$ttrfcode,PDO::PARAM_INT);
         $reqRF->bindValue(':cocode',$cocode,PDO::PARAM_INT);
         $reqRF->execute();
     }
