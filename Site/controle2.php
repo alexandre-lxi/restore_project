@@ -349,7 +349,7 @@ if (isset($_GET['error'])){
                 Image recherchée :
             </div>
 
-            <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
+            <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
         </div>
 
 
