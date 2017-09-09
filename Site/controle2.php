@@ -11,18 +11,12 @@ $name = (isset($_GET['name'])?$_GET['name']:'');
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co2.co_code, imf.i_width, imf.i_height
-            from restore_file_co_analyse2 co2, restore_files rf, image_file imf
-            where co2.rf_code = rf.id
-            and rf.s_format in ('jpg','png')            
-            and rf.is_restored = 0
-            and rf.to_restore=0
-            and co2.co_code <> 1
-            and i_foreigncode = co2.co_code
-            and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
-            order by RAND()
-            limit 1
-            
+    $sql = "select co.i_autocode
+                from container co, image_file imf
+                where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
+                and co.i_autocode not in (SELECT co_code from restore_file_co2 where is_restored =1)
+                and imf.i_foreigncode = co.i_autocode
+                and imf.s_fileformat in ('.jpg','.png');
             ";
 
     $req = $pdo->prepare($sql);
@@ -33,9 +27,10 @@ try{
     $cocode = $rowCo->co_code;
 
 
-    $sql = "select rf_code, fname, width, height
-            from restore_file_co_analyse2, restore_files
-            where co_code = :cocode            
+    $sql = "select rf_code, fname, imf.i_width, imf.i_height
+            from restore_file_co_analyse2, restore_files, image_file imf
+            where co_code = :cocode
+            and i_foreigncode = co_code
             and id = rf_code";
 
     $req = $pdo->prepare($sql);
@@ -97,8 +92,8 @@ try{
             </div>
 
             <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
-            <p>Width: <?php echo $rowCo->i_width; ?></p>
-            <p>Height: <?php echo $rowCo->i_height; ?></p>
+            <p>Width: <?php echo $rowCo->width; ?></p>
+            <p>Height: <?php echo $rowCo->height; ?></p>
         </div>
 
 
@@ -116,8 +111,8 @@ try{
                         echo '<tr>';
                         echo '<td>
                                     <img style="margin: 5px" src="'.$fname.'"\>
-                                    <p>Width: '.$rowRf->width.'</p>
-                                    <p>Height: '.$rowRf->height.'</p>
+                                    <p>Width: '.$rowRf->i_width.'</p>
+                                    <p>Height: '.$rowRf->i_height.'</p>
                               </td>';
                         echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
                         echo '</tr>';
