@@ -54,7 +54,7 @@ try{
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
     }else{
-        $sql = "update restore_files set to_restore=-1 where id=:rfcode";
+        $sql = "update restore_files set to_restore=2 where id=:rfcode";
         $reqRF = $pdo->prepare($sql);
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
