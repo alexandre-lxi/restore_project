@@ -361,6 +361,8 @@ if (isset($_GET['error'])){
                         $fname = basename($rowRf['fname']);
                         $fname = explode('.',$fname);
                         $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+                        if (!file_exists($fname))
+                            continue;
 
                         echo '<li class="li">';
                         echo '<table>';
