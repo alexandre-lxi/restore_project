@@ -17,7 +17,7 @@ try{
             and rf.s_format in ('jpg','png')            
             and rf.is_restored = 0
             and rf.to_restore=0
-            and co2.to_restore = 0
+            and (co2.to_restore = 0 or co2.to_restore is null) 
             and co2.co_code <> 1
             and i_foreigncode = co2.co_code
             and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
