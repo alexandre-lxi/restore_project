@@ -349,9 +349,7 @@ if (isset($_GET['error'])){
                 Image recherchée :
             </div>
 
-            <img height="170px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
-            <p>Width: <?php echo $rowCo->i_width; ?></p>
-            <p>Height: <?php echo $rowCo->i_height; ?></p>
+            <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
         </div>
 
 
@@ -368,9 +366,7 @@ if (isset($_GET['error'])){
                         echo '<table>';
                         echo '<tr>';
                         echo '<td>
-                                    <img style="margin: 5px" src="'.$fname.'"\>
-                                    <p>Width: '.$rowRf['width'].'</p>
-                                    <p>Height: '.$rowRf['height'].'</p>
+                                    <img style="margin: 5px" src="'.$fname.'"\>                                    
                               </td>';
                         echo '<td><input type="radio" name="list" value="'.$rowRf['rfcode'].'"></td>';
                         echo '</tr>';
