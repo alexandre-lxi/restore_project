@@ -56,7 +56,7 @@ function findBySizes($width, $height)
 }
 
 
-function findByPixels($cocode)
+function findByPixels($cocode, $width, $height)
 {
     $VALEUR_hote = 'prod.kwk.eu.com';
     $VALEUR_port = '3306';
@@ -124,7 +124,8 @@ function findByPixels($cocode)
             }
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
-                    FROM restore_nfile_colors, restore_files rf where rfcode = rf.id";
+                    FROM restore_nfile_colors, restore_files rf where rfcode = rf.id 
+                    and rf.width=:width and rf.height=:height";
 
             $sql .= " and (";
 
@@ -139,6 +140,8 @@ function findByPixels($cocode)
             //print_r($sql);
 
             $reqSel = $pdo->prepare($sql);
+            $reqSel->bindValue(':width',$width,PDO::PARAM_INT);
+            $reqSel->bindValue(':width',$width,PDO::PARAM_INT);
             $reqSel->execute();
 
             $selRows = $reqSel->fetchAll(PDO::FETCH_OBJ);
@@ -185,9 +188,10 @@ try{
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
             continue;
 
-//        $rowsRf = findByPixels($cocode);
-//        if (count($rowsRf)>0)
-//            break;
+        $rowsRf = findByPixels($cocode, $rowCo->i_width, $rowCo->i_height);
+        if (count($rowsRf)>0)
+            break;
+
         $rowsRf = findBySizes($rowCo->i_width, $rowCo->i_height);
         if (count($rowsRf)>0)
             break;
