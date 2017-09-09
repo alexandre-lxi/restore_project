@@ -303,18 +303,10 @@ try{
         print_r('NB1:'.count($rowsRf).'<br>');
 
         $rowsRf3 = findByPixels($cocode);
-            foreach ($rowsRf3 as $item) {
-                $rowsRf[] = $item;
-            }
-
-        print_r('NB2:'.count($rowsRf).'#'.count($rowsRf3).'<br>');
+        print_r('NB2:'.count($rowsRf3).'<br>');
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
-        foreach ($rowsRf2 as $item) {
-            $rowsRf[] = $item;
-        }
-
-        print_r('NB2:'.count($rowsRf).'#'.count($rowsRf2).'<br>');
+        print_r('NB2:'.count($rowsRf2).'<br>');
 
         if (count($rowsRf)>0)
             break;
@@ -373,6 +365,60 @@ if (isset($_GET['error'])){
                 <ul class="ul">
                     <?php
                     foreach ($rowsRf as $rowRf) {
+                        $fname = basename($rowRf['fname']);
+                        $fname = explode('.',$fname);
+                        $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+                        if (!file_exists($fname))
+                            continue;
+
+                        echo '<li class="li">';
+                        echo '<table>';
+                        echo '<tr>';
+                        echo '<td>
+                                    <img style="margin: 5px" src="'.$fname.'"\>
+                                    <p style="font-size: small;">Dimension : '.$rowRf['width'].'x'.$rowRf['height'].'</p>                                    
+                              </td>';
+                        echo '<td><input type="radio" name="list" value="'.$rowRf['rfcode'].'"></td>';
+                        echo '</tr>';
+                        echo '</table>';
+                        echo '</li>';
+                    }
+
+                    ?>
+
+                </ul>
+            </div>
+            <div>
+                <ul class="ul">
+                    <?php
+                    foreach ($rowsRf3 as $rowRf) {
+                        $fname = basename($rowRf['fname']);
+                        $fname = explode('.',$fname);
+                        $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+                        if (!file_exists($fname))
+                            continue;
+
+                        echo '<li class="li">';
+                        echo '<table>';
+                        echo '<tr>';
+                        echo '<td>
+                                    <img style="margin: 5px" src="'.$fname.'"\>
+                                    <p style="font-size: small;">Dimension : '.$rowRf['width'].'x'.$rowRf['height'].'</p>                                    
+                              </td>';
+                        echo '<td><input type="radio" name="list" value="'.$rowRf['rfcode'].'"></td>';
+                        echo '</tr>';
+                        echo '</table>';
+                        echo '</li>';
+                    }
+
+                    ?>
+
+                </ul>
+            </div>
+            <div>
+                <ul class="ul">
+                    <?php
+                    foreach ($rowsRf2 as $rowRf) {
                         $fname = basename($rowRf['fname']);
                         $fname = explode('.',$fname);
                         $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
