@@ -180,6 +180,9 @@ try{
 //        if (count($rowsRf)>0)
 //            break;
         $rowRf = findBySizes($rowCo->i_width, $rowCo->i_height);
+        if (count($rowsRf)>0)
+            break;
+
     }
 
 
