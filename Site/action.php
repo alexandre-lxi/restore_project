@@ -42,10 +42,11 @@ try{
     $reqRA->execute();
 
     if ($rfcode <> '') {
-        $sql = "INSERT INTO restore_file_co3 VALUES (:rfcode, :cocode, FALSE)";
+        $sql = "INSERT INTO restore_file_co3 VALUES (:rfcode, :cocode, FALSE, :who)";
         $reqrf3 = $pdo->prepare($sql);
         $reqrf3->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
         $reqrf3->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $reqrf3->bindValue(':who', $name, PDO::PARAM_INT);
         $reqrf3->execute();
 
         $sql = "update restore_files set to_restore=1 where id=:rfcode";
