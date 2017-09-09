@@ -25,7 +25,7 @@ function findBySizes($width, $height)
                 where is_restored <> 1 
                 and to_restore=0
                 and width = :width 
-                and height=:height 
+                and height=:height                 
                 and s_format in ('jpg', 'png') 
                 order by fsize desc";
 
@@ -281,6 +281,7 @@ try{
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0
+            and co.i_autocode < 60000
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.jpg','.png') 
             order by rand()           
