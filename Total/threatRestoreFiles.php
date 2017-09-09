@@ -994,7 +994,7 @@ function threatImageByCo()
 
             if (count($ret)==1){
                 echo "    1 row OK";
-                insertCo($ret['rfcode'], $row->i_autocode );
+                insertCo($ret[0]['rfcode'], $row->i_autocode );
             }
         }
     } catch (PDOException $Exception) {
