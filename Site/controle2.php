@@ -23,6 +23,7 @@ function findBySizes($width, $height)
 
         $sql = "SELECT * from restore_files 
                 where is_restored <> 1 
+                and to_restore=0
                 and width = :width 
                 and height=:height 
                 and s_format in ('jpg', 'png') 
@@ -188,7 +189,7 @@ try{
 //        $rowsRf = findByPixels($cocode);
 //        if (count($rowsRf)>0)
 //            break;
-        $rowRf = findBySizes($rowCo->i_width, $rowCo->i_height);
+        $rowsRf = findBySizes($rowCo->i_width, $rowCo->i_height);
         if (count($rowsRf)>0)
             break;
     }
