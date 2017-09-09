@@ -65,7 +65,7 @@ function findByPixels($cocode)
     $VALEUR_mot_de_passe = 'alaidin';
 
 
-    $taux = 0.1;
+    $taux = 0.15;
     $vals[1] = array(
         'r'=> array('min'=>0,'max'=>0),
         'g'=> array('min'=>0,'max'=>0),
@@ -173,7 +173,7 @@ function findByPixelsSize($cocode, $width, $height)
     $VALEUR_mot_de_passe = 'alaidin';
 
 
-    $taux = 0.1;
+    $taux = 0.15;
     $vals[1] = array(
         'r'=> array('min'=>0,'max'=>0),
         'g'=> array('min'=>0,'max'=>0),

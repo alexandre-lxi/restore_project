@@ -289,7 +289,7 @@ function controlPixels($rfcode, $cocode)
         $tCols[$i] = array('p'.$i.'_r', 'p'.$i.'_g', 'p'.$i.'_b');
     }
 
-    $taux = 0.1;
+    $taux = 0.15;
 
     try {
         echo "controlPixels rf: ".$rfcode." co: ".$cocode."\n";
@@ -342,7 +342,7 @@ function controlPixels($rfcode, $cocode)
 
         //echo $nb;
 
-        if ($nb >= 9)
+        if ($nb >= 8)
             return 1;
         else
             return 0;
@@ -1006,12 +1006,12 @@ function threatImageByCo()
 
 
 //threatImage();
-threatImageByCo();
+//threatImageByCo();
 //print_r(findByPixels(773));
 //threatOffice();
 //threatOfficeAn();
 //threatVideo();
 //threatOthers();
 //threatImageAn();
-//print_r(controlPixels(28704, 46740));
+print_r(controlPixels(117816, 3666));
 
