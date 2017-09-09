@@ -19,10 +19,9 @@ try{
             and rf.to_restore=0
             and co2.co_code <> 1
             and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
-            group by co2.co_code
-            having count(*)>1
-            ORDER BY RAND( )
+            order by RAND()
             limit 1
+            
             ";
 
     $req = $pdo->prepare($sql);
