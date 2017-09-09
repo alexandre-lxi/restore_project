@@ -123,18 +123,24 @@ try{
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
             and co.i_autocode not in (select co_code from restore_file_co3)
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png');
-            limit 1
+            and imf.s_fileformat in ('.jpg','.png')            
             ";
 
     $req = $pdo->prepare($sql);
     $req->execute();
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
-    $rowCo = $rows[0];
-    $cocode = $rowCo->i_autocode;
 
-    $rowsRf = findByPixels($cocode);
+    foreach ($rows as $rowCo) {
+        $cocode = $rowCo->i_autocode;
+        if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
+            continue;
+
+        $rowsRf = findByPixels($cocode);
+        if (count($rowsRf)>0)
+            break;
+    }
+
 
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
