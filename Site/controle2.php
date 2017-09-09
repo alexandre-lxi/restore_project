@@ -298,17 +298,18 @@ try{
             continue;
 
         $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
-        if (count($rowsRf)>0)
-            break;
-
-        $rowsRf = findByPixels($cocode);
-        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
-
+        $rowsRf3 = findByPixels($cocode);
         if (count($rowsRf)>0){
-            foreach ($rowsRf2 as $item) {
+            foreach ($rowsRf3 as $item) {
                 $rowsRf[] = $item;
             }
         }
+        
+        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
+        foreach ($rowsRf2 as $item) {
+            $rowsRf[] = $item;
+        }
+
 
         if (count($rowsRf)>0)
             break;
