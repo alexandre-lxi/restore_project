@@ -9,6 +9,12 @@
 
 
 $name = (isset($_POST['name']))?$_POST['name']:'';
+$cocode = (isset($_POST['cocode']))?$_POST['cocode']:'';
+$rfcode = (isset($_POST['list']))?$_POST['list']:'';
 
 
-header("Location: http://verif.iris-solutions.fr/controle.php?name=".$name);
+echo "name:". $name.'<br>';
+echo 'cocode:'.$cocode.'<br>';
+echo 'rfcode:'.$rfcode.'<br>';
+
+//header("Location: http://verif.iris-solutions.fr/controle.php?name=".$name);

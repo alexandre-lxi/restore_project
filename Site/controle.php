@@ -69,7 +69,7 @@ try{
 </head>
 <body>
 <form action="action.php" method="post">
-    <input type="hidden" value="<?php echo $cocode; ?>">
+    <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
 
     <div id="entete">
         <p>Votre nom : <input type="text" name="name" value="<?php echo (isset($_GET['name'])?$_GET['name']:''); ?>"></p>
