@@ -25,7 +25,7 @@ function findBySizes($width, $height)
                 and height=:height 
                 and s_format in ('jpg', 'png') 
                 order by fsize desc
-                limit 50";
+                limit 10";
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':width',$width,PDO::PARAM_INT);
