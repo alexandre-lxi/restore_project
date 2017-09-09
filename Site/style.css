@@ -1,3 +1,7 @@
+body{
+    background-color: lightgrey;
+}
+
 #entete, #menu, #contenu, #footer {
     padding:1px 0;
 }
