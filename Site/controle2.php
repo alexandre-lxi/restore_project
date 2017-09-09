@@ -306,14 +306,14 @@ try{
                 $rowsRf[] = $item;
             }
 
-        print_r('NB2:'.count($rowsRf).'<br>');
+        print_r('NB2:'.count($rowsRf).'#'.count($rowsRf3)'<br>');
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
         foreach ($rowsRf2 as $item) {
             $rowsRf[] = $item;
         }
 
-        print_r('NB3:'.count($rowsRf).'<br>');
+        print_r('NB2:'.count($rowsRf).'#'.count($rowsRf2)'<br>');
 
         if (count($rowsRf)>0)
             break;
