@@ -33,6 +33,8 @@ if ($name == ''){
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
+    $pdo->beginTransaction();
+
     $sql = "update restore_activity set click=click+1, fusion=fusion+:nb where name=:idname";
     $reqRA = $pdo->prepare($sql);
     $reqRA->bindValue(':idname', $name, PDO::PARAM_STR);
@@ -45,13 +47,26 @@ try{
         $reqrf3->bindValue(':rfcode', $rfcode, PDO::PARAM_INT);
         $reqrf3->bindValue(':cocode', $cocode, PDO::PARAM_INT);
         $reqrf3->execute();
+
+        $sql = "update restore_files set to_restore=1 where id=:rfcode";
+        $reqRF = $pdo->prepare($sql);
+        $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
+        $reqRF->execute();
+    }else{
+        $sql = "update restore_files set to_restore=-1 where id=:rfcode";
+        $reqRF = $pdo->prepare($sql);
+        $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
+        $reqRF->execute();
     }
 
+
+    $pdo->commit();
     header('Location: http://verif.iris-solutions.fr/controle.php?name='.$name);
 
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
+    $pdo->rollBack();
     $error = $Exception->getMessage().' : '.$Exception->getCode();
     header('Location: http://verif.iris-solutions.fr/controle.php?errors='.$error);
     exit();
