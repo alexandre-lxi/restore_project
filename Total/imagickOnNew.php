@@ -507,7 +507,7 @@ try {
     $req = $pdo->prepare($sql);
 
     $sqlSel = "select id, fname, width, s_format from restore_files where s_format in('jpg','png','tif','jpeg','png','gif','eps','pdf','ai')
-      and id < 150000
+      and id = 282578      
       order by 1 desc";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
@@ -530,10 +530,12 @@ try {
             if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
                 $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
                 shell_exec($nconv);
+            }else{
+                convertFile($fname, $fthumb, $param);    // create thumbnail image
             }
 
-            //$success = convertFile($fname, $fthumb, $param);    // create thumbnail image
-            $success = file_exists($fthumb);
+            //$success = file_exists($fthumb);
+            $success = false;
 
             if ($success) {
 
