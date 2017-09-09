@@ -508,8 +508,7 @@ try {
             values (:rfcode, :p1_r, :p1_g, :p1_b, :p1_a, :p2_r, :p2_g, :p2_b, :p2_a, :p3_r, :p3_g, :p3_b, :p3_a, :p4_r, :p4_g, :p4_b, :p4_a, :p5_r, :p5_g, :p5_b, :p5_a, :p6_r, :p6_g, :p6_b, :p6_a, :p7_r, :p7_g, :p7_b, :p7_a, :p8_r, :p8_g, :p8_b, :p8_a, :p9_r, :p9_g, :p9_b, :p9_a, :p10_r, :p10_g, :p10_b, :p10_a)';
     $req = $pdo->prepare($sql);
 
-    $sqlSel = "select id, fname, width, s_format from restore_files where s_format in('jpg','png')
-      and id = 263853 
+    $sqlSel = "select id, fname, width, s_format from restore_files where s_format in('jpg','png')       
       order by 1 desc";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
