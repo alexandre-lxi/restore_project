@@ -71,54 +71,60 @@ try{
 
 </head>
 <body>
-<form action="action.php" method="post">
-    <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
+<?php
+    if (isset($_GET['error'])){
+        echo '<p style="color: red;">'.$_GET['error'].'</p>';
+    }else{
+?>
+    <form action="action.php" method="post">
+        <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
 
-    <div id="entete">
-        <p>Votre nom :
-            <select name="name">
-                <option value="sounia" selected="<?php echo ($name == 'sounia')?'selected':""; ?>">Sounia</option>
-                <option value="antoine" selected="<?php echo ($name == 'antoine')?'selected':""; ?>">Antoine</option>
-            </select>
-        </p>
+        <div id="entete">
+            <p>Votre nom :
+                <select name="name">
+                    <option value="sounia" selected="<?php echo ($name == 'sounia')?'selected':""; ?>">Sounia</option>
+                    <option value="antoine" selected="<?php echo ($name == 'antoine')?'selected':""; ?>">Antoine</option>
+                </select>
+            </p>
 
-        <p><input type="submit"></p>
-    </div>
-
-    <div id="tofind">
-        <div>
-            Image recherchée :
+            <p><input type="submit"></p>
         </div>
 
-        <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
-    </div>
-
-
-    <div id="main">
+        <div id="tofind">
             <div>
-                <ul class="ul">
-                <?php
-                foreach ($rowsRf as $rowRf) {
-                    $fname = basename($rowRf->fname);
-                    $fname = explode('.',$fname);
-                    $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
-
-                    echo '<li class="li">';
-                    echo '<table>';
-                    echo '<tr>';
-                    echo '<td><img style="margin: 5px" src="'.$fname.'"\></td>';
-                    echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
-                    echo '</tr>';
-                    echo '</table>';
-                    echo '</li>';
-                }
-
-                ?>
-
-                </ul>
+                Image recherchée :
             </div>
-    </div>
-</form>
+
+            <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
+        </div>
+
+
+        <div id="main">
+                <div>
+                    <ul class="ul">
+                    <?php
+                    foreach ($rowsRf as $rowRf) {
+                        $fname = basename($rowRf->fname);
+                        $fname = explode('.',$fname);
+                        $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+
+                        echo '<li class="li">';
+                        echo '<table>';
+                        echo '<tr>';
+                        echo '<td><img style="margin: 5px" src="'.$fname.'"\></td>';
+                        echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
+                        echo '</tr>';
+                        echo '</table>';
+                        echo '</li>';
+                    }
+
+                    ?>
+
+                    </ul>
+                </div>
+        </div>
+    </form>
+<?php } ?>
 
 </body>
 </html>

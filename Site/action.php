@@ -47,9 +47,12 @@ try{
         $reqrf3->execute();
     }
 
+    header('Location: http://verif.iris-solutions.fr/controle.php?name='.$name);
+
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
-    echo $Exception->getMessage().' : '.$Exception->getCode();
-    die();
+    $error = $Exception->getMessage().' : '.$Exception->getCode();
+    header('Location: http://verif.iris-solutions.fr/controle.php?errors='.$error);
+    exit();
 }
