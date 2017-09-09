@@ -177,6 +177,7 @@ try{
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
+    $nb = 0;
     foreach ($rows as $rowCo) {
         $cocode = $rowCo->i_autocode;
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
@@ -189,6 +190,8 @@ try{
         if (count($rowsRf)>0)
             break;
 
+        $nb++;
+        if ($nb>5) break;
     }
 
 
