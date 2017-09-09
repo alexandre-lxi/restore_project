@@ -299,21 +299,21 @@ try{
 
         $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
 
-        print_r($rowsRf);
+        print_r('NB1:'.count($rowsRf).'<br>');
 
         $rowsRf3 = findByPixels($cocode);
             foreach ($rowsRf3 as $item) {
                 $rowsRf[] = $item;
             }
 
-        print_r($rowsRf);
+        print_r('NB2:'.count($rowsRf).'<br>');
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
         foreach ($rowsRf2 as $item) {
             $rowsRf[] = $item;
         }
 
-        print_r($rowsRf);
+        print_r('NB3:'.count($rowsRf).'<br>');
 
         if (count($rowsRf)>0)
             break;
