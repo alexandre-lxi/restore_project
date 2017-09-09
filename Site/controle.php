@@ -11,7 +11,7 @@ $name = (isset($_GET['name'])?$_GET['name']:'');
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co2.co_code , count(*)
+    $sql = "select co2.co_code, rf.width, rf.height
             from restore_file_co_analyse2 co2, restore_files rf
             where co2.rf_code = rf.id
             and rf.s_format in ('jpg','png')            
@@ -32,9 +32,10 @@ try{
     $cocode = $rowCo->co_code;
 
 
-    $sql = "select rf_code, fname
-            from restore_file_co_analyse2, restore_files
+    $sql = "select rf_code, fname, imf.i_width, imf.i_height
+            from restore_file_co_analyse2, restore_files, image_file imf
             where co_code = :cocode
+            and i_foreigncode = co_code
             and id = rf_code";
 
     $req = $pdo->prepare($sql);
@@ -96,6 +97,8 @@ try{
             </div>
 
             <img height="240px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
+            <p>Width: <?php echo $rowCo->width; ?></p>
+            <p>Height: <?php echo $rowCo->height; ?></p>
         </div>
 
 
@@ -111,7 +114,11 @@ try{
                         echo '<li class="li">';
                         echo '<table>';
                         echo '<tr>';
-                        echo '<td><img style="margin: 5px" src="'.$fname.'"\></td>';
+                        echo '<td>
+                                    <img style="margin: 5px" src="'.$fname.'"\>
+                                    <p>Width: '.$rowRf->i_width.'</p>
+                                    <p>Height: '.$rowRf->i_height.'</p>
+                              </td>';
                         echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
                         echo '</tr>';
                         echo '</table>';
