@@ -262,27 +262,27 @@ function convertFile($infile, $outfile, $param)
     $cmykProf = "EuroscaleCoated.icc";
     ztrace("convertFile: " . $infile ." to ".$outfile."\n");
     //get input file information
-    if(isImage($infile) || isPdf($infile))
-    {
-        $inData = getImageInfo($infile);
-        //mail('dsnook@maload.com', 'image', print_r($inData,true));
-    }
-    else if(isVideo($infile))
-    {
-        $inData = getVideoInfo($infile);
-        //mail('dsnook@maload.com', 'video', print_r($inData,true));
-        //return false;
-    }
-    else if(isAudio($infile))
-    {
-        $inData = getAudioInfo($infile);
-        //	mail('dsnook@maload.com', 'audio', print_r($inData,true));
-    }
-    else
-    {
-        $inData = array();
-        //	mail('dsnook@maload.com', 'no', print_r($inData,true));
-    }
+//    if(isImage($infile) || isPdf($infile))
+//    {
+//        $inData = getImageInfo($infile);
+//        //mail('dsnook@maload.com', 'image', print_r($inData,true));
+//    }
+//    else if(isVideo($infile))
+//    {
+//        $inData = getVideoInfo($infile);
+//        //mail('dsnook@maload.com', 'video', print_r($inData,true));
+//        //return false;
+//    }
+//    else if(isAudio($infile))
+//    {
+//        $inData = getAudioInfo($infile);
+//        //	mail('dsnook@maload.com', 'audio', print_r($inData,true));
+//    }
+//    else
+//    {
+//        $inData = array();
+//        //	mail('dsnook@maload.com', 'no', print_r($inData,true));
+//    }
     //create command $line prefix
     $newsize = (isset($param['newsize']) && $param['newsize']!==false) ? " -resize  ".$param['newsize']."x".$param['newsize']." " : "";
     $density = (isset($param['density']) && $param['density']!==false) ? " -density ".$param['density']." " : "";
@@ -348,12 +348,12 @@ function convertFile($infile, $outfile, $param)
             {
                 //$convert .= " -flatten ";
                 $convert .= $density ." -flatten -auto-orient ";
-                if($inData['COLORSPACE'] == COLORSPACE_RGB)
-                    $convert .= $rgbCmd;
-                else if($inData['COLORSPACE'] == COLORSPACE_CMYK)
-                    $convert .= $cmykCmd;
-                else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
-                    $convert .= $rgbCmd;
+//                if($inData['COLORSPACE'] == COLORSPACE_RGB)
+//                    $convert .= $rgbCmd;
+//                else if($inData['COLORSPACE'] == COLORSPACE_CMYK)
+//                    $convert .= $cmykCmd;
+//                else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
+//                    $convert .= $rgbCmd;
                 $convert .= " \"".$infile."\" \"".$outfile."\"";
                 ztrace($convert);
 
