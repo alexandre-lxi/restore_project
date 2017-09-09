@@ -11,12 +11,13 @@ $name = (isset($_GET['name'])?$_GET['name']:'');
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co2.co_code, imf.i_width, imf.i_height
+    $sql = "select co2.co_code, imf.i_width, imf.i_height, rf.id
             from restore_file_co_analyse2 co2, restore_files rf, image_file imf
             where co2.rf_code = rf.id
             and rf.s_format in ('jpg','png')            
             and rf.is_restored = 0
             and rf.to_restore=0
+            and co2.to_restore = 0
             and co2.co_code <> 1
             and i_foreigncode = co2.co_code
             and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
@@ -78,6 +79,7 @@ try{
 ?>
     <form action="action.php" method="post">
         <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
+        <input type="hidden" name="ttrfcode" value="<?php echo $rowCo->id; ?>">
 
         <div id="entete">
             <p>Votre nom :

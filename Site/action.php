@@ -15,7 +15,7 @@ $VALEUR_mot_de_passe = 'alaidin';
 $name = (isset($_POST['name']))?$_POST['name']:'';
 $cocode = (isset($_POST['cocode']))?$_POST['cocode']:'';
 $rfcode = (isset($_POST['list']))?$_POST['list']:'';
-
+$ttrfcode=  (isset($_POST['ttrfcode']))?$_POST['ttrfcode']:'';
 
 echo "name:". $name.'<br>';
 echo 'cocode:'.$cocode.'<br>';
@@ -54,9 +54,10 @@ try{
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
     }else{
-        $sql = "update restore_files set to_restore=2 where id=:rfcode";
+        $sql = "update restore_file_co_analyse2 set to_restore=-1 where rf_code=:rfcode and co_code=:cocode";
         $reqRF = $pdo->prepare($sql);
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
+        $reqRF->bindValue(':cocode',$cocode,PDO::PARAM_INT);
         $reqRF->execute();
     }
 
