@@ -208,7 +208,7 @@ if (isset($_GET['error'])){
                                     <p>Width: '.$rowRf['width'].'</p>
                                     <p>Height: '.$rowRf['height'].'</p>
                               </td>';
-                        echo '<td><input type="radio" name="list" value="'.$rowRf['rf_code'].'"></td>';
+                        echo '<td><input type="radio" name="list" value="'.$rowRf['rfcode'].'"></td>';
                         echo '</tr>';
                         echo '</table>';
                         echo '</li>';
