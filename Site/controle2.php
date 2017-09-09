@@ -99,7 +99,7 @@ function findByPixels($cocode)
             foreach ($selRows as $selRow) {
                 $ret[] = array(
                         'rfcode' => $selRow->rfcode,
-                        'widht' => $selRow->width,
+                        'width' => $selRow->width,
                         'height' => $selRow->heigth,
                         'fname' => $selRow->fname);
 
