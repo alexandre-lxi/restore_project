@@ -6,6 +6,8 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
+$name = (isset($_GET['name'])?$_GET['name']:'');
+
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
@@ -13,7 +15,8 @@ try{
             from restore_file_co_analyse2 co2, restore_files rf
             where co2.rf_code = rf.id
             and rf.s_format in ('jpg','png')
-            and co2.is_restored <> 5
+            and co2.is_restored not in(5,4)
+            and rf.is_restored = 0
             and co2.co_code <> 1
             and co2.co_code in (select i_autocode from container where b_isintrash <> 0)
             group by co2.co_code
@@ -72,7 +75,13 @@ try{
     <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
 
     <div id="entete">
-        <p>Votre nom : <input type="text" name="name" value="<?php echo (isset($_GET['name'])?$_GET['name']:''); ?>"></p>
+        <p>Votre nom :
+            <select name="name">
+                <option value="sounia" selected="<?php echo ($name == 'sounia')?'selected':""; ?>">Sounia</option>
+                <option value="antoine" selected="<?php echo ($name == 'antoine')?'selected':""; ?>">Antoine</option>
+            </select>
+        </p>
+
         <p><input type="submit"></p>
     </div>
 
