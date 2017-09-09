@@ -99,8 +99,7 @@ try{
             </div>
 
             <img height="170px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->co_code.'.jpg' ?>">
-            <p>Width: <?php echo $rowCo->i_width; ?></p>
-            <p>Height: <?php echo $rowCo->i_height; ?></p>
+            <p style="font-size: small;">Dimension: <?php echo $rowCo->i_width.'x'.$rowCo->i_height; ?></p>
         </div>
 
 
@@ -118,8 +117,7 @@ try{
                         echo '<tr>';
                         echo '<td>
                                     <img style="margin: 5px" src="'.$fname.'"\>
-                                    <p>Width: '.$rowRf->width.'</p>
-                                    <p>Height: '.$rowRf->height.'</p>
+                                    <p style="font-size: small;">Dimension : '.$rowRf->width.'x'.$rowRf->height.'</p>
                               </td>';
                         echo '<td><input type="radio" name="list" value="'.$rowRf->rf_code.'"></td>';
                         echo '</tr>';

@@ -309,7 +309,7 @@ try{
                 $rowsRf[] = $item;
             }
         }
-                    
+
         if (count($rowsRf)>0)
             break;
     }
