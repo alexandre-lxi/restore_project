@@ -185,12 +185,12 @@ try{
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
             continue;
 
-        $rowsRf = findByPixels($cocode);
-        if (count($rowsRf)>0)
-            break;
-//        $rowsRf = findBySizes($rowCo->i_width, $rowCo->i_height);
+//        $rowsRf = findByPixels($cocode);
 //        if (count($rowsRf)>0)
 //            break;
+        $rowsRf = findBySizes($rowCo->i_width, $rowCo->i_height);
+        if (count($rowsRf)>0)
+            break;
     }
 
 
