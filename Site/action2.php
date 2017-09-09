@@ -24,7 +24,7 @@ echo 'rfcode:'.$rfcode.'<br>';
 if ($name == ''){
     $error = 'Vous devez vous identifier !';
 
-    header('Location: http://verif.iris-solutions.fr/controle2.php?errors='.$error);
+    header('Location: http://54.194.136.252/controle2.php?errors='.$error);
     exit();
 }
 
@@ -56,13 +56,13 @@ try{
 
 
     $pdo->commit();
-    header('Location: http://verif.iris-solutions.fr/controle2.php?name='.$name);
+    header('Location: http://54.194.136.252/controle2.php?name='.$name);
 
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
     $pdo->rollBack();
     $error = $Exception->getMessage().' : '.$Exception->getCode();
-    header('Location: http://verif.iris-solutions.fr/controle2.php?errors='.$error);
+    header('Location: http://54.194.136.252/controle2.php?errors='.$error);
     exit();
 }
