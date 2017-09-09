@@ -509,7 +509,7 @@ try {
     $req = $pdo->prepare($sql);
 
     $sqlSel = "select id, fname, width, s_format from restore_files where s_format in('jpg','png')
-      and id < 155000
+      and id = 263853 
       order by 1 desc";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
