@@ -84,6 +84,7 @@ try{
                 <select name="name">
                     <option value="sounia" selected="<?php echo ($name == 'sounia')?'selected':""; ?>">Sounia</option>
                     <option value="antoine" selected="<?php echo ($name == 'antoine')?'selected':""; ?>">Antoine</option>
+                    <option value="alex" selected="<?php echo ($name == 'alex')?'selected':""; ?>">Alex</option>
                 </select>
             </p>
 
