@@ -16,6 +16,8 @@ function findBySizes($width, $height)
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
 
+    $ret= array();
+
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
@@ -189,9 +191,6 @@ try{
         $rowRf = findBySizes($rowCo->i_width, $rowCo->i_height);
         if (count($rowsRf)>0)
             break;
-
-        $nb++;
-        if ($nb>5) break;
     }
 
 
