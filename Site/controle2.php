@@ -19,7 +19,13 @@ function findBySizes($width, $height)
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-        $sql = "SELECT * from restore_files where is_restored <> 1 and width = :width and height=:height and s_format in ('jpg', 'png')";
+        $sql = "SELECT * from restore_files 
+                where is_restored <> 1 
+                and width = :width 
+                and height=:height 
+                and s_format in ('jpg', 'png') 
+                order by fsize desc
+                limit 50";
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':width',$width,PDO::PARAM_INT);
