@@ -25,7 +25,10 @@ function findBySizes($width, $height)
                 where is_restored <> 1 
                 and to_restore=0
                 and width = :width 
-                and height=:height                 
+                and height=:height
+                and id not in (select rf_code  from restore_file_co3)
+                and id not in (select rf_code  from restore_file_co2)
+                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)                 
                 and s_format in ('jpg', 'png') 
                 order by fsize desc";
 
