@@ -84,9 +84,9 @@ try{
         <div id="entete">
             <p>Votre nom :
                 <select name="name">
-                    <option value="sounia" selected="<?php echo ($name == 'sounia')?'selected':""; ?>">Sounia</option>
-                    <option value="antoine" selected="<?php echo ($name == 'antoine')?'selected':""; ?>">Antoine</option>
-                    <option value="alex" selected="<?php echo ($name == 'alex')?'selected':""; ?>">Alex</option>
+                    <option value="sounia" <?php echo ($name == 'sounia')?'selected="selected"':''; ?>">Sounia</option>
+                    <option value="antoine" <?php echo ($name == 'antoine')?'selected="selected"':''; ?>">Antoine</option>
+                    <option value="alex" <?php echo ($name == 'alex')?'selected="selected"':''; ?>">Alex</option>
                 </select>
             </p>
 
