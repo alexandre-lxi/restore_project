@@ -27,6 +27,7 @@ try{
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
     $rowCo = $rows[0];
+    $cocode = $rowCo->co_code;
 
 
     $sql = "select rf_code, fname
@@ -68,9 +69,10 @@ try{
 </head>
 <body>
 <form action="action.php" method="post">
+    <input type="hidden" value="<?php echo $cocode; ?>">
 
     <div id="entete">
-        <p>Votre nom : <input type="text" name="name"/></p>
+        <p>Votre nom : <input type="text" name="name" value="<?php echo (isset($_GET['name'])?$_GET['name']:''); ?>"></p>
         <p><input type="submit"></p>
     </div>
 

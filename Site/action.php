@@ -6,4 +6,9 @@
  * Time: 21:00
  */
 
-header("Location: http://verif.iris-solutions.fr/controle.php");
+
+
+$name = (isset($_POST['name']))?$_POST['name']:'';
+
+
+header("Location: http://verif.iris-solutions.fr/controle.php?name=".$name);
