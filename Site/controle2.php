@@ -124,8 +124,7 @@ function findByPixels($cocode)
             }
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
-                    FROM restore_nfile_colors, restore_files rf where rfcode = rf.id 
-                    and rf.width=:width and rf.height=:height";
+                    FROM restore_nfile_colors, restore_files rf where rfcode = rf.id";
 
             $sql .= " and (";
 
@@ -140,8 +139,6 @@ function findByPixels($cocode)
             //print_r($sql);
 
             $reqSel = $pdo->prepare($sql);
-            $reqSel->bindValue(':width',$width,PDO::PARAM_INT);
-            $reqSel->bindValue(':width',$width,PDO::PARAM_INT);
             $reqSel->execute();
 
             $selRows = $reqSel->fetchAll(PDO::FETCH_OBJ);
