@@ -123,7 +123,8 @@ try{
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
             and co.i_autocode not in (select co_code from restore_file_co3)
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png')            
+            and imf.s_fileformat in ('.jpg','.png') 
+            order by rand()           
             ";
 
     $req = $pdo->prepare($sql);
