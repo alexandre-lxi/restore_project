@@ -228,12 +228,19 @@ function findByPixelsSize($cocode, $width, $height)
                 $bcol = $tCols[$i][2];
                 $bval = $row->$bcol;
 
-                $vals[$i]['r']['min'] = $rval*(1-$taux);
-                $vals[$i]['r']['max'] = $rval*(1+ $taux);
-                $vals[$i]['g']['min'] = $gval*(1-$taux);
-                $vals[$i]['g']['max'] = $gval*(1+ $taux);
-                $vals[$i]['b']['min'] = $bval*(1-$taux);
-                $vals[$i]['b']['max'] = $bval*(1+ $taux);
+                $vals[$i]['r']['min'] = $rval-15;
+                $vals[$i]['r']['max'] = $rval+15;
+                $vals[$i]['g']['min'] = $gval-15;
+                $vals[$i]['g']['max'] = $gval+15;
+                $vals[$i]['b']['min'] = $bval-15;
+                $vals[$i]['b']['max'] = $bval+15;
+
+//                $vals[$i]['r']['min'] = $rval*(1-$taux);
+//                $vals[$i]['r']['max'] = $rval*(1+ $taux);
+//                $vals[$i]['g']['min'] = $gval*(1-$taux);
+//                $vals[$i]['g']['max'] = $gval*(1+ $taux);
+//                $vals[$i]['b']['min'] = $bval*(1-$taux);
+//                $vals[$i]['b']['max'] = $bval*(1+ $taux);
             }
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
@@ -1020,5 +1027,5 @@ function threatImageByCo()
 //threatVideo();
 //threatOthers();
 //threatImageAn();
-print_r(controlPixels(106261, 22601));
+print_r(controlPixels(78132, 53688));
 
