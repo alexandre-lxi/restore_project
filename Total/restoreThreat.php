@@ -549,22 +549,22 @@ try {
                 if (!file_exists($oldthumbfile) || ($row->co_code >60000)){
                     $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
                     $success = convertFile($newFile, $webFile, $param);        // create web image
+
                     $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
                     $success = convertFile($newFile, $thumbFile, $param);    // create thumbnail image
                     //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
-
-
-                    $sql = "update restore_files set is_restored =1, to_restore=0 where id=:id";
-                    $req = $pdo->prepare($sql);
-                    $req->bindValue(':id', $row->id, PDO::PARAM_INT);
-                    $req->execute();
-
-                    $sql = "update restore_file_co2 set is_restored = 1 where rf_code = :rfcode and co_code = :cocode";
-                    $req = $pdo->prepare($sql);
-                    $req->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
-                    $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
-                    $req->execute();
                 }
+
+                $sql = "update restore_files set is_restored =1, to_restore=0 where id=:id";
+                $req = $pdo->prepare($sql);
+                $req->bindValue(':id', $row->id, PDO::PARAM_INT);
+                $req->execute();
+
+                $sql = "update restore_file_co3 set is_restored = 1 where rf_code = :rfcode and co_code = :cocode";
+                $req = $pdo->prepare($sql);
+                $req->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
+                $req->execute();
             }
         }
     }
