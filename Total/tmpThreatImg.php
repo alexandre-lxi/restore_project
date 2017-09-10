@@ -21,7 +21,9 @@ try {
     $sql = "SELECT *
       FROM restore_files
       WHERE s_format in ('jpg', 'png')
-      and id in (112500,72556,94167)
+      and id not in (select rf_code from restore_file_co3)
+      and id not in (select rf_code from restore_file_co2)      
+      and id in (128,131,143)
       ";
 
     $req = $pdo->prepare($sql);
@@ -30,15 +32,31 @@ try {
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
     $nb = 0;
 
+    $sql = "update restore_files set height = :height, width = :width, fsize = :fsize where id = :rfcode";
+    $upd = $pdo->prepare($sql);
+
     $img = new Imagick();
 
     foreach ($rows as $row) {
         $vid = $row->fname;
 
+        echo $vid."\n";
+
         if (file_exists($vid)) {
             $img->readImage($vid);
 
-            echo $vid." width = ".$img->getImageWidth()." height = ".$img->getImageHeight()." size= ".$img->getImageLength()."\n";
+            if (($row->height <> $img->getImageHeight()) ||
+                ($row->width <> $img->getImageWidth()) ||
+                ($row->fsize <> $img->getImageLength())){
+                echo "NEW width = ".$img->getImageWidth()." height = ".$img->getImageHeight()." size= ".$img->getImageLength()."\n";
+
+                $upd->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                $upd->bindValue(':height', $img->getImageHeight(), PDO::PARAM_INT);
+                $upd->bindValue(':width', $img->getImageWidth(), PDO::PARAM_INT);
+                $upd->bindValue(':fsize', $img->getImageLength(), PDO::PARAM_INT);
+
+                $upd->execute();
+            }
 
             $img->clear();
         }
