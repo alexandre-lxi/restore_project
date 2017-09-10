@@ -514,9 +514,9 @@ try {
 
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "SELECT * FROM restore_files, restore_file_co2 
+    $sql = "SELECT * FROM restore_files, restore_file_co3 
             WHERE rf_code = id            
-            and restore_file_co2.is_restored = 0
+            and restore_file_co3.is_restored = 0
             and to_restore = 1";
 
     $req = $pdo->prepare($sql);
@@ -541,13 +541,12 @@ try {
         if (!copy($oldFile, $newFile)) {
             $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
             //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat_20170910.txt', $log, FILE_APPEND);
         }else{
             if (file_exists($oldFile)){
                 ztrace($newFile."=>".$thumbFile."=>".$webFile);
 
-                //if (!file_exists($oldthumbfile)){
-                if (true){
+                if (!file_exists($oldthumbfile) || ($row->co_code >60000)){
                     $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
                     $success = convertFile($newFile, $webFile, $param);        // create web image
                     $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');

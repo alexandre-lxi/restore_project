@@ -299,7 +299,7 @@ try{
             and b_isintrash =0
             and co.i_autocode < 60000
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png') 
+            and imf.s_fileformat in ('.jpg','.png')            
             order by rand()           
             ";
 
