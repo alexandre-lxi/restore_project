@@ -517,9 +517,7 @@ try {
     $sql = "SELECT * FROM restore_files, restore_file_co3 
             WHERE rf_code = id            
             and restore_file_co3.is_restored = 0
-            and to_restore = 1
-            and co_code=1200
-            limit 1";
+            and to_restore = 1";
 
     $req = $pdo->prepare($sql);
     $req->execute();
