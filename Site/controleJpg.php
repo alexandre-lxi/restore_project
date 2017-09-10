@@ -43,7 +43,8 @@ try {
             WHERE co2.is_restored = 0
             and co2.rf_code = rf.id
             and rf.s_format in ('jpg','png')
-            ";
+            order by rand()
+            limit 500";
     $req = $pdo->prepare($sql);
     $req->execute();
     $rfvals = $req->fetchAll(PDO::FETCH_OBJ);
