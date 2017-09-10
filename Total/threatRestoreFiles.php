@@ -335,9 +335,9 @@ function controlPixels($rfcode, $cocode)
             echo $b_rfval."<=>".$b_coval."\n";
 
             if (
-                ((($r_coval +10) >= $r_rfval) && (($r_coval -10) <= $r_rfval)) &&
-                ((($g_coval +10) >= $g_rfval) && (($g_coval -10) <= $g_rfval)) &&
-                ((($b_coval +10) >= $b_rfval) && (($b_coval -10) <= $b_rfval)))
+                ((($r_coval +15) >= $r_rfval) && (($r_coval -15) <= $r_rfval)) &&
+                ((($g_coval +15) >= $g_rfval) && (($g_coval -15) <= $g_rfval)) &&
+                ((($b_coval +15) >= $b_rfval) && (($b_coval -15) <= $b_rfval)))
                 $nb++;
 
 //            if (
@@ -1020,5 +1020,5 @@ function threatImageByCo()
 //threatVideo();
 //threatOthers();
 //threatImageAn();
-print_r(controlPixels(86160, 57014));
+print_r(controlPixels(106261, 22601));
 

@@ -125,12 +125,12 @@ function findByPixels($cocode)
 //                $vals[$i]['b']['min'] = $bval*(1-$taux);
 //                $vals[$i]['b']['max'] = $bval*(1+ $taux);
 
-                $vals[$i]['r']['min'] = $rval-10;
-                $vals[$i]['r']['max'] = $rval+10;
-                $vals[$i]['g']['min'] = $gval-10;
-                $vals[$i]['g']['max'] = $gval+10;
-                $vals[$i]['b']['min'] = $bval-10;
-                $vals[$i]['b']['max'] = $bval+10;
+                $vals[$i]['r']['min'] = $rval-15;
+                $vals[$i]['r']['max'] = $rval+15;
+                $vals[$i]['g']['min'] = $gval-15;
+                $vals[$i]['g']['max'] = $gval+15;
+                $vals[$i]['b']['min'] = $bval-15;
+                $vals[$i]['b']['max'] = $bval+15;
             }
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
@@ -230,12 +230,12 @@ function findByPixelsSize($cocode, $width, $height)
                 $bcol = $tCols[$i][2];
                 $bval = $row->$bcol;
 
-                $vals[$i]['r']['min'] = $rval-10;
-                $vals[$i]['r']['max'] = $rval+10;
-                $vals[$i]['g']['min'] = $gval-10;
-                $vals[$i]['g']['max'] = $gval+10;
-                $vals[$i]['b']['min'] = $bval-10;
-                $vals[$i]['b']['max'] = $bval+10;
+                $vals[$i]['r']['min'] = $rval-15;
+                $vals[$i]['r']['max'] = $rval+15;
+                $vals[$i]['g']['min'] = $gval-15;
+                $vals[$i]['g']['max'] = $gval+15;
+                $vals[$i]['b']['min'] = $bval-15;
+                $vals[$i]['b']['max'] = $bval+15;
 
 //                $vals[$i]['r']['min'] = $rval*(1-$taux);
 //                $vals[$i]['r']['max'] = $rval*(1+ $taux);
