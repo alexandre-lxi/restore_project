@@ -517,7 +517,9 @@ try {
     $sql = "SELECT * FROM restore_files, restore_file_co3 
             WHERE rf_code = id            
             and restore_file_co3.is_restored = 0
-            and to_restore = 1";
+            and to_restore = 1
+            and co_code=1200
+            limit 1";
 
     $req = $pdo->prepare($sql);
     $req->execute();
@@ -554,22 +556,40 @@ try {
                     $success = convertFile($newFile, $thumbFile, $param);    // create thumbnail image
                     //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
                 }
+                else
+                    $success = true;
 
-                $sql = "update restore_files set is_restored =1, to_restore=0 where id=:id";
-                $req = $pdo->prepare($sql);
-                $req->bindValue(':id', $row->id, PDO::PARAM_INT);
-                $req->execute();
+                if ($success) {
+                    $pdo->beginTransaction();
 
-                $sql = "update restore_file_co3 set is_restored = 1 where rf_code = :rfcode and co_code = :cocode";
-                $req = $pdo->prepare($sql);
-                $req->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
-                $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
-                $req->execute();
+                    $sql = "UPDATE restore_files SET is_restored =1, to_restore=0 WHERE id=:id";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':id', $row->id, PDO::PARAM_INT);
+                    $req->execute();
+
+                    $sql = "UPDATE restore_file_co3 SET is_restored = 1 WHERE rf_code = :rfcode AND co_code = :cocode";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                    $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
+                    $req->execute();
+
+                    $sql = "update container
+                            inner join restore_container_online on i_autocode = co_code
+                            set b_isonline = 1
+                            where b_isonline = 0
+                            and i_autocode = :cocode";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':cocode', $row->co_code, PDO::PARAM_INT);
+                    $req->execute();
+
+                    $pdo->commit();
+                }
             }
         }
     }
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.
+    $pdo->rollBack();
     echo $Exception->getMessage().' : '.$Exception->getCode();
 }
