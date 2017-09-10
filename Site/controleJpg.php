@@ -43,8 +43,9 @@ try {
             WHERE co2.is_restored = 0
             and co2.rf_code = rf.id
             and rf.s_format in ('jpg','png')
-            order by rand()
-            limit 500";
+            and co_code in (SELECT co_code from restore_file_co2 group by co_code having count(*)>1)
+            order by co_code
+            limit 100";
     $req = $pdo->prepare($sql);
     $req->execute();
     $rfvals = $req->fetchAll(PDO::FETCH_OBJ);
