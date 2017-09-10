@@ -26,11 +26,13 @@ function findBySizes($width, $height)
                 and to_restore=0
                 and width = :width 
                 and height=:height
-                and id not in (select rf_code  from restore_file_co3)
-                and id not in (select rf_code  from restore_file_co2)
-                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)                 
+                                 
                 and s_format in ('jpg', 'png') 
                 order by fsize desc";
+
+//        and id not in (select rf_code  from restore_file_co3)
+//                and id not in (select rf_code  from restore_file_co2)
+//                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)
 
         $req = $pdo->prepare($sql);
         $req->bindValue(':width',$width,PDO::PARAM_INT);
