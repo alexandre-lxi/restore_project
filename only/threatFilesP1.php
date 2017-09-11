@@ -54,16 +54,6 @@ function testFile($file)
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-        $sql = "select * from onlyfrance.restore_file_co where co_code = :cocode";
-        $req = $pdo->prepare($sql);
-        $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
-        $req->execute();
-        $tmps = $req->fetchAll();
-        if (count($tmps)>0) {
-            echo "!!!! Code exists !!!!\n\n";
-            unlink($file);
-            return false;
-        }
 
     } catch (PDOException $Exception) {
         // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A

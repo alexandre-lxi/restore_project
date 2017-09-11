@@ -458,8 +458,9 @@ function threatImage()
 
         $sql = "SELECT *
         FROM restore_files
-        WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)        
-        AND s_format IN ('jpg', 'png')
+        WHERE id NOT IN (SELECT rf_code FROM restore_file_co2)
+        and id NOT IN (SELECT rf_code FROM restore_file_co3)          
+        AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps',  'ai')
         and id between 155660 and 206770";
 
         //AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps',  'ai')
@@ -984,7 +985,7 @@ function threatImageByCo()
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-        $sql = "select co.i_autocode, imf.i_width, imf.i_height
+        $sql = "select co.i_autocode, imf.i_width, imf.i_height, imf.i_filesize, right(s_fileformat,3) s_fileformat
             from container co, image_file imf
             where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
@@ -1010,6 +1011,25 @@ function threatImageByCo()
                 echo "    1 row OK";
                 insertCo($ret[0]['rfcode'], $row->i_autocode );
             }
+
+            $sql = "select id from restore_files where s_format = :sformat and fsize = :fsize and width = :width and height = :height";
+            $reqRf = $pdo->prepare($sql);
+            $reqRf->bindValue(':sformat', $row->s_fileformat, PDO::PARAM_STR);
+            $reqRf->bindValue(':fsize', $row->i_filesize, PDO::PARAM_INT);
+            $reqRf->bindValue(':width', $row->i_width, PDO::PARAM_INT);
+            $reqRf->bindValue(':height', $row->i_height, PDO::PARAM_INT);
+            $reqRf->execute();
+            $rfRows = $reqRf->fetchAll(PDO::FETCH_OBJ);
+
+            if (count($rfRows) == 1){
+                echo "    1 size : ".$rfRows[0]->id;
+                insertCo($rfRows[0]->id, $row->i_autocode);
+            }elseif (count($rfRows)>1){
+                foreach ($rfRows as $rfRow) {
+                    echo "    x size : ".$rfRow->id."\n";
+                    insertCoAn($rfRow->id, $row->i_autocode, "FSIZE#TOA", false);
+                }
+            }
         }
     } catch (PDOException $Exception) {
         // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
@@ -1027,5 +1047,5 @@ function threatImageByCo()
 //threatVideo();
 //threatOthers();
 //threatImageAn();
-print_r(controlPixels(78132, 53688));
+//print_r(controlPixels(78132, 53688));
 
