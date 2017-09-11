@@ -60,6 +60,59 @@ function findBySizes($width, $height)
     }
 }
 
+function getInfo($cocode, $rf_code)
+{
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    $ret= array();
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        if ($cocode <> '') {
+            $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country 
+                      from image_infofr
+                      where i_foreigncode = :cocode";
+
+            $req = $pdo->prepare($sql);
+            $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+            $req->execute();
+
+            $rows = $req->fetchAll(PDO::FETCH_OBJ);
+            $row = $rows[0];
+
+            $ret = '<table>
+                        <tr>
+                            <td>Caption: '.$row->s_caption.'</td>
+                            <td>Writer: '.$row->s_captionwriter.'</td>
+                            <td>Headline: '.$row->s_headline.'</td>
+                        </tr>
+                        <tr>
+                            <td>Instuction: '.$row->s_instruction.'</td>
+                            <td>Credits: '.$row->s_credits.'</td>
+                            <td>Objectname: '.$row->s_objectname.'</td>
+                        </tr>
+                        <tr>
+                            <td>City: '.$row->s_city.'</td>
+                            <td>Country: '.$row->s_country.'</td>
+                            <td></td>
+                        </tr>
+                    </table>';
+        }
+
+        return $ret;
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+        return false;
+    }
+}
+
 function findInAnalyse($cocode)
 {
     $VALEUR_hote = 'prod.kwk.eu.com';
@@ -361,7 +414,7 @@ try{
     foreach ($rows as $rowCo) {
         $cocode = $rowCo->i_autocode;
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
-            $sref = $rowCo->s_reference;
+            $sref = getInfo($rowCo->i_autocode, '');
         else
             $sref = '';
 
@@ -426,7 +479,11 @@ if (isset($_GET['error'])){
                 Image recherchée :
             </div>
 
-            <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>" alt="<?php echo $sref; ?>">
+            <?php if ($sref <> ''){
+                echo $sref;
+            }else{ ?>
+                <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
+            <?php } ?>
             <p style="font-size: small;">Dimension: <?php echo $rowCo->i_width.'x'.$rowCo->i_height; ?></p>
         </div>
 
