@@ -24,9 +24,8 @@ function findBySizes($width, $height)
         $sql = "SELECT * from restore_files 
                 where is_restored <> 1 
                 and to_restore=0
-                and width = :width 
-                and height=:height
-                                 
+                and width between :width1 and :width2  
+                and height between :height1 and :height2                                 
                 and s_format in ('jpg', 'png') 
                 order by fsize desc";
 
@@ -35,8 +34,10 @@ function findBySizes($width, $height)
 //                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)
 
         $req = $pdo->prepare($sql);
-        $req->bindValue(':width',$width,PDO::PARAM_INT);
-        $req->bindValue(':height',$height,PDO::PARAM_INT);
+        $req->bindValue(':width1',$width-100,PDO::PARAM_INT);
+        $req->bindValue(':width2',$width+100,PDO::PARAM_INT);
+        $req->bindValue(':height1',$height-100,PDO::PARAM_INT);
+        $req->bindValue(':height2',$height+100,PDO::PARAM_INT);
         $req->execute();
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
