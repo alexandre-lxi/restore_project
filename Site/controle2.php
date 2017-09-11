@@ -409,7 +409,9 @@ if (isset($_GET['error'])){
             <p>Votre nom :
                 <select name="name">
                     <option value="sounia" <?php echo ($name == 'sounia')?'selected="selected"':''; ?>">Sounia</option>
+                    <option value="sabrina" <?php echo ($name == 'sabrina')?'selected="selected"':''; ?>">Sabrina</option>
                     <option value="antoine" <?php echo ($name == 'antoine')?'selected="selected"':''; ?>">Antoine</option>
+                    <option value="leon" <?php echo ($name == 'leon')?'selected="selected"':''; ?>">Léon</option>
                     <option value="alex" <?php echo ($name == 'alex')?'selected="selected"':''; ?>">Alex</option>
                 </select>
             </p>
