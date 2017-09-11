@@ -60,6 +60,52 @@ function findBySizes($width, $height)
     }
 }
 
+function findInAnalyse($cocode)
+{
+    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
+
+    $ret= array();
+
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "SELECT * 
+                from restore_file_co_analyse2 an2, restore_files rf 
+                where reason = 'FSIZE#TOA'
+                and co_code = :cocode   
+                and rf.id = an2.rf_code
+                ";
+
+//        and id not in (select rf_code  from restore_file_co3)
+//                and id not in (select rf_code  from restore_file_co2)
+//                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)
+
+        $req = $pdo->prepare($sql);
+        $req->bindValue(':cocode',$cocode,PDO::PARAM_INT);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($rows as $row) {
+            $ret[] = array(
+                'width' => $row->width,
+                'rfcode' => $row->id,
+                'height' => $row->height,
+                'fname' => $row->fname);
+
+        }
+        return $ret;
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+        return false;
+    }
+}
 
 function findByPixels($cocode)
 {
@@ -296,10 +342,10 @@ try{
             where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
             and co.i_autocode not in (select co_code from restore_file_co3)
-            and b_isintrash =0
-            and co.i_autocode < 60000
+            and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png')            
+            and imf.s_fileformat in ('.jpg','.png')      
+            and co.i_autocode = 27472      
             order by rand()           
             ";
 
@@ -314,6 +360,8 @@ try{
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
             continue;
 
+        $rowsAn = findInAnalyse($cocode);
+
         $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
 
         //print_r('NB1:'.count($rowsRf).'<br>');
@@ -324,7 +372,7 @@ try{
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
         //print_r('NB2:'.count($rowsRf2).'<br>');
 
-        if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3))>0)
+        if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
             break;
     }
 
@@ -377,6 +425,33 @@ if (isset($_GET['error'])){
 
 
         <div id="main">
+            <div>
+                <ul class="ul">
+                    <?php
+                    foreach ($rowsAn as $rowRf) {
+                        $fname = basename($rowRf['fname']);
+                        $fname = explode('.',$fname);
+                        $fname = 'pictures/tmpdir/'.$fname[0].'.jpg';
+                        if (!file_exists($fname))
+                            continue;
+
+                        echo '<li class="li">';
+                        echo '<table>';
+                        echo '<tr>';
+                        echo '<td>
+                                    <img style="margin: 5px" src="'.$fname.'"\>
+                                    <p style="font-size: small;">Dimension : '.$rowRf['width'].'x'.$rowRf['height'].'</p>                                    
+                              </td>';
+                        echo '<td><input type="radio" name="list" value="'.$rowRf['rfcode'].'"></td>';
+                        echo '</tr>';
+                        echo '</table>';
+                        echo '</li>';
+                    }
+
+                    ?>
+
+                </ul>
+            </div>
             <div>
                 <ul class="ul">
                     <?php
