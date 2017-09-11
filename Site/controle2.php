@@ -337,7 +337,7 @@ function findByPixelsSize($cocode, $width, $height)
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co.i_autocode, imf.i_width, imf.i_height, 
+    $sql = "select co.i_autocode, imf.i_width, imf.i_height, co.s_reference,
               (select count(*) from restore_file_co_analyse2 where reason = 'FSIZE#TOA' and co_code = co.i_autocode) cnt
             from container co, image_file imf
             where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
@@ -360,8 +360,10 @@ try{
     $nb = 0;
     foreach ($rows as $rowCo) {
         $cocode = $rowCo->i_autocode;
-        /*if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
-            continue;*/
+        if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
+            $sref = $rowCo->s_reference;
+        else
+            $sref = '';
 
         $rowsAn = findInAnalyse($cocode);
 
@@ -424,7 +426,7 @@ if (isset($_GET['error'])){
                 Image recherchée :
             </div>
 
-            <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>">
+            <img height="200px" src="<?php echo 'pictures/olddir/thumbdir/'.$rowCo->i_autocode.'.jpg' ?>" alt="<?php echo $sref; ?>">
             <p style="font-size: small;">Dimension: <?php echo $rowCo->i_width.'x'.$rowCo->i_height; ?></p>
         </div>
 
