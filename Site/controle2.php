@@ -346,6 +346,8 @@ try{
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.jpg','.png')
+            and co.i_autocode not in (38016,37758,37776,37922,38004,37880,37769,37867,37799,37886,37537,38010,37849,
+37788,37997,37902,37906,37544,37808,37838,37874,37913,37823,37832,37860)
             order by cnt DESC , rand()           
             ";
 
