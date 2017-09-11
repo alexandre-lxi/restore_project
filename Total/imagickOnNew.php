@@ -519,7 +519,10 @@ try {
 
     $rows = $reqSel->fetchAll(PDO::FETCH_OBJ);
 
+    $nb = 0;
+
     foreach ($rows as $row) {
+        $nb++;
         echo $row->fname."\n";
 
         $fname = $row->fname;
@@ -579,7 +582,10 @@ try {
         }catch(Exception $e){
             continue;
         }
+
     }
+
+    echo $nb."\n";
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
     // String.

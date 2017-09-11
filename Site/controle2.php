@@ -360,8 +360,8 @@ try{
     $nb = 0;
     foreach ($rows as $rowCo) {
         $cocode = $rowCo->i_autocode;
-        if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
-            continue;
+        /*if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
+            continue;*/
 
         $rowsAn = findInAnalyse($cocode);
 
