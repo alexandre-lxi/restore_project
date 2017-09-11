@@ -1040,7 +1040,7 @@ function threatImageByCo()
 
 
 //threatImage();
-//threatImageByCo();
+threatImageByCo();
 //print_r(findByPixels(773));
 //threatOffice();
 //threatOfficeAn();
