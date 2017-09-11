@@ -88,19 +88,19 @@ function getInfo($cocode, $rf_code)
 
             $ret = '<table>
                         <tr>
-                            <td>Caption: '.$row->s_caption.'</td>
-                            <td>Writer: '.$row->s_captionwriter.'</td>
-                            <td>Headline: '.$row->s_headline.'</td>
+                            <td class="td">Caption: '.$row->s_caption.'</td>
+                            <td class="td">Writer: '.$row->s_captionwriter.'</td>
+                            <td class="td">Headline: '.$row->s_headline.'</td>
                         </tr>
                         <tr>
-                            <td>Instuction: '.$row->s_instruction.'</td>
-                            <td>Credits: '.$row->s_credits.'</td>
-                            <td>Objectname: '.$row->s_objectname.'</td>
+                            <td class="td">Instuction: '.$row->s_instruction.'</td>
+                            <td class="td">Credits: '.$row->s_credits.'</td>
+                            <td class="td">Objectname: '.$row->s_objectname.'</td>
                         </tr>
                         <tr>
-                            <td>City: '.$row->s_city.'</td>
-                            <td>Country: '.$row->s_country.'</td>
-                            <td></td>
+                            <td class="td">City: '.$row->s_city.'</td>
+                            <td class="td">Country: '.$row->s_country.'</td>
+                            <td class="td"></td>
                         </tr>
                     </table>';
         }
