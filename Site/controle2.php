@@ -337,7 +337,8 @@ function findByPixelsSize($cocode, $width, $height)
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co.i_autocode, imf.i_width, imf.i_height
+    $sql = "select co.i_autocode, imf.i_width, imf.i_height, 
+              (select count(*) from restore_file_co_analyse2 where reason = 'FSIZE#TOA' and co_code = co.i_autocode) cnt
             from container co, image_file imf
             where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
@@ -345,7 +346,7 @@ try{
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.jpg','.png')
-            order by rand()           
+            order by cnt DESC , rand()           
             ";
 
     $req = $pdo->prepare($sql);
