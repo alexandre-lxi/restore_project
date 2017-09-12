@@ -61,8 +61,13 @@ function testFile($file)
         $tmps = $req->fetchAll();
         if (count($tmps)>0) {
             echo "!!!! Code exists !!!!\n\n";
-            unlink($file);
-            return false;
+
+            shell_exec('wget ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg /home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg');
+            echo "      Wget: ".date("H:i:s", microtime(true)- $timestart)."\n";
+            if (file_exists('/home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg')) {
+                unlink($file);
+                return false;
+            }
         }
 
     } catch (PDOException $Exception) {
