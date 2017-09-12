@@ -62,7 +62,7 @@ function testFile($file)
         if (count($tmps)>0) {
             echo "!!!! Code exists !!!!\n\n";
 
-            shell_exec('wget ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg /home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg');
+            shell_exec('wget ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg /home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg');
             echo "      Wget: ".date("H:i:s", microtime(true)- $timestart)."\n";
             if (file_exists('/home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg')) {
                 unlink($file);
@@ -142,9 +142,9 @@ function testFile($file)
 
             echo "      Insert tables: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
-            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
-            shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
-            shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:33Dskoi2e@prod.kwk.eu.com/oridir/'.$fname);
+            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/oridir/'.$fname);
 
             echo "      WPUT: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
