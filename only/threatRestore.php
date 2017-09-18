@@ -10,7 +10,7 @@
 
 function testFile()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'onlyfrance';
     $VALEUR_user = 'alaidin';
