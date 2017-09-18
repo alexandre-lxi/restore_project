@@ -1209,7 +1209,7 @@ function threatPdfByCo()
                     insertCoAn($rfRow->id, $row->i_autocode, "PDF#FSIZE#TOA", false);
                 }
             }else{
-                echo "    No file";
+                echo "    No file\n";
             }
         }
     } catch (PDOException $Exception) {
