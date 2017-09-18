@@ -55,7 +55,7 @@ function testFile()
 
             echo $file."\n";
             if(!file_exists($file)){
-                echo "    FILE NOT EXISTS !!!!";
+                echo "    FILE NOT EXISTS !!!!\n";
                 continue;
             }
 
