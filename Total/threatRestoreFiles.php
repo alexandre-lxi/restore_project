@@ -1185,12 +1185,12 @@ function threatPdfByCo()
 
 
             if ($row->i_width+$row->i_height == 0){
-                $sql = "SELECT id FROM restore_files WHERE concat('.',s_format) = :sformat AND fsize = :fsize";
+                $sql = "SELECT id FROM restore_files WHERE s_format = :sformat AND fsize = :fsize";
                 $reqRf = $pdo->prepare($sql);
                 $reqRf->bindValue(':sformat', $row->s_fileformat, PDO::PARAM_STR);
                 $reqRf->bindValue(':fsize', $row->i_filesize, PDO::PARAM_INT);
             }else {
-                $sql = "SELECT id FROM restore_files WHERE concat('.',s_format) = :sformat AND fsize = :fsize AND width = :width AND height = :height";
+                $sql = "SELECT id FROM restore_files WHERE s_format = :sformat AND fsize = :fsize AND width = :width AND height = :height";
                 $reqRf = $pdo->prepare($sql);
                 $reqRf->bindValue(':sformat', $row->s_fileformat, PDO::PARAM_STR);
                 $reqRf->bindValue(':fsize', $row->i_filesize, PDO::PARAM_INT);
@@ -1208,6 +1208,8 @@ function threatPdfByCo()
                     echo "    x size : ".$rfRow->id."\n";
                     insertCoAn($rfRow->id, $row->i_autocode, "PDF#FSIZE#TOA", false);
                 }
+            }else{
+                echo "    No file";
             }
         }
     } catch (PDOException $Exception) {
