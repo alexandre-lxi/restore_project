@@ -16,9 +16,9 @@ function testFile()
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
 
-    $dThumb = '/home/ubuntu/new_onlyfrance/pictures2/thumbdir/';
-    $dWeb = '/home/ubuntu/new_onlyfrance/pictures2/webdir/';
-    $dori = '/home/ubuntu/new_onlyfrance/pictures2/oridir/';
+    $dThumb = '/home/ubuntu/new_onlyfrance/pictures/thumbdir/';
+    $dWeb = '/home/ubuntu/new_onlyfrance/pictures/webdir/';
+    $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
 
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -29,7 +29,7 @@ function testFile()
                    AND rco.is_restored = 0
                    and rf.to_restore = 1
                    and s_format in ('jpg','png','tif')";*/
-        $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference
+        $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference, rf.id
                     from container co, image_file imf, restore_files2 rf
                     where s_reference like '%Nancy%'
                     and imf.i_foreigncode = co.i_autocode
@@ -93,8 +93,9 @@ function testFile()
                     $rqt->bindValue(':fname', $fname, PDO::PARAM_STR);
                     $rqt->execute();
 
-                    $sql = "select max(id) id from onlyfrance.restore_files";
+                    $sql = "select max(id) id from onlyfrance.restore_files where fname = :fname";
                     $rqt = $pdo->prepare($sql);
+                    $rqt->bindValue(':fname', $fname, PDO::PARAM_STR);
                     $rqt->execute();
                     $id = $rqt->fetchAll(PDO::FETCH_OBJ);
                     $id = $id[0]->id;
