@@ -46,6 +46,7 @@ function testFile()
         $rows = $reqSel->fetchAll(PDO::FETCH_OBJ);
 
         foreach ($rows as $row) {
+
             $file = $row->fname;
             $fname = $row->co_code.'.'.$row->s_format;
             $cocode = $row->co_code;
@@ -53,6 +54,12 @@ function testFile()
             $img = new Imagick();
 
             echo $file."\n";
+            if(!file_exists($file)){
+                echo "    FILE NOT EXISTS !!!!";
+                continue;
+            }
+
+
             $img->readImage($file);
 
 
