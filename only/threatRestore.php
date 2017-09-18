@@ -31,8 +31,7 @@ function testFile()
                    and s_format in ('jpg','png','tif')";*/
         $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference
                     from container co, image_file imf, restore_files2 rf
-                    where s_reference like '%Nancy%'
-                    and imf.i_foreigncode = co.i_autocode
+                    where imf.i_foreigncode = co.i_autocode
                     and imf.i_width = rf.width
                     and imf.i_height = rf.height
                     and imf.i_filesize = rf.fsize
