@@ -19,6 +19,8 @@ function testFile()
     $dThumb = '/home/ubuntu/new_onlyfrance/pictures2/thumbdir/';
     $dWeb = '/home/ubuntu/new_onlyfrance/pictures2/webdir/';
     $dori = '/home/ubuntu/new_onlyfrance/pictures2/oridir/';
+    $timestart=microtime(true);
+    echo "Start: ".date("H:i:s", $timestart)."\n";
 
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -50,9 +52,11 @@ function testFile()
 
             $img = new Imagick();
 
+            echo $file."\n";
             $img->readImage($file);
 
-            echo $file."\n";
+
+            echo "      Readfile: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
             if ($img->getImageWidth() > $img->getImageHeight()) {
                 $img->resizeImage(300, 0, Imagick::FILTER_LANCZOS, 1);
@@ -72,13 +76,15 @@ function testFile()
                 $img->clear();
             }
 
+            echo "      Resize: ".date("H:i:s", microtime(true)- $timestart)."\n";
+
             if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
                 shell_exec('cp '.$file.' '.$dori.$fname);
 
                 shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
                 shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
                 shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/oridir/'.$fname);
-
+                echo "      WPUT: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
                 if (file_exists($dori.$fname)) {
                     $sql = "insert into onlyfrance.restore_files (fname, isOldFile) values(:fname, FALSE )";
