@@ -23,12 +23,21 @@ function testFile()
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-        $sqlSel = "SELECT * 
+        /*$sqlSel = "SELECT *
                    FROM onlyfrance.restore_files2 rf, onlyfrance.restore_file_co2 rco
                    WHERE rco.rf_code = rf.id
                    AND rco.is_restored = 0
                    and rf.to_restore = 1
-                   and s_format in ('jpg','png','tif')";
+                   and s_format in ('jpg','png','tif')";*/
+        $sqlSel = "select DISTINCT fname, co.i_autocode, rf.s_format, co.s_reference
+                    from container co, image_file imf, restore_files2 rf
+                    where s_reference like '%Nancy%'
+                    and imf.i_foreigncode = co.i_autocode
+                    and imf.i_width = rf.width
+                    and imf.i_height = rf.height
+                    and imf.i_filesize = rf.fsize
+                    and imf.s_fileformat = concat('.', rf.s_format)
+                    and co.i_autocode not in (select co_code from restore_file_co2)";
 
         $reqSel = $pdo->prepare($sqlSel);
         $reqSel->execute();
@@ -66,6 +75,11 @@ function testFile()
 
             if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
                 shell_exec('mv '.$file.' '.$dori.$fname);
+
+                shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
+                shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
+                shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/oridir/'.$fname);
+
 
                 if (file_exists($dori.$fname)) {
                     $sql = "update onlyfrance.restore_files2 set is_restored = 1 where id = :id";
