@@ -29,13 +29,14 @@ function testFile()
                    AND rco.is_restored = 0
                    and rf.to_restore = 1
                    and s_format in ('jpg','png','tif')";*/
-        $sqlSel = "select DISTINCT fname, co.i_autocode, rf.s_format, co.s_reference
+        $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference
                     from container co, image_file imf, restore_files2 rf
                     where s_reference like '%Nancy%'
                     and imf.i_foreigncode = co.i_autocode
                     and imf.i_width = rf.width
                     and imf.i_height = rf.height
                     and imf.i_filesize = rf.fsize
+                    and rf.is_restored = 0
                     and imf.s_fileformat = concat('.', rf.s_format)
                     and co.i_autocode not in (select co_code from restore_file_co2)";
 
@@ -87,9 +88,20 @@ function testFile()
                     $rqt->bindValue(':id', $row->id, PDO::PARAM_INT);
                     $rqt->execute();
 
-                    $sql = "update onlyfrance.restore_file_co2 set is_restored =1 where rf_code = :rfcode and co_code = :cocode ";
+                    $sql = "insert into onlyfrance.restore_files (fname, isOldFile) values(:fname, TRUE )";
                     $rqt = $pdo->prepare($sql);
-                    $rqt->bindValue(':rfcode', $row->id, PDO::PARAM_INT);
+                    $rqt->bindValue(':fname', $fname, PDO::PARAM_STR);
+                    $rqt->execute();
+
+                    $sql = "select max(id) id from onlyfrance.restore_files";
+                    $rqt = $pdo->prepare($sql);
+                    $rqt->execute();
+                    $id = $rqt->fetchAll(PDO::FETCH_OBJ);
+                    $id = $id[0]->id;
+
+                    $sql = "insert into onlyfrance.restore_file_co (rf_code, co_code) values (:rfcode, :cocode) ";
+                    $rqt = $pdo->prepare($sql);
+                    $rqt->bindValue(':rfcode', $id, PDO::PARAM_INT);
                     $rqt->bindValue(':cocode', $cocode, PDO::PARAM_INT);
                     $rqt->execute();
                 }
