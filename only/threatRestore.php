@@ -29,16 +29,15 @@ function testFile()
                    AND rco.is_restored = 0
                    and rf.to_restore = 1
                    and s_format in ('jpg','png','tif')";*/
-        $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference, rf.id
+        $sqlSel = "select DISTINCT fname, co.i_autocode co_code, rf.s_format, co.s_reference
                     from container co, image_file imf, restore_files2 rf
                     where s_reference like '%Nancy%'
                     and imf.i_foreigncode = co.i_autocode
                     and imf.i_width = rf.width
                     and imf.i_height = rf.height
                     and imf.i_filesize = rf.fsize
-                    and rf.is_restored = 0
                     and imf.s_fileformat = concat('.', rf.s_format)
-                    and co.i_autocode not in (select co_code from restore_file_co2)";
+                    and co.i_autocode not in (select co_code from restore_file_co)";
 
         $reqSel = $pdo->prepare($sqlSel);
         $reqSel->execute();
@@ -83,12 +82,7 @@ function testFile()
 
 
                 if (file_exists($dori.$fname)) {
-                    $sql = "update onlyfrance.restore_files2 set is_restored = 1 where id = :id";
-                    $rqt = $pdo->prepare($sql);
-                    $rqt->bindValue(':id', $row->id, PDO::PARAM_INT);
-                    $rqt->execute();
-
-                    $sql = "insert into onlyfrance.restore_files (fname, isOldFile) values(:fname, TRUE )";
+                    $sql = "insert into onlyfrance.restore_files (fname, isOldFile) values(:fname, FALSE )";
                     $rqt = $pdo->prepare($sql);
                     $rqt->bindValue(':fname', $fname, PDO::PARAM_STR);
                     $rqt->execute();
