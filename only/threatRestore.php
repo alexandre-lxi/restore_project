@@ -16,9 +16,9 @@ function testFile()
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
 
-    $dThumb = '/home/ubuntu/new_onlyfrance/pictures/thumbdir/';
-    $dWeb = '/home/ubuntu/new_onlyfrance/pictures/webdir/';
-    $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
+    $dThumb = '/home/ubuntu/new_onlyfrance/pictures2/thumbdir/';
+    $dWeb = '/home/ubuntu/new_onlyfrance/pictures2/webdir/';
+    $dori = '/home/ubuntu/new_onlyfrance/pictures2/oridir/';
 
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
