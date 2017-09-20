@@ -28,8 +28,10 @@ function _readDir($dirsource)
             if ($file == '..') continue;
 
             if (!is_dir($dirsource.$file)) {
+                $ref = $file;
+
                 foreach ($cars as $car) {
-                    $ref = str_replace($car,"_",$file);
+                    $ref = str_replace($car,"_",$ref);
                 }
                 echo $file."\n";
                 echo $ref."\n";
