@@ -54,7 +54,7 @@ function testFile($file)
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-        $sql = "select * from onlyfrance.restore_file_co where co_code = :cocode";
+        /*$sql = "select * from onlyfrance.restore_file_co where co_code = :cocode";
         $req = $pdo->prepare($sql);
         $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
         $req->execute();
@@ -62,13 +62,9 @@ function testFile($file)
         if (count($tmps)>0) {
             echo "!!!! Code exists !!!!\n\n";
 
-            shell_exec('wget ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg /home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg');
-            echo "      Wget: ".date("H:i:s", microtime(true)- $timestart)."\n";
-            if (file_exists('/home/ubuntu/new_onlyfrance/tmp/'.$cocode.'.jpg')) {
                 unlink($file);
                 return false;
-            }
-        }
+        }*/
 
     } catch (PDOException $Exception) {
         // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A

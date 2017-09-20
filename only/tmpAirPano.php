@@ -8,7 +8,7 @@
 
 function _readDir($dirsource)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'onlyfrance';
     $VALEUR_user = 'alaidin';
@@ -24,9 +24,11 @@ function _readDir($dirsource)
             if ($file == '..') continue;
 
             if (!is_dir($dirsource.$file)) {
+		$ref = str_replace("+","_",$file);
+
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
                 $req = $pdo->prepare($sql);
-                $req->bindValue('sref', $file, PDO::PARAM_STR);
+                $req->bindValue('sref', $ref, PDO::PARAM_STR);
                 $req->execute();
 
                 $vals = $req->fetchAll(PDO::FETCH_OBJ);
@@ -47,4 +49,4 @@ function _readDir($dirsource)
     }
 }
 
-_readDir('/home/ubuntu/new_onlyfrance/test/');
+_readDir('/home/ubuntu/new_onlyfrance/tmp/');
