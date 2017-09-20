@@ -31,6 +31,8 @@ function _readDir($dirsource)
                 foreach ($cars as $car) {
                     $ref = str_replace($car,"_",$file);
                 }
+                echo $file."\n";
+                echo $ref."\n";
 
 
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
