@@ -33,9 +33,6 @@ function _readDir($dirsource)
                 foreach ($cars as $car) {
                     $ref = str_replace($car,"_",$ref);
                 }
-                echo $file."\n";
-                echo $ref."\n";
-
 
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
                 $req = $pdo->prepare($sql);
@@ -45,8 +42,34 @@ function _readDir($dirsource)
                 $vals = $req->fetchAll(PDO::FETCH_OBJ);
 
                 if (count($vals)==1){
+                    echo $file."\n";
+                    echo $ref."\n";
+
                     $cocode = $vals[0]->i_autocode;
                     rename($dirsource.$file, $dirsource.$cocode.'.jpg');
+                }elseif (count($vals)>1){
+                    echo $file."\n";
+                    echo $ref."\n";
+
+                    echo "   MULTI\n";
+
+                    $fsize = filesize($file);
+
+                    $sql = "select * from onlyfrance.container co, onlyfrance.image_file imf 
+                            where s_reference=:sref 
+                            and co.i_autocode = imf.i_foreigncode
+                            and imf.i_filesize = :fsize";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':sref', $ref, PDO::PARAM_STR);
+                    $req->bindValue(':fsize', $fsize, PDO::PARAM_INT);
+                    $req->execute();
+
+                    $vals = $req->fetchAll(PDO::FETCH_OBJ);
+                    if (count($vals)==1) {
+                        $cocode = $vals[0]->i_autocode;
+                        rename($dirsource.$file, $dirsource.$cocode.'.jpg');
+                    }
+
                 }
 
             } else {
