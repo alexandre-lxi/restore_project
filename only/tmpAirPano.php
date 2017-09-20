@@ -6,6 +6,8 @@
  * Time: 00:41
  */
 
+
+
 function _readDir($dirsource)
 {
     $VALEUR_hote = '127.0.0.1';
@@ -13,6 +15,8 @@ function _readDir($dirsource)
     $VALEUR_nom_bd = 'onlyfrance';
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
+
+    $cars = array("+",")","(","'","&","é","è","à" );
 
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -24,7 +28,10 @@ function _readDir($dirsource)
             if ($file == '..') continue;
 
             if (!is_dir($dirsource.$file)) {
-		$ref = str_replace("+","_",$file);
+                foreach ($cars as $car) {
+                    $ref = str_replace($car,"_",$file);
+                }
+
 
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
                 $req = $pdo->prepare($sql);
