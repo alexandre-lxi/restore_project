@@ -6,7 +6,7 @@
  * Time: 13:21
  */
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -70,7 +70,7 @@ function isOffice($file)
 
 function findByPixels($rfcode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -172,7 +172,7 @@ function findByPixels($rfcode)
 
 function findByPixelsCo($cocode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -285,7 +285,7 @@ function findByPixelsCo($cocode)
 
 function findByPixelsSize($cocode, $width, $height)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -400,7 +400,7 @@ function findByPixelsSize($cocode, $width, $height)
 
 function controlPixels($rfcode, $cocode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -484,7 +484,7 @@ function controlPixels($rfcode, $cocode)
 
 function insertCo($rfcode, $cocode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -525,7 +525,7 @@ function insertCo($rfcode, $cocode)
 
 function insertCoAn($rfcode, $cocode, $reason, $isrestored = false)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -561,7 +561,7 @@ function insertCoAn($rfcode, $cocode, $reason, $isrestored = false)
 
 function threatImage()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -678,7 +678,7 @@ function threatImage()
 
 function threatVideo()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -821,7 +821,7 @@ function threatVideo()
 
 function threatOffice()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -894,7 +894,7 @@ function threatOffice()
 
 function threatOthers()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -968,7 +968,7 @@ function threatOthers()
 }
 
 function threatOfficeAn(){
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -1029,7 +1029,7 @@ function threatOfficeAn(){
 }
 
 function threatImageAn(){
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -1090,7 +1090,7 @@ function threatImageAn(){
 
 function threatImageByCo()
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -1152,11 +1152,78 @@ function threatImageByCo()
     }
 }
 
+function threatPdfByCo()
+{
+    $VALEUR_hote = '127.0.0.1';
+    $VALEUR_port = '3306';
+    $VALEUR_nom_bd = 'total-refontedam';
+    $VALEUR_user = 'alaidin';
+    $VALEUR_mot_de_passe = 'alaidin';
 
+    try {
+        $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+
+        $sql = "select co.i_autocode, imf.i_width, imf.i_height, imf.i_filesize, right(s_fileformat,3) s_fileformat
+            from container co, image_file imf
+            where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
+            and co.i_autocode not in (SELECT co_code from restore_file_co2)
+            and co.i_autocode not in (select co_code from restore_file_co3)
+            and b_isintrash =0
+            and imf.i_foreigncode = co.i_autocode
+            and imf.s_fileformat in ('.pdf') ";
+
+        //AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps',  'ai')
+
+        $req = $pdo->prepare($sql);
+        $req->execute();
+
+        $rows = $req->fetchAll(PDO::FETCH_OBJ);
+        $nb = 0;
+
+        foreach ($rows as $row) {
+            echo $row->i_autocode."\n";
+
+
+            if ($row->i_width+$row->i_height == 0){
+                $sql = "SELECT id FROM restore_files WHERE s_format = :sformat AND fsize = :fsize";
+                $reqRf = $pdo->prepare($sql);
+                $reqRf->bindValue(':sformat', $row->s_fileformat, PDO::PARAM_STR);
+                $reqRf->bindValue(':fsize', $row->i_filesize, PDO::PARAM_INT);
+            }else {
+                $sql = "SELECT id FROM restore_files WHERE s_format = :sformat AND fsize = :fsize AND width = :width AND height = :height";
+                $reqRf = $pdo->prepare($sql);
+                $reqRf->bindValue(':sformat', $row->s_fileformat, PDO::PARAM_STR);
+                $reqRf->bindValue(':fsize', $row->i_filesize, PDO::PARAM_INT);
+                $reqRf->bindValue(':width', $row->i_width, PDO::PARAM_INT);
+                $reqRf->bindValue(':height', $row->i_height, PDO::PARAM_INT);
+            }
+            $reqRf->execute();
+            $rfRows = $reqRf->fetchAll(PDO::FETCH_OBJ);
+
+            if (count($rfRows) == 1){
+                echo "    1 size : ".$rfRows[0]->id;
+                insertCo($rfRows[0]->id, $row->i_autocode);
+            }elseif (count($rfRows)>1){
+                foreach ($rfRows as $rfRow) {
+                    echo "    x size : ".$rfRow->id."\n";
+                    insertCoAn($rfRow->id, $row->i_autocode, "PDF#FSIZE#TOA", false);
+                }
+            }else{
+                echo "    No file\n";
+            }
+        }
+    } catch (PDOException $Exception) {
+        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+        // String.
+        echo $Exception->getMessage().' : '.$Exception->getCode();
+    }
+}
+
+threatPdfByCo();
 //threatImage();
 //threatImageByCo();
 //print_r(findByPixels(773));
-print_r(findByPixelsCo(28589));
+//print_r(findByPixelsCo(28589));
 //threatOffice();
 //threatOfficeAn();
 //threatVideo();

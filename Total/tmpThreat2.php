@@ -6,7 +6,7 @@
  * Time: 00:34
  */
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -40,11 +40,13 @@ try {
             if (isset($pagesizematches[1])) {
                 $width = round($pagesizematches[1] / 2.83);
                 $height = round($pagesizematches[2] / 2.83);
+                $fsize = filesize($vid);
 
-                $sql = 'update restore_files set width= :width, height= :height where id=:id';
+                $sql = 'update restore_files set width= :width, height= :height, fsize = :fsize where id=:id';
                 $req = $pdo->prepare($sql);
                 $req->bindValue(':width', $width, PDO::PARAM_INT);
                 $req->bindValue(':height', $height, PDO::PARAM_INT);
+                $req->bindValue(':fsize', $fsize, PDO::PARAM_INT);
                 $req->bindValue(':id', $row->id, PDO::PARAM_INT);
                 $req->execute();
             }
