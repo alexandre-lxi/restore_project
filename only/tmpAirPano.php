@@ -31,7 +31,11 @@ function _readDir($dirsource)
                 $ref = $file;
 
                 foreach ($cars as $car) {
-                    $ref = str_replace($car,"_",$ref);
+                    if ($car = "è"){
+                        $ref = str_replace($car,"a_",$ref);
+                    }else{
+                        $ref = str_replace($car,"_",$ref);
+                    }
                 }
 
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
