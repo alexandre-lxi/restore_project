@@ -515,6 +515,9 @@ try {
     $files = scandir($dirsource);
 
     foreach ($files as $file) {
+        if ($file == '.') continue;
+        if ($file == '..') continue;
+
         $fname = basename($file);
         $cocode = explode('.',$fname);
         $ext = $cocode[1];
