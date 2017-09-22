@@ -500,7 +500,7 @@ if (isset($_GET['error'])){
 
 
         <div id="main">
-            <div>
+            <div class="zoom">
                 <ul class="ul">
                     <?php
                     foreach ($rowsAn as $rowRf) {
@@ -527,7 +527,7 @@ if (isset($_GET['error'])){
 
                 </ul>
             </div>
-            <div>
+            <div class="zoom">
                 <ul class="ul">
                     <?php
                     foreach ($rowsRf as $rowRf) {
@@ -554,7 +554,7 @@ if (isset($_GET['error'])){
 
                 </ul>
             </div>
-            <div>
+            <div class="zoom">
                 <ul class="ul">
                     <?php
                     foreach ($rowsRf3 as $rowRf) {
@@ -581,7 +581,7 @@ if (isset($_GET['error'])){
 
                 </ul>
             </div>
-            <div>
+            <div class="zoom">
                 <ul class="ul">
                     <?php
                     foreach ($rowsRf2 as $rowRf) {

@@ -68,7 +68,7 @@ table{
     border: 1px solid black; /* auront une bordure de 1px */
 }
 
-img:hover {
+.zoom img:hover {
     width:600px;
     height:auto;
 }
