@@ -538,14 +538,21 @@ try {
 
 
         try {
+            $img->readImage($fname);
+            $newImg = $img->mergeImageLayers(Imagick::LAYERMETHOD_OPTIMIZEIMAGE);
+            $img->clear();
+            $newImg->setFormat('jpg');
 
-                if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
-                    $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
-                    shell_exec($nconv);
-                } else {
-                    convertFile($fname, $fthumb, $param);    // create thumbnail image
-                }
 
+            if ($newImg->getImageWidth() > $newImg->getImageHeight()){
+                $newImg->resizeImage(280,0,Imagick::FILTER_LANCZOS,1);
+                $newImg->writeImage($fthumb);
+                $newImg->clear();
+            }else{
+                $newImg->resizeImage(0,280,Imagick::FILTER_LANCZOS,1);
+                $newImg->writeImage($fthumb);
+                $newImg->clear();
+            }
 
             $success = file_exists($fthumb);
             //$success = false;
