@@ -517,8 +517,8 @@ try {
                where s_format in('psd')
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
-               and id not in (select rf_code from restore_file_co3)     
-               and ID = 307349  
+               and id not in (select rf_code from restore_file_co3)   
+               
       order by 1 desc ";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
@@ -553,6 +553,7 @@ try {
             //$success = false;
 
             if ($success) {
+                print "   thumbOK\n";
 
                 $img->readImage($fthumb);
                 $del->bindValue(':rfcode', $icode, PDO::PARAM_INT);
@@ -563,12 +564,7 @@ try {
                 $cnt = 1;
 
                 foreach ($lpixels as $lpixel) {
-                    print_r($lpixel);
-
                     $shnew = $img->getImagePixelColor($lpixel[0], $lpixel[1])->getColor();
-
-                    print_r($shnew);
-
                     $req->bindValue(':p'.$cnt.'_a', $shnew['a'], PDO::PARAM_INT);
                     $req->bindValue(':p'.$cnt.'_r', $shnew['r'], PDO::PARAM_INT);
                     $req->bindValue(':p'.$cnt.'_g', $shnew['g'], PDO::PARAM_INT);
