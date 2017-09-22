@@ -68,4 +68,8 @@ table{
     border: 1px solid black; /* auront une bordure de 1px */
 }
 
+img:hover {
+    width:300px;
+    height:400px;
+}
 
