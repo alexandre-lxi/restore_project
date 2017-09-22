@@ -308,6 +308,7 @@ function convertFile($infile, $outfile, $param)
             ztrace("imagick");
             $img = new Imagick();
             ztrace("new imagick");
+            ztrace($infile);
             $img->readImage($infile);
             ztrace("imagick.read");
             $nblayers = $img->getNumberImages();
