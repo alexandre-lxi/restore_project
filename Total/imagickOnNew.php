@@ -298,12 +298,12 @@ function convertFile($infile, $outfile, $param)
     {
         case 'psd':
             // handle color space
-            if($inData['COLORSPACE'] == COLORSPACE_RGB)
-                $convert .= $rgbCmd;
-            else if($inData['COLORSPACE'] == COLORSPACE_CMYK)
-                $convert .= $cmykCmd ;
-            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
-                $convert .= $rgbCmd;
+//            if($inData['COLORSPACE'] == COLORSPACE_RGB)
+//                $convert .= $rgbCmd;
+//            else if($inData['COLORSPACE'] == COLORSPACE_CMYK)
+//                $convert .= $cmykCmd ;
+//            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
+//                $convert .= $rgbCmd;
 
             if($inData['NBLAYERS']>1)
             {
@@ -513,7 +513,7 @@ try {
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
                and id not in (select rf_code from restore_file_co3)       
-      order by 1 desc limit 2";
+      order by 1 desc ";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
 
