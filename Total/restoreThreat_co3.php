@@ -8,7 +8,7 @@
 
 include("/var/www/utils/getid3/getid3/getid3.php");
 
-$VALEUR_hote = 'localhost';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -510,7 +510,7 @@ function convertFile($infile, $outfile, $param)
 
 try {
     $dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
-    $dest = '/var/www/projects/total-1410-refontedam/restoreDir/newdir';
+    $dest = '/var/www/projects/total-1410-refontedam/back/account/pictures/restoredir';
 
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
@@ -541,7 +541,7 @@ try {
         if (!copy($oldFile, $newFile)) {
             $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
             //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat_20170910.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat_20170922.txt', $log, FILE_APPEND);
         }else{
             if (file_exists($oldFile)){
                 ztrace($newFile."=>".$thumbFile."=>".$webFile);

@@ -8,7 +8,7 @@
 
 include("/var/www/utils/getid3/getid3/getid3.php");
 
-$VALEUR_hote = 'localhost';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -510,7 +510,7 @@ function convertFile($infile, $outfile, $param)
 
 try {
     $dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
-    $dest = '/var/www/projects/total-1410-refontedam/restoreDir/newdir';
+    $dest = '/var/www/projects/total-1410-refontedam/back/account/pictures/restoredir';
 
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
