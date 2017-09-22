@@ -514,7 +514,8 @@ try {
                where s_format in('psd')
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
-               and id not in (select rf_code from restore_file_co3)       
+               and id not in (select rf_code from restore_file_co3)     
+               and ID = 307349  
       order by 1 desc ";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
@@ -538,21 +539,11 @@ try {
 
 
         try {
-            $img->readImage($fname);
-            $newImg = $img->mergeImageLayers(Imagick::LAYERMETHOD_OPTIMIZEIMAGE);
-            $img->clear();
-            $newImg->setFormat('jpg');
-
-
-            if ($newImg->getImageWidth() > $newImg->getImageHeight()){
-                $newImg->resizeImage(280,0,Imagick::FILTER_LANCZOS,1);
-                $newImg->writeImage($fthumb);
-                $newImg->clear();
-            }else{
-                $newImg->resizeImage(0,280,Imagick::FILTER_LANCZOS,1);
-                $newImg->writeImage($fthumb);
-                $newImg->clear();
+            if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
+                $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
             }
+
+            convertFile($fname, $fthumb, $param);    // create thumbnail image
 
             $success = file_exists($fthumb);
             //$success = false;
