@@ -6,7 +6,7 @@
  * Time: 00:34
  */
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
