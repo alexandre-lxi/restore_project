@@ -542,12 +542,13 @@ try {
 
 
         try {
-            if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
-                $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
+            if (!file_exists($fthumb)) {
+                if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
+                    $param = array('newsize' => 280, 'quality' => 85, 'density' => '72x72');
+                }
+
+                convertFile($fname, $fthumb, $param);    // create thumbnail image
             }
-
-            convertFile($fname, $fthumb, $param);    // create thumbnail image
-
             $success = file_exists($fthumb);
             //$success = false;
 
