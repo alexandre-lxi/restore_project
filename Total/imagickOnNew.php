@@ -524,7 +524,7 @@ try {
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
                and id not in (select rf_code from restore_file_co3)   
-               
+               and width <> 0
       order by 1 desc ";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
