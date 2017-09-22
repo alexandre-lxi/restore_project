@@ -423,16 +423,18 @@ try{
         else
             $sref = '';
 
+        $rowsAn = array();
+        $rowsRf = array();
         $rowsRf3= array();
         $rowsRf2 = array();
 
-        $rowsAn = findInAnalyse($cocode);
+        //$rowsAn = findInAnalyse($cocode);
 
-        $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
+        //$rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
 
         //print_r('NB1:'.count($rowsRf).'<br>');
 
-        $rowsRf3 = findByPixels($cocode);
+        //$rowsRf3 = findByPixels($cocode);
         //print_r('NB2:'.count($rowsRf3).'<br>');
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height, $rowCo->s_fileformat);
