@@ -8,7 +8,7 @@ $VALEUR_mot_de_passe = 'alaidin';
 
 $name = (isset($_GET['name'])?$_GET['name']:'');
 
-function findBySizes($width, $height)
+function findBySizes($width, $height, $sformat)
 {
     $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
@@ -18,6 +18,8 @@ function findBySizes($width, $height)
 
     $ret= array();
 
+    $sformat = str_replace('.','',$sformat);
+
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
@@ -26,7 +28,7 @@ function findBySizes($width, $height)
                 and to_restore=0
                 and width between :width1 and :width2  
                 and height between :height1 and :height2                                 
-                and s_format in ('jpg', 'png') 
+                and s_format = :sformat 
                 order by fsize desc";
 
 //        and id not in (select rf_code  from restore_file_co3)
@@ -34,10 +36,11 @@ function findBySizes($width, $height)
 //                and id not in (select rf_code  from restore_file_co where restore_files.is_restored=1)
 
         $req = $pdo->prepare($sql);
-        $req->bindValue(':width1',$width-100,PDO::PARAM_INT);
-        $req->bindValue(':width2',$width+100,PDO::PARAM_INT);
-        $req->bindValue(':height1',$height-100,PDO::PARAM_INT);
-        $req->bindValue(':height2',$height+100,PDO::PARAM_INT);
+        $req->bindValue(':width1',$width-50,PDO::PARAM_INT);
+        $req->bindValue(':width2',$width+50,PDO::PARAM_INT);
+        $req->bindValue(':height1',$height-50,PDO::PARAM_INT);
+        $req->bindValue(':height2',$height+50,PDO::PARAM_INT);
+        $req->bindValue(':format', $sformat, PDO::PARAM_STR);
         $req->execute();
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
@@ -392,7 +395,7 @@ function findByPixelsSize($cocode, $width, $height)
 try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "select co.i_autocode, imf.i_width, imf.i_height, co.s_reference,
+    $sql = "select co.i_autocode, imf.i_width, imf.i_height, co.s_reference, imf.s_fileformat ,
               (select count(*) from restore_file_co_analyse2 where reason = 'FSIZE#TOA' and co_code = co.i_autocode)+
               (select count(*) from restore_file_co_analyse2 where reason = 'PBS#TOA' and co_code = co.i_autocode)cnt
             from container co, image_file imf
@@ -401,7 +404,8 @@ try{
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.psd')   
+            and imf.s_fileformat in ('.psd')
+            and s_reference like 'ETI%'   
             and co.i_autocode not in (37735, 37570, 37577, 37556, 29351, 29347)         
             order by cnt DESC , rand()           
             ";
@@ -431,7 +435,7 @@ try{
         $rowsRf3 = findByPixels($cocode);
         //print_r('NB2:'.count($rowsRf3).'<br>');
 
-        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
+        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height, $rowCo->s_fileformat);
         //print_r('NB2:'.count($rowsRf2).'<br>');
 
         if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
