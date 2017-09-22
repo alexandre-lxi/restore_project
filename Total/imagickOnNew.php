@@ -311,7 +311,7 @@ function convertFile($infile, $outfile, $param)
                 $keepconvert = $convert;
                 $convert = "convert -quality 100 ".$density." ";
                 // get unique tempo output file
-                $tmpfile= tempnam ("./account/pictures/tmp", "imv4_");
+                $tmpfile= tempnam ("/home/ubuntu/restore_total/tmp", "imv4_");
                 $convert .= " \"".$infile."\" \"".$tmpfile.".jpg\"";
                 ztrace("First conversion in order to get the layer:\n".$convert);
                 system($convert);
@@ -509,11 +509,11 @@ try {
     $req = $pdo->prepare($sql);
 
     $sqlSel = "select id, fname, width, s_format from restore_files 
-               where s_format in('jpg','png')
+               where s_format in('psd')
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
                and id not in (select rf_code from restore_file_co3)       
-      order by 1 desc";
+      order by 1 desc limit 2";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
 
