@@ -526,9 +526,9 @@ try {
 
 
         $oldFile = $dirsource.$file;
-        $newFile = $dest.'/oridir/'.$file;
-        $thumbFile = $dest.'/thumbdir/'.$cocode.'.jpg';
-        $webFile = $dest.'/webdir/'.$cocode.'.jpg';
+        $newFile = $dest.'oridir/'.$file;
+        $thumbFile = $dest.'thumbdir/'.$cocode.'.jpg';
+        $webFile = $dest.'webdir/'.$cocode.'.jpg';
         $oldthumbfile =   '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/'.$cocode.'.jpg';
 
         echo $oldFile."\n";
@@ -536,35 +536,35 @@ try {
         echo $thumbFile."\n";
         echo $webFile."\n";
 
-//        if (!copy($oldFile, $newFile)) {
-//            $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
-//            //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
-//            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
-//        }else{
-//            if (file_exists($oldFile)){
-//                ztrace($newFile."=>".$thumbFile."=>".$webFile);
-//
-//                if (!file_exists($oldthumbfile)){
-//                    $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
-//                    $success = convertFile($newFile, $webFile, $param);        // create web image
-//                    $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
-//                    $success = convertFile($newFile, $thumbFile, $param);    // create thumbnail image
-//                    //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
-//
-//
-//                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
-//                    $req = $pdo->prepare($sql);
-//                    $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
-//                    $req->bindValue(':hasThumb', 3, PDO::PARAM_BOOL);
-//                    $req->execute();
-//                }else{
-//                    $sql = "insert into restore_ok values (:i_code, 3)";
-//                    $req = $pdo->prepare($sql);
-//                    $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
-//                    $req->execute();
-//                }
-//            }
-//        }
+        if (!copy($oldFile, $newFile)) {
+            $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
+            //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
+            file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
+        }else{
+            if (file_exists($oldFile)){
+                ztrace($newFile."=>".$thumbFile."=>".$webFile);
+
+                if (!file_exists($oldthumbfile)){
+                    $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
+                    $success = convertFile($newFile, $webFile, $param);        // create web image
+                    $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
+                    $success = convertFile($newFile, $thumbFile, $param);    // create thumbnail image
+                    //fwrite($fp, "Item type: ".$pool->getItemType($item)."\n");
+
+
+                    $sql = "insert into restore_ok values (:i_code, :hasThumb)";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
+                    $req->bindValue(':hasThumb', 4, PDO::PARAM_BOOL);
+                    $req->execute();
+                }else{
+                    $sql = "insert into restore_ok values (:i_code, 3)";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
+                    $req->execute();
+                }
+            }
+        }
     }
 } catch (PDOException $Exception) {
     // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
