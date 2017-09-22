@@ -304,18 +304,23 @@ function convertFile($infile, $outfile, $param)
 //                $convert .= $cmykCmd ;
 //            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
 //                $convert .= $rgbCmd;
-
+try{
             ztrace("imagick");
+echo 'INFILE :'.$infile."\n";
+
             $img = new Imagick();
-            ztrace("new imagick");
-            ztrace($infile);
+
             $img->readImage($infile);
             ztrace("imagick.read");
             $nblayers = $img->getNumberImages();
             ztrace("imagick.getNum");
             ztrace($nblayers);
             $img->clear();
-
+}catch(Exception $e){
+	echo $e->getMessage()."\n";
+$img->clear();
+return false;
+}
             if($nblayers>1)
             {
                 // WARNING: DON'T RESIZE PSD FILE but lower output layer (xxx-0.jpg)
@@ -524,7 +529,7 @@ try {
                and id not in (select rf_code from restore_file_co)
                and id not in (select rf_code from restore_file_co2)
                and id not in (select rf_code from restore_file_co3)   
-               
+ and width <> 0              
       order by 1 desc ";
     $reqSel = $pdo->prepare($sqlSel);
     $reqSel->execute();
