@@ -20,10 +20,10 @@ try {
 
     $sql = "SELECT *
       FROM restore_files
-      WHERE s_format in ('jpg', 'png')
+      WHERE s_format in ('psd')
       and id not in (select rf_code from restore_file_co3)
       and id in (select rf_code from restore_file_co2)     
-      
+      and width = 0
       ";
 
     $req = $pdo->prepare($sql);
