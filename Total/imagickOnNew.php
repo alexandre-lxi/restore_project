@@ -305,6 +305,8 @@ function convertFile($infile, $outfile, $param)
 //            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
 //                $convert .= $rgbCmd;
 
+            $inData = getImageInfo($infile);
+
             if($inData['NBLAYERS']>1)
             {
                 // WARNING: DON'T RESIZE PSD FILE but lower output layer (xxx-0.jpg)
@@ -537,18 +539,13 @@ try {
 
         try {
 
-            if (file_exists($fthumb)){
-                echo '  ##File exists'."\n";
-
-            }else {
-
                 if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
                     $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
                     shell_exec($nconv);
                 } else {
                     convertFile($fname, $fthumb, $param);    // create thumbnail image
                 }
-            }
+
 
             $success = file_exists($fthumb);
             //$success = false;
