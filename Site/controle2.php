@@ -1,6 +1,6 @@
 <?php
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
@@ -10,7 +10,7 @@ $name = (isset($_GET['name'])?$_GET['name']:'');
 
 function findBySizes($width, $height)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -63,7 +63,7 @@ function findBySizes($width, $height)
 
 function getInfo($cocode, $rf_code)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -116,7 +116,7 @@ function getInfo($cocode, $rf_code)
 
 function findInAnalyse($cocode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -163,7 +163,7 @@ function findInAnalyse($cocode)
 
 function findByPixels($cocode)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
@@ -275,7 +275,7 @@ function findByPixels($cocode)
 
 function findByPixelsSize($cocode, $width, $height)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'total-refontedam';
     $VALEUR_user = 'alaidin';
