@@ -40,7 +40,7 @@ function findBySizes($width, $height, $sformat)
         $req->bindValue(':width2',$width+50,PDO::PARAM_INT);
         $req->bindValue(':height1',$height-50,PDO::PARAM_INT);
         $req->bindValue(':height2',$height+50,PDO::PARAM_INT);
-        $req->bindValue(':format', $sformat, PDO::PARAM_STR);
+        $req->bindValue(':sformat', $sformat, PDO::PARAM_STR);
         $req->execute();
 
         $rows = $req->fetchAll(PDO::FETCH_OBJ);
