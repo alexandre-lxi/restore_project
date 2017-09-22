@@ -15,7 +15,7 @@ $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
 $dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toImport/';
-$dest = '/var/www/projects/total-1410-refontedam/back/account/pictures/';
+$dest = '/var/www/projects/total-1410-refontedam/back/account/pictures/restoredir/';
 
 define("COLORSPACE_RGB", "RGB");
 define("COLORSPACE_CMYK","CMYK");
