@@ -132,6 +132,7 @@ function findInAnalyse($cocode)
                 where reason in ('FSIZE#TOA','PBS#TOA')
                 and co_code = :cocode   
                 and rf.id = an2.rf_code
+                
                 ";
 
 //        and id not in (select rf_code  from restore_file_co3)
@@ -400,7 +401,8 @@ try{
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.psd')            
+            and imf.s_fileformat in ('.psd')   
+            and co.i_autocode not in (37735)         
             order by cnt DESC , rand()           
             ";
 
