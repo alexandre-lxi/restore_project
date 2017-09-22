@@ -439,6 +439,7 @@ try{
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height, $rowCo->s_fileformat);
         print_r('NB2:'.count($rowsRf2).'<br>');
+        print_r($rowCo->i_width. 'X' .$rowCo->i_height.' sf:'.str_replace('.','',$rowCo->s_fileformat) );
 
         if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
             break;
