@@ -534,17 +534,20 @@ try {
 
         $fthumb = $tmpdname.$name.'.jpg';
 
-        if (file_exists($fthumb)){
-            echo '  ##File exists'."\n";
-            continue;
-        }
 
         try {
-            if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
-                $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
-                shell_exec($nconv);
-            }else{
-                convertFile($fname, $fthumb, $param);    // create thumbnail image
+
+            if (file_exists($fthumb)){
+                echo '  ##File exists'."\n";
+
+            }else {
+
+                if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
+                    $nconv = 'convert '.$fname.' -density 72x72 -quality 85 -gravity center -extent 300x300 '.$fthumb;
+                    shell_exec($nconv);
+                } else {
+                    convertFile($fname, $fthumb, $param);    // create thumbnail image
+                }
             }
 
             $success = file_exists($fthumb);
