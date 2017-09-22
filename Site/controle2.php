@@ -129,7 +129,7 @@ function findInAnalyse($cocode)
 
         $sql = "SELECT * 
                 from restore_file_co_analyse2 an2, restore_files rf 
-                where reason = 'FSIZE#TOA'
+                where reason in ('FSIZE#TOA','PBS#TOA')
                 and co_code = :cocode   
                 and rf.id = an2.rf_code
                 ";
@@ -426,7 +426,7 @@ try{
         $rowsRf3 = findByPixels($cocode);
         //print_r('NB2:'.count($rowsRf3).'<br>');
 
-        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
+        //$rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
         //print_r('NB2:'.count($rowsRf2).'<br>');
 
         if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
