@@ -305,9 +305,11 @@ function convertFile($infile, $outfile, $param)
 //            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
 //                $convert .= $rgbCmd;
 
+            ztrace("imagick");
             $img = new Imagick();
             $img->readImage($infile);
             $nblayers = $img->getNumberImages();
+            ztrace($nblayers);
             $img->clear();
 
             if($nblayers>1)
@@ -543,6 +545,8 @@ try {
 
         try {
             if (!file_exists($fthumb)) {
+                print "   thumb to convert \n";
+
                 if (($row->width < 280) && ($row->width > 0) && ($row->s_format <> 'pdf')) {
                     $param = array('newsize' => 280, 'quality' => 85, 'density' => '72x72');
                 }
