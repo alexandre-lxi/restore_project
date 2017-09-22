@@ -305,9 +305,12 @@ function convertFile($infile, $outfile, $param)
 //            else if($inData['COLORSPACE'] == COLORSPACE_GRAY)
 //                $convert .= $rgbCmd;
 
-            $inData = getImageInfo($infile);
+            $img = new Imagick();
+            $img->readImage($infile);
+            $nblayers = $img->getNumberImages();
+            $img->clear();
 
-            if($inData['NBLAYERS']>1)
+            if($nblayers>1)
             {
                 // WARNING: DON'T RESIZE PSD FILE but lower output layer (xxx-0.jpg)
                 $keepconvert = $convert;

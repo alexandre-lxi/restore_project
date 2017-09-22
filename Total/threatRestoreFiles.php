@@ -1106,7 +1106,7 @@ function threatImageByCo()
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png') ";
+            and imf.s_fileformat in ('.psd') ";
 
         //AND s_format IN ('psd', 'tif', 'jpg', 'jpeg', 'png', 'gif', 'eps',  'ai')
 
@@ -1125,6 +1125,11 @@ function threatImageByCo()
                 echo "    1 row OK";
                 insertCo($ret[0]['rfcode'], $row->i_autocode );
                 continue;
+            }elseif(count($ret)>1){
+                foreach ($ret as $item) {
+                    echo "    x PBS : ".$item['rfcode']."\n";
+                    insertCoAn($item['rfcode'], $row->i_autocode, "PBS#TOA", false);
+                }
             }
 
             $sql = "select id from restore_files where s_format = :sformat and fsize = :fsize and width = :width and height = :height";
