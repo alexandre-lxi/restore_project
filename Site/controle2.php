@@ -428,10 +428,10 @@ try{
 
         //print_r('NB1:'.count($rowsRf).'<br>');
 
-        //$rowsRf3 = findByPixels($cocode);
+        $rowsRf3 = findByPixels($cocode);
         //print_r('NB2:'.count($rowsRf3).'<br>');
 
-        //$rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
+        $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height);
         //print_r('NB2:'.count($rowsRf2).'<br>');
 
         if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
