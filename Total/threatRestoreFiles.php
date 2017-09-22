@@ -1130,6 +1130,7 @@ function threatImageByCo()
                     echo "    x PBS : ".$item['rfcode']."\n";
                     insertCoAn($item['rfcode'], $row->i_autocode, "PBS#TOA", false);
                 }
+                continue;
             }
 
             $sql = "select id from restore_files where s_format = :sformat and fsize = :fsize and width = :width and height = :height";
