@@ -8,7 +8,7 @@
 
 
 $img = new Imagick();
-$img->readImage('/var/www/iris/restore/tmp/36757.jpg');
-
+//$img->readImage('/home/ubuntu/restore/toAnalyse/recup_dir.91/f275398656.psd');
+$img->readImage('/home/ubuntu/restore/toAnalyse/recup_dir.9/f7503872.psd');
 echo $img->getNumberImages();
 $img->clear();

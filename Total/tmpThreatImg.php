@@ -22,7 +22,7 @@ try {
       FROM restore_files
       WHERE s_format in ('jpg', 'png')
       and id not in (select rf_code from restore_file_co3)
-      and id not in (select rf_code from restore_file_co2)     
+      and id in (select rf_code from restore_file_co2)     
       
       ";
 
