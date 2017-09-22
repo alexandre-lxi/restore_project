@@ -16,7 +16,7 @@ $dvideo = '/var/www/projects/total-1410-refontedam/back/account/pictures/video/'
 //$dirsource = '/home/ubuntu/new_onlyfrance/test/';
 //$dirsource    = '/home/ubuntu/new_onlyfrance/toAnalyse/';
 
-$VALEUR_hote = 'prod.kwk.eu.com';
+$VALEUR_hote = '127.0.0.1';
 $VALEUR_port = '3306';
 $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
