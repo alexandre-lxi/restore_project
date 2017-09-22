@@ -1124,6 +1124,7 @@ function threatImageByCo()
             if (count($ret)==1){
                 echo "    1 row OK";
                 insertCo($ret[0]['rfcode'], $row->i_autocode );
+                continue;
             }
 
             $sql = "select id from restore_files where s_format = :sformat and fsize = :fsize and width = :width and height = :height";
@@ -1219,9 +1220,9 @@ function threatPdfByCo()
     }
 }
 
-threatPdfByCo();
+//threatPdfByCo();
 //threatImage();
-//threatImageByCo();
+threatImageByCo();
 //print_r(findByPixels(773));
 //print_r(findByPixelsCo(28589));
 //threatOffice();
