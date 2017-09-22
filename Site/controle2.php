@@ -228,12 +228,12 @@ function findByPixels($cocode)
 //                $vals[$i]['b']['min'] = $bval*(1-$taux);
 //                $vals[$i]['b']['max'] = $bval*(1+ $taux);
 
-                $vals[$i]['r']['min'] = $rval-15;
-                $vals[$i]['r']['max'] = $rval+15;
-                $vals[$i]['g']['min'] = $gval-15;
-                $vals[$i]['g']['max'] = $gval+15;
-                $vals[$i]['b']['min'] = $bval-15;
-                $vals[$i]['b']['max'] = $bval+15;
+                $vals[$i]['r']['min'] = $rval-10;
+                $vals[$i]['r']['max'] = $rval+10;
+                $vals[$i]['g']['min'] = $gval-10;
+                $vals[$i]['g']['max'] = $gval+10;
+                $vals[$i]['b']['min'] = $bval-10;
+                $vals[$i]['b']['max'] = $bval+10;
             }
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
@@ -402,7 +402,7 @@ try{
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.psd')   
-            and co.i_autocode not in (37735)         
+            and co.i_autocode not in (37735, 35570)         
             order by cnt DESC , rand()           
             ";
 
