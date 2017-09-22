@@ -7,6 +7,14 @@
  */
 
 
+function getFileExtension($file, $withdot=false)
+{
+    if($withdot)
+        return strtolower(substr($file, strrpos($file,".")));
+    else
+        return strtolower(substr($file, strrpos($file,".")+1));
+}
+
 
 function _readDir($dirsource)
 {
@@ -43,6 +51,8 @@ function _readDir($dirsource)
                 $req->bindValue('sref', $ref, PDO::PARAM_STR);
                 $req->execute();
 
+                $ext = getFileExtension($file, true);
+
                 $vals = $req->fetchAll(PDO::FETCH_OBJ);
 
                 if (count($vals)==1){
@@ -50,7 +60,7 @@ function _readDir($dirsource)
                     echo $ref."\n";
 
                     $cocode = $vals[0]->i_autocode;
-                    rename($dirsource.$file, $dirsource.$cocode.'.jpg');
+                    rename($dirsource.$file, $dirsource.$cocode.$ext);
                 }elseif (count($vals)>1){
                     echo $file."\n";
                     echo $ref."\n";
@@ -71,7 +81,7 @@ function _readDir($dirsource)
                     $vals = $req->fetchAll(PDO::FETCH_OBJ);
                     if (count($vals)==1) {
                         $cocode = $vals[0]->i_autocode;
-                        rename($dirsource.$file, $dirsource.$cocode.'.jpg');
+                        rename($dirsource.$file, $dirsource.$cocode.$ext);
                     }
 
                 }
