@@ -402,7 +402,7 @@ try{
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.psd')   
-            and co.i_autocode not in (37735, 35570)         
+            and co.i_autocode not in (37735, 37570)         
             order by cnt DESC , rand()           
             ";
 
