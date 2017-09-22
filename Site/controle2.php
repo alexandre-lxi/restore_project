@@ -392,17 +392,15 @@ try{
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "select co.i_autocode, imf.i_width, imf.i_height, co.s_reference,
-              (select count(*) from restore_file_co_analyse2 where reason = 'FSIZE#TOA' and co_code = co.i_autocode) cnt
+              (select count(*) from restore_file_co_analyse2 where reason = 'FSIZE#TOA' and co_code = co.i_autocode)+
+              (select count(*) from restore_file_co_analyse2 where reason = 'PBS#TOA' and co_code = co.i_autocode)cnt
             from container co, image_file imf
             where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
             and co.i_autocode not in (SELECT co_code from restore_file_co2)
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.jpg','.png')
-            and co.i_autocode not in (38016,37758,37776,37922,38004,37880,37769,37867,37799,37886,37537,38010,37849,
-37788,37997,37902,37906,37544,37808,37838,37874,37913,37823,37832,37860,58621,58693,58623,58663,58643,58619,58627,58649,
-58635,58689,58647,58695,58629,58609,58679,58687,58641,58605,58681,58607,58637,58653,58661,58613,58691,58631)
+            and imf.s_fileformat in ('.psd')            
             order by cnt DESC , rand()           
             ";
 
