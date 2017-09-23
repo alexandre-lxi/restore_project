@@ -15,8 +15,11 @@ $VALEUR_mot_de_passe = 'alaidin';
 
 $ffmpeg_path = 'ffmpeg'; //or: /usr/bin/ffmpeg , or /usr/local/bin/ffmpeg - depends on your installation (type which ffmpeg into a console to find the install path)
 $vid = 'PATH/TO/VIDEO'; //Replace here!
+$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
 
 try {
+
+
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
     $sql = "SELECT *
