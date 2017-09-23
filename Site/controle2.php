@@ -430,7 +430,7 @@ try{
 
         //$rowsAn = findInAnalyse($cocode);
 
-        //$rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
+        $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
 
         //print_r('NB1:'.count($rowsRf).'<br>');
 
