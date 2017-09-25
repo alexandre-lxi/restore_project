@@ -12,7 +12,7 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-$dirsource = '/var/www/tmp_total/newdir/oridir/';
+$dirsource = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
 //$dest = '/home/ubuntu/restore/toAnalyse/newdir';
 
 //$dirsource = '/home/alex/Documents/IRIS/Clients/kwk/total/tmp/';
@@ -43,7 +43,9 @@ AND imf.s_fileformat IS NOT NULL ";
             $sql = "UPDATE container SET b_isonline = 1 WHERE i_autocode = :id";
             $req = $pdo->prepare($sql);
             $req->bindValue(':id', $row->i_autocode, pdo::PARAM_INT);
-            $req->execute();
+            //$req->execute();
+
+            echo " OK ".$fname;
 
             $log = "UPDATE container SET b_isonline = 0 WHERE i_autocode = ".$row->i_autocode.";\n";
 //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
