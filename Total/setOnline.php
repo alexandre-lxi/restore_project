@@ -43,9 +43,9 @@ AND imf.s_fileformat IS NOT NULL ";
             $sql = "UPDATE container SET b_isonline = 1 WHERE i_autocode = :id";
             $req = $pdo->prepare($sql);
             $req->bindValue(':id', $row->i_autocode, pdo::PARAM_INT);
-            //$req->execute();
+            $req->execute();
 
-            echo " OK ".$fname;
+            echo " OK ".$fname."\n";
 
             $log = "UPDATE container SET b_isonline = 0 WHERE i_autocode = ".$row->i_autocode.";\n";
 //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
