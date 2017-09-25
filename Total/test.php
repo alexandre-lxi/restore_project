@@ -22,7 +22,7 @@ try {
 
     $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
-    $sql = "SELECT *
+    $sql = "SELECT count(*)
       FROM restore_files
       WHERE s_format in ('psd')                 
       and width = 0

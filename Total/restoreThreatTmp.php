@@ -555,7 +555,7 @@ try {
                     $sql = "insert into restore_ok values (:i_code, :hasThumb)";
                     $req = $pdo->prepare($sql);
                     $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
-                    $req->bindValue(':hasThumb', 4, PDO::PARAM_BOOL);
+                    $req->bindValue(':hasThumb', 4, PDO::PARAM_INT);
                     $req->execute();
                 }else{
                     $sql = "insert into restore_ok values (:i_code, 3)";
