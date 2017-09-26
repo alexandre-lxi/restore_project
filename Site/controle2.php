@@ -441,8 +441,7 @@ try{
             and co.i_autocode not in (select co_code from restore_file_co3)
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.psd')
-               and co.i_autocode = 56163
+            and imf.s_fileformat in ('.psd')               
             and co.i_autocode not in (37735, 37570, 37577, 37556, 29351, 29347)         
             order by cnt DESC , rand()           
             ";
