@@ -97,20 +97,29 @@ function getInfo($cocode, $rf_code)
 
             print_r($testref);
 
-            $sql = "select i_autocode from container where s_reference = :sref";
+            $sql = "select co.i_autocode from container co, image_file imf 
+                    where imf.i_foreigncode = co.i_autocode 
+                    and s_reference = :sref
+                    and exists(
+                        select *
+                        from image_file imf2
+                         where imf2.i_foreigncode = :cocode
+                         and imf.i_width = imf2.i_width
+                         and imf.i_height = imf2.i_height)";
             $req = $pdo->prepare($sql);
             $req->bindValue(':sref',$testref, PDO::PARAM_STR );
+            $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
             $req->execute();
 
             $rows = $req->fetchAll(PDO::FETCH_OBJ);
             if (count($rows)>0){
-                $ret = '<ul>';
+
                 foreach ($rows as $row) {
-                    $ret .= '<li>';
+
                     $ret .= '<img height="200px" src="pictures/olddir/thumbdir/'.$row->i_autocode.'.jpg">';
-                    $ret .= '</li>';
+
                 }
-                $ret .= '</ul>';
+
             }else {
                 $ret = '<table>
                         <tr>
