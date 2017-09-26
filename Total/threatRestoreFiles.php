@@ -1228,7 +1228,7 @@ function threatPdfByCo()
 
 //threatPdfByCo();
 //threatImage();
-threatImageByCo();
+//threatImageByCo();
 //print_r(findByPixels(773));
 //print_r(findByPixelsCo(28589));
 //threatOffice();
@@ -1236,5 +1236,5 @@ threatImageByCo();
 //threatVideo();
 //threatOthers();
 //threatImageAn();
-//print_r(controlPixels(78132, 53688));
+print_r(controlPixels(237615, 49303));
 
