@@ -277,7 +277,7 @@ function findByPixels($cocode)
     }
 }
 
-function findByPixelsSize($cocode, $width, $height)
+function findByPixelsSize($cocode, $width, $height, $format)
 {
     $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
@@ -336,12 +336,12 @@ function findByPixelsSize($cocode, $width, $height)
                 $bcol = $tCols[$i][2];
                 $bval = $row->$bcol;
 
-                $vals[$i]['r']['min'] = $rval-15;
-                $vals[$i]['r']['max'] = $rval+15;
-                $vals[$i]['g']['min'] = $gval-15;
-                $vals[$i]['g']['max'] = $gval+15;
-                $vals[$i]['b']['min'] = $bval-15;
-                $vals[$i]['b']['max'] = $bval+15;
+                $vals[$i]['r']['min'] = $rval-30;
+                $vals[$i]['r']['max'] = $rval+30;
+                $vals[$i]['g']['min'] = $gval-30;
+                $vals[$i]['g']['max'] = $gval+30;
+                $vals[$i]['b']['min'] = $bval-30;
+                $vals[$i]['b']['max'] = $bval+30;
 
 //                $vals[$i]['r']['min'] = $rval*(1-$taux);
 //                $vals[$i]['r']['max'] = $rval*(1+ $taux);
@@ -353,7 +353,7 @@ function findByPixelsSize($cocode, $width, $height)
 
             $sql = "SELECT distinct rfcode, rf.height, rf.width, rf.fname
                     FROM restore_nfile_colors, restore_files rf where rfcode = rf.id 
-                    and rf.width=:width and rf.height=:height";
+                    and rf.width=:width and rf.height=:height and s_format = :sformat";
 
             $sql .= " and (";
 
@@ -370,6 +370,7 @@ function findByPixelsSize($cocode, $width, $height)
             $reqSel = $pdo->prepare($sql);
             $reqSel->bindValue(':width',$width,PDO::PARAM_INT);
             $reqSel->bindValue(':height',$height,PDO::PARAM_INT);
+            $reqSel->bindValue(':sformat',$format,PDO::PARAM_STR);
             $reqSel->execute();
 
             $selRows = $reqSel->fetchAll(PDO::FETCH_OBJ);
@@ -428,9 +429,10 @@ try{
         $rowsRf3= array();
         $rowsRf2 = array();
 
+        $sformat = str_replace('.','', $rowCo->s_fileformat);
         //$rowsAn = findInAnalyse($cocode);
 
-        $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height);
+        $rowsRf = findByPixelsSize($cocode, $rowCo->i_width, $rowCo->i_height, $sformat);
 
         //print_r('NB1:'.count($rowsRf).'<br>');
 
