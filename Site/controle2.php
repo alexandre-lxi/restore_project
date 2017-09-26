@@ -78,7 +78,8 @@ function getInfo($cocode, $rf_code)
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
 
         if ($cocode <> '') {
-            $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country 
+
+            $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country, s_reference 
                       from image_infofr
                       where i_foreigncode = :cocode";
 
@@ -89,7 +90,25 @@ function getInfo($cocode, $rf_code)
             $rows = $req->fetchAll(PDO::FETCH_OBJ);
             $row = $rows[0];
 
-            $ret = '<table>
+            $testref = basename($row->s_reference);
+            $testref = explode('.',$testref);
+            $testref = $testref[0].'.jpg';
+            $sql = "select i_autocode from container where s_reference = :sref";
+            $req = $pdo->prepare($sql);
+            $req->bindValue(':sref',$testref, PDO::PARAM_STR );
+            $req->execute();
+
+            $rows = $req->fetchAll(PDO::FETCH_OBJ);
+            if (count($rows)>0){
+                $ret = '<ul>';
+                foreach ($rows as $row) {
+                    $ret .= '<li>';
+                    $ret .= '<img height="200px" src="pictures/olddir/thumbdir/'.$row->i_autocode.'.jpg">';
+                    $ret .= '</li>';
+                }
+                $ret .= '</ul>';
+            }else {
+                $ret = '<table>
                         <tr>
                             <td class="td">Caption: '.$row->s_caption.'</td>
                             <td class="td">Writer: '.$row->s_captionwriter.'</td>
@@ -106,6 +125,7 @@ function getInfo($cocode, $rf_code)
                             <td class="td"></td>
                         </tr>
                     </table>';
+            }
         }
 
         return $ret;
@@ -406,7 +426,7 @@ try{
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
             and imf.s_fileformat in ('.psd')
-               
+               and co.i_autocode = 56163
             and co.i_autocode not in (37735, 37570, 37577, 37556, 29351, 29347)         
             order by cnt DESC , rand()           
             ";
