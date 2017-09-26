@@ -95,8 +95,6 @@ function getInfo($cocode, $rf_code)
             $testref = explode('.',$testref);
             $testref = $testref[0].'.jpg';
 
-            print_r($testref);
-
             $sql = "select co.i_autocode from container co, image_file imf 
                     where imf.i_foreigncode = co.i_autocode 
                     and s_reference = :sref
@@ -113,6 +111,11 @@ function getInfo($cocode, $rf_code)
 
             $rows = $req->fetchAll(PDO::FETCH_OBJ);
             if (count($rows)>0){
+                $ret = '<table>
+                        <tr>
+                            <td class="td">Objectname: '.$row->s_objectname.'</td>
+                        </tr>                        
+                    </table>';
 
                 foreach ($rows as $row) {
 
