@@ -93,6 +93,9 @@ function getInfo($cocode, $rf_code)
             $testref = basename($row->s_reference);
             $testref = explode('.',$testref);
             $testref = $testref[0].'.jpg';
+
+            print_r($testref);
+
             $sql = "select i_autocode from container where s_reference = :sref";
             $req = $pdo->prepare($sql);
             $req->bindValue(':sref',$testref, PDO::PARAM_STR );
