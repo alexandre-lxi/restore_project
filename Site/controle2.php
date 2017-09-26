@@ -79,6 +79,21 @@ function getInfo($cocode, $rf_code)
 
         if ($cocode <> '') {
 
+            $kw = array();
+            $sql = "select s_label
+                    from container_thesaurusfr, thesaurusfr
+                    where i_containercode = :cocode
+                    and thesaurusfr.i_autocode = container_thesaurusfr.i_foreigncode";
+            $req = $pdo->prepare($sql);
+            $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+            $req->execute();
+            $rows = $req->fetchAll(PDO::FETCH_OBJ);
+            foreach ($rows as $row) {
+                $kw[] = $row->s_label;
+            }
+
+            $kwline = implode(", ", $kw);
+
             $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country, co.s_reference 
                       from image_infofr inf, container co
                       where inf.i_foreigncode = :cocode
@@ -113,8 +128,11 @@ function getInfo($cocode, $rf_code)
             if (count($rows)>0){
                 $ret = '<table>
                         <tr>
-                            <td class="td">Objectname: '.$row->s_objectname.'</td>
-                        </tr>                        
+                            <td class="td">Objectname: '.$row->s_objectname.'</td>                            
+                        </tr>
+                        <tr>
+                            <td class="td">Mots clés: '.$kwline.'</td>                            
+                        </tr>                                                
                     </table>';
 
                 foreach ($rows as $row) {
@@ -138,7 +156,7 @@ function getInfo($cocode, $rf_code)
                         <tr>
                             <td class="td">City: '.$row->s_city.'</td>
                             <td class="td">Country: '.$row->s_country.'</td>
-                            <td class="td"></td>
+                            <td class="td">Mots clés: '.$kwline.'</td>
                         </tr>
                     </table>';
             }
