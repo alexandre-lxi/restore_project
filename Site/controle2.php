@@ -79,9 +79,10 @@ function getInfo($cocode, $rf_code)
 
         if ($cocode <> '') {
 
-            $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country, s_reference 
-                      from image_infofr
-                      where i_foreigncode = :cocode";
+            $sql = "select s_caption, s_captionwriter, s_headline, s_instruction, s_credits, s_objectname, s_city, s_country, co.s_reference 
+                      from image_infofr inf, container co
+                      where inf.i_foreigncode = :cocode
+                      and co.i_autocode = inf.i_foreigncode                      ";
 
             $req = $pdo->prepare($sql);
             $req->bindValue(':cocode', $cocode, PDO::PARAM_INT);
