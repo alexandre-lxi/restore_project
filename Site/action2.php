@@ -52,6 +52,12 @@ try{
         $reqRF = $pdo->prepare($sql);
         $reqRF->bindValue(':rfcode',$rfcode,PDO::PARAM_INT);
         $reqRF->execute();
+    }else{
+        $sql = "INSERT INTO restore_nf_file VALUES (:cocode, :who)";
+        $reqrf3 = $pdo->prepare($sql);
+        $reqrf3->bindValue(':cocode', $cocode, PDO::PARAM_INT);
+        $reqrf3->bindValue(':who', $name, PDO::PARAM_INT);
+        $reqrf3->execute();
     }
 
 
