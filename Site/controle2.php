@@ -470,7 +470,7 @@ try{
 
     $rows = $req->fetchAll(PDO::FETCH_OBJ);
 
-    $nb = 0;
+    $nb = count($rows);
     foreach ($rows as $rowCo) {
         $cocode = $rowCo->i_autocode;
         if (!file_exists('/home/ubuntu/restore/olddir/thumbdir/'.$cocode.'.jpg'))
@@ -524,6 +524,7 @@ if (isset($_GET['error'])){
     echo '<p style="color: red;">'.$_GET['error'].'</p>';
 }else{
     ?>
+    <p style="color: green;"><?php echo $nb; ?></p>
     <form action="action2.php" method="post">
         <input type="hidden" name="cocode" value="<?php echo $cocode; ?>">
 
