@@ -460,7 +460,7 @@ try{
             and co.i_autocode not in (select co_code from restore_nf_file)
             and b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.psd')               
+            and imf.s_fileformat in ('.psd', '.jpg','.png')               
             and co.i_autocode not in (37735, 37570, 37577, 37556, 29351, 29347)         
             order by cnt DESC , rand()           
             ";
@@ -494,8 +494,8 @@ try{
         //print_r('NB2:'.count($rowsRf3).'<br>');
 
         $rowsRf2 = findBySizes($rowCo->i_width, $rowCo->i_height, $rowCo->s_fileformat);
-        print_r('NB2:'.count($rowsRf2).'<br>');
-        print_r($rowCo->i_width. 'X' .$rowCo->i_height.' sf:'.str_replace('.','',$rowCo->s_fileformat) );
+        //print_r('NB2:'.count($rowsRf2).'<br>');
+        //print_r($rowCo->i_width. 'X' .$rowCo->i_height.' sf:'.str_replace('.','',$rowCo->s_fileformat) );
 
         if ((count($rowsRf) + count($rowsRf2)+ count($rowsRf3)+ count($rowsAn))>0 )
             break;
