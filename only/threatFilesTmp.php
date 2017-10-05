@@ -10,7 +10,7 @@
 
 //$dirsource    = '/home/ubuntu/tri/toRestore/';
 //$dirsource = '/home/ubuntu/new_onlyfrance/toRestore/toRestore/';
-$dirsource = '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/';
+$dirsource = '/home/ubuntu/new_onlyfrance/tmp/';
 //$dirsource    = '/home/ubuntu/new_onlyfrance/toAnalyse/';
 
 function getFileExtension($file, $withdot=false)
@@ -35,9 +35,9 @@ function testFile($file)
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
 
-    $dThumb = '/var/www/prod/onlyfrance/back/account/pictures/thumbdir/';
-    $dWeb = '/var/www/prod/onlyfrance/back/account/pictures/webdir/';
-    $dori = '/var/www/prod/onlyfrance/back/account/pictures/oridir/';
+    $dThumb = '/home/ubuntu/new_onlyfrance/pictures/thumbdir/';
+    $dWeb = '/home/ubuntu/new_onlyfrance/pictures/webdir/';
+    $dori = '/home/ubuntu/new_onlyfrance/pictures/oridir/';
 
     $timestart=microtime(true);
 
@@ -77,8 +77,7 @@ function testFile($file)
 
 
     if (file_exists($dWeb.$cocode.'.jpg') && file_exists($dThumb.$cocode.'.jpg')) {
-        rename($file, $dori.$fname);
-
+        shell_exec('mv '.$file.' '.$dori.$fname);
 
         echo "      Move: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
@@ -111,6 +110,12 @@ function testFile($file)
             }
 
             echo "      Insert tables: ".date("H:i:s", microtime(true)- $timestart)."\n";
+
+            shell_exec('wput '.$dWeb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/webdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dThumb.$cocode.'.jpg ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/thumbdir/'.$cocode.'.jpg');
+            shell_exec('wput '.$dori.$fname.' ftp://onlyfrance:azE53fl95ghHtrq34@prod.kwk.eu.com/oridir/'.$fname);
+
+            echo "      WPUT: ".date("H:i:s", microtime(true)- $timestart)."\n";
 
             try {
                 $sql = "update onlyfrance.container co
@@ -155,8 +160,6 @@ function _readDir($dirsource)
         } else {
             _readDir($dirsource.$file.'/');
         }
-
-        break;
     }
 }
 
