@@ -6,8 +6,6 @@
  * Time: 00:41
  */
 
-
-
 function _readDir($dirsource)
 {
     $VALEUR_hote = '127.0.0.1';
@@ -15,8 +13,6 @@ function _readDir($dirsource)
     $VALEUR_nom_bd = 'onlyfrance';
     $VALEUR_user = 'alaidin';
     $VALEUR_mot_de_passe = 'alaidin';
-
-    $cars = array("+",")","(","'","&","é","è","à" );
 
     try {
         $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
@@ -28,52 +24,16 @@ function _readDir($dirsource)
             if ($file == '..') continue;
 
             if (!is_dir($dirsource.$file)) {
-                $ref = $file;
-
-                foreach ($cars as $car) {
-                    if ($car = "è"){
-                        $ref = str_replace($car,"a_",$ref);
-                    }else{
-                        $ref = str_replace($car,"_",$ref);
-                    }
-                }
-
                 $sql = "select * from onlyfrance.container where s_reference=:sref";
                 $req = $pdo->prepare($sql);
-                $req->bindValue('sref', $ref, PDO::PARAM_STR);
+                $req->bindValue('sref', $file, PDO::PARAM_STR);
                 $req->execute();
 
                 $vals = $req->fetchAll(PDO::FETCH_OBJ);
 
                 if (count($vals)==1){
-                    echo $file."\n";
-                    echo $ref."\n";
-
                     $cocode = $vals[0]->i_autocode;
-                    rename($dirsource.$file, $dirsource.$cocode.'.jpg');
-                }elseif (count($vals)>1){
-                    echo $file."\n";
-                    echo $ref."\n";
-
-                    echo "   MULTI\n";
-
-                    $fsize = filesize($file);
-
-                    $sql = "select * from onlyfrance.container co, onlyfrance.image_file imf 
-                            where s_reference=:sref 
-                            and co.i_autocode = imf.i_foreigncode
-                            and imf.i_filesize = :fsize";
-                    $req = $pdo->prepare($sql);
-                    $req->bindValue(':sref', $ref, PDO::PARAM_STR);
-                    $req->bindValue(':fsize', $fsize, PDO::PARAM_INT);
-                    $req->execute();
-
-                    $vals = $req->fetchAll(PDO::FETCH_OBJ);
-                    if (count($vals)==1) {
-                        $cocode = $vals[0]->i_autocode;
-                        rename($dirsource.$file, $dirsource.$cocode.'.jpg');
-                    }
-
+                    rename($dirsource.$file, '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$cocode.'.jpg');
                 }
 
             } else {
@@ -87,4 +47,4 @@ function _readDir($dirsource)
     }
 }
 
-_readDir('/home/ubuntu/new_onlyfrance/tmp/');
+_readDir('/var/www/prod/onlyfrance/back/account/ftpupload/2_dir/ALEX_1er_dossier/');
