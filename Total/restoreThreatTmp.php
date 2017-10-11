@@ -542,9 +542,9 @@ try {
             file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
         }else{
             if (file_exists($newFile)){
-                ztrace($newFile."=>".$thumbFile."=>".$webFile);
 
                 if (!file_exists($oldthumbfile)){
+                    ztrace($newFile."=>".$thumbFile."=>".$webFile);
                     $param = array('newsize' => 600, 'quality' => 85, 'density' => '72x72');
                     $success = convertFile($newFile, $webFile, $param);        // create web image
                     $param = array('newsize' =>280, 'quality' => 85, 'density' => '72x72');
@@ -558,6 +558,7 @@ try {
                     $req->bindValue(':hasThumb', 4, PDO::PARAM_INT);
                     $req->execute();
                 }else{
+                    ztrace($newFile."=> No convert");
                     $sql = "insert into restore_ok values (:i_code, 3)";
                     $req = $pdo->prepare($sql);
                     $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
