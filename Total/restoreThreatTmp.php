@@ -541,7 +541,7 @@ try {
             //file_put_contents('/home/ubuntu/log.txt', $log, FILE_APPEND);
             file_put_contents('/var/www/projects/total-1410-refontedam/restoreDir/scrypt/log_restoreThreat.txt', $log, FILE_APPEND);
         }else{
-            if (file_exists($oldFile)){
+            if (file_exists($newFile)){
                 ztrace($newFile."=>".$thumbFile."=>".$webFile);
 
                 if (!file_exists($oldthumbfile)){
