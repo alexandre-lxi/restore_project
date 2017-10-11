@@ -532,9 +532,6 @@ try {
         $oldthumbfile =   '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/'.$cocode.'.jpg';
 
         echo $oldFile."\n";
-        echo $newFile."\n";
-        echo $thumbFile."\n";
-        echo $webFile."\n";
 
         if (!copy($oldFile, $newFile)) {
             $log = "ERROR COPY#".$oldFile."=>".$newFile."\n";
@@ -557,12 +554,16 @@ try {
                     $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
                     $req->bindValue(':hasThumb', 4, PDO::PARAM_INT);
                     $req->execute();
+
+                    unlink($oldFile);
                 }else{
                     ztrace($newFile."=> No convert");
                     $sql = "insert into restore_ok values (:i_code, 3)";
                     $req = $pdo->prepare($sql);
                     $req->bindValue(':i_code', $cocode, PDO::PARAM_INT);
                     $req->execute();
+
+                    unlink($oldFile);
                 }
             }
         }

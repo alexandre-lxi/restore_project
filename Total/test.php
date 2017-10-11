@@ -6,45 +6,38 @@
  * Time: 13:34
  */
 
-
-$VALEUR_hote = '127.0.0.1';
-$VALEUR_port = '3306';
-$VALEUR_nom_bd = 'total-refontedam';
-$VALEUR_user = 'alaidin';
-$VALEUR_mot_de_passe = 'alaidin';
-
-$ffmpeg_path = 'ffmpeg'; //or: /usr/bin/ffmpeg , or /usr/local/bin/ffmpeg - depends on your installation (type which ffmpeg into a console to find the install path)
-$vid = 'PATH/TO/VIDEO'; //Replace here!
-$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toAnalyse/';
-
-try {
+$dirsource = '/var/www/projects/total-1410-refontedam/restoreDir/toImport/toRestore/';
+$dest = '/var/www/projects/total-1410-refontedam/back/account/pictures/';
 
 
-    $pdo = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe);
+    $files = scandir($dirsource);
 
-    $sql = "SELECT count(*)
-      FROM restore_files
-      WHERE s_format in ('psd')                 
-      and width = 0
-      ";
+    foreach ($files as $file) {
+        if ($file == '.') continue;
+        if ($file == '..') continue;
 
-    $req = $pdo->prepare($sql);
-    $req->execute();
+        $fname = basename($file);
+        $cocode = explode('.', $fname);
+        $ext = $cocode[1];
+        $cocode = $cocode[0];
 
-    $rows = $req->fetchAll(PDO::FETCH_OBJ);
+        $oldFile = $dirsource.$file;
+        $newFile = $dest.'oridir/'.$file;
+        $thumbFile = $dest.'thumbdir/'.$cocode.'.jpg';
+        $webFile = $dest.'webdir/'.$cocode.'.jpg';
 
-    $nb = 0;
 
-    foreach ($rows as $row) {
-        $oldFile = str_replace('/home/ubuntu/restore/toAnalyse/', $dirsource, $row->fname);
-        $newFile = '/var/www/tmp/toco/'.basename($oldFile);
+        $nbu = 0;
+        $nbk = 0;
 
-        copy($oldFile, $newFile);
+        if (file_exists($newFile)){
+            echo "KNOWN ".$fname."\n";
+            $nbk++;
+        }else{
+            echo "UNKNOWN ".$fname."\n";
+            $nbu++;
+        }
 
     }
 
-    } catch (PDOException $Exception) {
-    // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
-    // String.
-    echo $Exception->getMessage().' : '.$Exception->getCode();
-}
+
