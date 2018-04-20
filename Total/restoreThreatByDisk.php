@@ -12,8 +12,8 @@ $VALEUR_nom_bd = 'total-refontedam';
 $VALEUR_user = 'alaidin';
 $VALEUR_mot_de_passe = 'alaidin';
 
-$dirsource = '/media/alex/MEDIATEC-DISK2-3T/*/';
-$dest = '/home/alex/Documents/LXI/Clients/KWK/support/total/tmp/';
+$dirsource = '/media/sf_partage_ub/SUPPORTCOM/*/';
+$dest = '/media/sf_partage_ub/total/';
 
 function glob_recursive($directory, &$directories = array()) {
     foreach(glob($directory, GLOB_ONLYDIR | GLOB_NOSORT) as $folder) {
@@ -37,13 +37,15 @@ try {
 
     $sql = "select co.i_autocode, imf.i_width, imf.i_height, co.s_reference, imf.s_fileformat 
             from container co, image_file imf
-            where co.i_autocode not in (select co_code from restore_file_co where is_restored=1)
-            and co.i_autocode not in (SELECT co_code from restore_file_co2)
-            and co.i_autocode not in (select co_code from restore_file_co3)
-            and co.i_autocode not in (select co_code from restore_nf_file)
-            and b_isintrash =0            
+            where b_isintrash =0            
             and imf.i_foreigncode = co.i_autocode
-            and imf.s_fileformat in ('.psd', '.jpg','.png')
+            and co.i_autocode in (
+  select i_containercode
+    from container_topic2 c2
+    inner JOIN topic2 t ON c2.i_foreigncode = t.i_autocode    
+    where i_leftidx>=8629 and i_rightidx <=8700
+)
+order by 1 desc
             ";
 
     $req = $pdo->prepare($sql);
@@ -56,13 +58,28 @@ try {
     glob_recursive($dirsource, $directories);
 
     foreach ($rows as $row) {
+        $ff = "";
+        $fm = 0;
 
         echo "REF : ".$dirsource.$row->s_reference."\n";
         $files = findFiles($directories, $row->s_reference);
 
         if (count($files) == 1){
+            echo "COPY"."\n";
             $file = $files[0];
-            copy($file, $dest.$row->i_autocode.$row->s_fileformat);
+            rename($file, $dest.$row->i_autocode.$row->s_fileformat);
+        }elseif (count($files) > 1){
+            foreach ($files as $file) {
+                if (filemtime($file) > $fm){
+                    $fm = filemtime($file) ;
+                    $ff = $file;
+                }
+            }
+
+            echo "COPY NN"."\n";
+            rename($file, $dest.$row->i_autocode.$row->s_fileformat);
+        }else{
+            echo "NOT FOUND"."\n";
         }
 
     }
