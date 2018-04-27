@@ -35,7 +35,8 @@ function _readDir($dirsource)
                     $cocode = $vals[0]->i_autocode;
                     rename($dirsource.$file, '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$cocode.'.jpg');
                 }elseif(count($vals)>1){
-                    $sql = "select * from onlyfrance.container where s_reference=:sref and i_autocode not in( select co_code from restore_file_co)";
+                    $sql = "select * from onlyfrance.container where s_reference=:sref and i_autocode not in( select co_code from 
+restore_file_co) and b_isonline = 0";
                     $req = $pdo->prepare($sql);
                     $req->bindValue('sref', $file, PDO::PARAM_STR);
                     $req->execute();
