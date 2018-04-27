@@ -53,7 +53,7 @@ restore_file_co) and b_isonline = 0";
                         $file = str_replace('ONLY_','', $file);
                         rename(
                             $dirsource.$file,
-                            '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$file;
+                            '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$file
                         );
                     }
                 }
