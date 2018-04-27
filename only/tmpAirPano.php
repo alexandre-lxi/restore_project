@@ -34,6 +34,21 @@ function _readDir($dirsource)
                 if (count($vals)==1){
                     $cocode = $vals[0]->i_autocode;
                     rename($dirsource.$file, '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$cocode.'.jpg');
+                }elseif(count($vals)>1){
+                    $sql = "select * from onlyfrance.container where s_reference=:sref and i_autocode not in( select co_code from restore_file_co)";
+                    $req = $pdo->prepare($sql);
+                    $req->bindValue('sref', $file, PDO::PARAM_STR);
+                    $req->execute();
+
+                    $vals = $req->fetchAll(PDO::FETCH_OBJ);
+
+                    if (count($vals)==1) {
+                        $cocode = $vals[0]->i_autocode;
+                        rename(
+                            $dirsource.$file,
+                            '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$cocode.'.jpg'
+                        );
+                    }
                 }
 
             } else {
