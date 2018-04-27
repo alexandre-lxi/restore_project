@@ -47,14 +47,14 @@ restore_file_co) and b_isonline = 0";
                         $cocode = $vals[0]->i_autocode;
                         rename(
                             $dirsource.$file,
-                            '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$cocode.'.jpg'
+                            '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/oridir/'.$cocode.'.jpg'
                         );
                     }
                 }elseif(strpos($file, 'ONLY_0') !== false){
                     $nfile = str_replace('ONLY_0','', $file);
                     rename(
                         $dirsource.$file,
-                        '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/'.$nfile
+                        '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/oridir/'.$nfile
                     );
                 }
 
