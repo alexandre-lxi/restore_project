@@ -10,7 +10,7 @@ $dirsource = '/var/www/prod/onlyfrance/back/account/pictures/tmp/toRestore/oridi
 
 function testFile($file)
 {
-    $VALEUR_hote = 'prod.kwk.eu.com';
+    $VALEUR_hote = '127.0.0.1';
     $VALEUR_port = '3306';
     $VALEUR_nom_bd = 'onlyfrance';
     $VALEUR_user = 'alaidin';
