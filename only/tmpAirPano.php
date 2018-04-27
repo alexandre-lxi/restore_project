@@ -47,4 +47,4 @@ function _readDir($dirsource)
     }
 }
 
-_readDir('/var/www/prod/onlyfrance/back/account/ftpupload/2_dir/ALEX_2e_dossier/');
+_readDir('/var/www/prod/onlyfrance/back/account/ftpupload/2_dir/ALEX_Nouveau/');
