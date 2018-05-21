@@ -19,8 +19,7 @@ function threat()
                 from topic0                
                 where i_leftidx >= 9788
                 and i_level >=2
-                order by i_leftidx
-                limit 30";
+                order by i_leftidx";
 
 
         $rqt = $pdo->prepare($sql);
