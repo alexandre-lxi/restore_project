@@ -78,7 +78,11 @@ function threat()
 					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $thumbdir.$id.'.jpg');
 				}elseif($fileext == 'pdf'){
 					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$webdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
-					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$thumbdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$thumbdir.$id.'.jpg'."\" -ratio -resize 280 280  \"".$newfname."\"";
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
 				}
 				else{
 						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
