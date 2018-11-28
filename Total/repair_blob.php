@@ -18,8 +18,9 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where  co.i_autocode = 70593
-				limit 1";
+				where s_reference = 'blob'
+				and dt_created > '2018-10-15'
+				limit 2";
 
 
 		$rqt = $pdo->prepare($sql);
@@ -51,11 +52,11 @@ function threat()
 			}
 
 			if (file_exists($newfname)){
-				print("\t".'Convert file: '.$blobfname."\n");
+				print("\t".'Convert file: '.$newfname."\n");
 				exec('convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$ref);
 				exec('convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$ref);
 
-				print("\t".'Update Database file: '.$blobfname."\n");
+				print("\t".'Update Database file: '.$ref."\n");
 				$sql = "update container set s_reference = :ref where i_autocode = :code";
 
 				$ins = $pdo->prepare($sql);
