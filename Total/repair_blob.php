@@ -20,9 +20,8 @@ function threat()
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
 				where s_reference = 'blob'
 				and dt_created > '2018-10-15'
-				and co.i_autocode = 70591
 				order by 1 desc
-				limit 2";
+				limit 1";
 
 
 		$rqt = $pdo->prepare($sql);
