@@ -80,11 +80,11 @@ function threat()
 					$convert = "sudo /var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
-					copy($tmpdir.$id.'.jpg', $webdir.$id.'.jpg');
+					rename($tmpdir.$id.'.jpg', $webdir.$id.'.jpg');
 					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 280 280  \"".$newfname."\"";
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
-					copy($tmpdir.$id.'.jpg', $thumbdir.$id.'.jpg');
+					rename($tmpdir.$id.'.jpg', $thumbdir.$id.'.jpg');
 				}
 				else{
 						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
