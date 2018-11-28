@@ -45,7 +45,7 @@ function threat()
 
 			if (file_exists($blobfname)){
 				print("\t".'Move file: '.$blobfname."\n");
-//				exec('mv '.$blobfname.' '.$newfname);
+				exec('mv '.$blobfname.' '.$newfname);
 
 				if (file_exists($newfname)){
 					print("\t".'Update Database file: '.$blobfname."\n");
