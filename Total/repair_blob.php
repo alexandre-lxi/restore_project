@@ -70,15 +70,20 @@ function threat()
 					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
-				}else{
-					$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
+				}elseif($fileext == 'zip') {
+					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $webdir.$id.'.jpg');
+					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $thumbdir.$id.'.jpg');
+				}
+				else{
+						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
+						print("\t\t".'Convert : '.$convert."\n");
+						exec($convert);
 
 
-					$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
+						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
+						print("\t\t".'Convert : '.$convert."\n");
+						exec($convert);
+					}
 				}
 
 
