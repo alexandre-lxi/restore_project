@@ -29,6 +29,8 @@ function threat()
 
 		$conts = $rqt->fetchAll(PDO::FETCH_OBJ);
 		$oridir = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
+		$webdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/webdir/';
+		$thumbdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/';
 
 		foreach ($conts as $cont) {
 			print($cont->id."\n" );
@@ -46,30 +48,32 @@ function threat()
 			if (file_exists($blobfname)){
 				print("\t".'Move file: '.$blobfname."\n");
 				exec('mv '.$blobfname.' '.$newfname);
-
-				if (file_exists($newfname)){
-					print("\t".'Update Database file: '.$blobfname."\n");
-					$sql = "update container set s_reference = :ref where i_autocode = :code";
-
-					$ins = $pdo->prepare($sql);
-					$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-					$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
-					$ins->execute();
-
-					$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
-
-					$ins = $pdo->prepare($sql);
-					$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-					$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
-					$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
-					$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
-					$ins->execute();
-				}
-
 			}else{
 				print("\t".'NO FILE TO MOVE'."\n");
 			}
 
+			if (file_exists($newfname)){
+				print("\t".'Convert file: '.$blobfname."\n");
+				exec('convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$ref);
+				exec('convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$ref);
+
+				print("\t".'Update Database file: '.$blobfname."\n");
+				$sql = "update container set s_reference = :ref where i_autocode = :code";
+
+				$ins = $pdo->prepare($sql);
+				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+				$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
+				$ins->execute();
+
+				$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
+
+				$ins = $pdo->prepare($sql);
+				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+				$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
+				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
+				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
+				$ins->execute();
+			}
 
 			//            print_r($pdo->errorInfo());
 		}
