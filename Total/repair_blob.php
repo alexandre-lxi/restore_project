@@ -62,20 +62,20 @@ function threat()
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
 
-					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 640x640 -quality 95 '.$webdir.$ref;
+					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
 
-					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$ref;
+					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
 				}else{
-					$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$ref;
+					$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
 
 
-					$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$ref;
+					$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 					print("\t\t".'Convert : '.$convert."\n");
 					exec($convert);
 				}
