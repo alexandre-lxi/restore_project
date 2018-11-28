@@ -18,9 +18,7 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where s_reference = 'blob'
-				and dt_created > '2018-10-15'
-				and co.i_autocode = 70593
+				where  co.i_autocode = 70593
 				limit 1";
 
 
