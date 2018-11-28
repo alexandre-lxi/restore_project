@@ -21,7 +21,7 @@ function threat()
 				where s_reference = 'blob'
 				and dt_created > '2018-10-15'
 				order by 1 desc
-				limit 2";
+				limit 1";
 
 
 		$rqt = $pdo->prepare($sql);
@@ -31,6 +31,7 @@ function threat()
 		$oridir = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
 		$webdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/webdir/';
 		$thumbdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/thumbdir/';
+		$tmpdir = '/var/www/projects/total-1410-refontedam/back/account/pictures/tmp/';
 
 		foreach ($conts as $cont) {
 			print($cont->id."\n" );
@@ -54,8 +55,31 @@ function threat()
 
 			if (file_exists($newfname)){
 				print("\t".'Convert file: '.$newfname."\n");
-				exec('convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$ref);
-				exec('convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$ref);
+
+				if ($fileext = 'mp4'){
+
+					$convert 	= "ffmpeg -i \"".$newfname."\" -ss 10 -vframes 1 -s 1920x1080 \"".$tmpdir.$id.'.jpg'."\"";
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+
+					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 640x640 -quality 95 '.$webdir.$ref;
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+
+					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$ref;
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+				}else{
+					$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$ref;
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+
+
+					$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$ref;
+					print("\t\t".'Convert : '.$convert."\n");
+					exec($convert);
+				}
+
 
 				print("\t".'Update Database file: '.$ref."\n");
 				$sql = "update container set s_reference = :ref where i_autocode = :code";
