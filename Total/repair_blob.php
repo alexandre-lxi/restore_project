@@ -73,6 +73,10 @@ function threat()
 					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $webdir.$id.'.jpg');
 					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $thumbdir.$id.'.jpg');
 				}
+				elseif($fileext == 'pptx') {
+					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $webdir.$id.'.jpg');
+					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $thumbdir.$id.'.jpg');
+				}
 				else{
 						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
 						print("\t\t".'Convert : '.$convert."\n");
