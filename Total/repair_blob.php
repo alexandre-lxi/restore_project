@@ -2,141 +2,75 @@
 
 function threat()
 {
-    $VALEUR_hote = '127.0.0.1';
-    $VALEUR_port = '3306';
-    $VALEUR_nom_bd = 'total-refontedam';
-    $VALEUR_user = 'alaidin';
-    $VALEUR_mot_de_passe = 'alaidin';
+	$VALEUR_hote = '127.0.0.1';
+	$VALEUR_port = '3306';
+	$VALEUR_nom_bd = 'total-refontedam';
+	$VALEUR_user = 'alaidin';
+	$VALEUR_mot_de_passe = 'alaidin';
 
-    try {
-        $pdo = new PDO(
-            'mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd,
-            $VALEUR_user,
-            $VALEUR_mot_de_passe
-        );
+	try {
+		$pdo = new PDO(
+			'mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd,
+			$VALEUR_user,
+			$VALEUR_mot_de_passe
+		);
 
-        $sql = "select *
-                from topic0                
-                where i_leftidx >= 9788
-                and i_level >=2
-                order by i_leftidx";
-
-
-        $rqt = $pdo->prepare($sql);
-        $rqt->execute();
-
-        $topics = $rqt->fetchAll(PDO::FETCH_OBJ);
-
-        $lft = 9788;
-        $rgt = $lft+1;
-        $lvl = 0;
-
-        $tabs = array();
+		$sql = "select co.i_autocode id, co.*, cq.*
+				from container  co
+          join conversion_queue cq on cq.i_containercode = co.i_autocode 
+				where s_reference = 'blob'
+				and dt_created > '2018-10-15'";
 
 
-        foreach ($topics as $topic) {
-            if ($topic->i_level > $lvl){
-                $lvl = $topic->i_level;
+		$rqt = $pdo->prepare($sql);
+		$rqt->execute();
 
-                if (array_key_exists($lvl-1, $tabs)){
-                    $lft = $tabs[$lvl-1]['rgt'];
-                    $rgt = $lft +1;
-                }
+		$conts = $rqt->fetchAll(PDO::FETCH_OBJ);
+		$oridir = '/var/www/projects/total-1410-refontedam/back/account/pictures/oridir/';
 
-                $tabs[$lvl] = array(
-                    'id'=> $topic->i_autocode,
-                    'name'=>$topic->s_label,
-                    'lft'=>$lft,
-                    'rgt'=>$rgt
-                );
+		foreach ($conts as $cont) {
+			print($cont->id."\n" );
+			$id = $cont->id;
+			$fileext = pathinfo($cont->s_filetoprocess, PATHINFO_EXTENSION);
+			$blobfname = $oridir.$id.'.blob';
+			$newfname =  $oridir.$id.'.'.$fileext;
 
-                for ($i = $lvl-1; $i >=2; $i--){
-                    $tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
+			print("\t".'Fileext: '.$fileext."\n");
+			print("\t".'Blob: '.$blobfname."\n");
+			print("\t".'New: '.$newfname."\n");
 
-                    $sql = "update topic0_restore set i_rightidx = :rgt
-                    where i_autocode = :i_autocode";
-                    $upd = $pdo->prepare($sql);
-                    $upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
-                    $upd->bindValue(':rgt', $tabs[$i]['rgt'], PDO::PARAM_INT);
-                    $upd->execute();
-                }
-            }elseif($topic->i_level == $lvl){
-                $lvl = $topic->i_level;
-
-                $lft = $tabs[$lvl]['rgt'] +1;
-                $rgt = $lft +1;
+			if (file_exists($blobfname)){
+				print("\t".'Move file: '.$blobfname."\n");
+				//exec('mv '.$blobfname.' '.$newfname);
+			}else{
+				print("\t".'NO FILE TO MOVE'."\n");
+			}
 
 
-                $tabs[$lvl] = array(
-                    'id'=> $topic->i_autocode,
-                    'name'=>$topic->s_label,
-                    'lft'=>$lft,
-                    'rgt'=>$rgt
-                );
-
-                for ($i = $lvl-1; $i >=2; $i--){
-                    $tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
-
-                    $sql = "update topic0_restore set i_rightidx = :rgt
-                    where i_autocode = :i_autocode";
-                    $upd = $pdo->prepare($sql);
-                    $upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
-                    $upd->bindValue(':rgt', $tabs[$i]['rgt'], PDO::PARAM_INT);
-                    $upd->execute();
-                }
-            }else{
-                $lvl = $topic->i_level;
-                unset($tabs[$lvl+1]);
+			//            exec('mv ')
 
 
-                $lft = $tabs[$lvl]['rgt'] +1;
-                $rgt = $lft +1;
+			//            $sql = "insert into topic0_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
+			//                VALUES (:i_autocode, :i_level, :i_leftidx, :i_rightidx, :s_label)";
+			//
+			//            $ins = $pdo->prepare($sql);
+			//            $ins->bindValue(':i_autocode', $topic->i_autocode, PDO::PARAM_INT);
+			//            $ins->bindValue(':i_level', $topic->i_level, PDO::PARAM_INT);
+			//            $ins->bindValue(':i_leftidx', $lft, PDO::PARAM_INT);
+			//            $ins->bindValue(':i_rightidx', $rgt, PDO::PARAM_INT);
+			//            $ins->bindValue(':s_label', $topic->s_label, PDO::PARAM_STR);
+			//            $ins->execute();
+
+			//            print_r($pdo->errorInfo());
+		}
 
 
-                $tabs[$lvl] = array(
-                    'id'=> $topic->i_autocode,
-                    'name'=>$topic->s_label,
-                    'lft'=>$lft,
-                    'rgt'=>$rgt
-                );
-
-                for ($i = $lvl-1; $i >=2; $i--){
-                    $tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
-
-                    $sql = "update topic0_restore set i_rightidx = :rgt
-                    where i_autocode = :i_autocode";
-                    $upd = $pdo->prepare($sql);
-                    $upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
-                    $upd->bindValue(':rgt', $tabs[$i]['rgt'], PDO::PARAM_INT);
-                    $upd->execute();
-                }
-            }
-
-//            print_r($tabs);
-            print( str_repeat("\t", $topic->i_level-2 )."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
-
-
-            $sql = "insert into topic0_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
-                VALUES (:i_autocode, :i_level, :i_leftidx, :i_rightidx, :s_label)";
-
-            $ins = $pdo->prepare($sql);
-            $ins->bindValue(':i_autocode', $topic->i_autocode, PDO::PARAM_INT);
-            $ins->bindValue(':i_level', $topic->i_level, PDO::PARAM_INT);
-            $ins->bindValue(':i_leftidx', $lft, PDO::PARAM_INT);
-            $ins->bindValue(':i_rightidx', $rgt, PDO::PARAM_INT);
-            $ins->bindValue(':s_label', $topic->s_label, PDO::PARAM_STR);
-            $ins->execute();
-
-//            print_r($pdo->errorInfo());
-        }
-
-
-    } catch (PDOException $Exception) {
-        // PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
-        // String.
-        echo $Exception->getMessage().' : '.$Exception->getCode();
-        die;
-    }
+	} catch (PDOException $Exception) {
+		// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
+		// String.
+		echo $Exception->getMessage().' : '.$Exception->getCode();
+		die;
+	}
 }
 
 threat();
