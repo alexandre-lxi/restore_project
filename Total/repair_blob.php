@@ -18,10 +18,7 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode = 70499
-				or co.i_autocode between 70486 and 70489
-				or co.i_autocode between 70480 and 70481
-				or co.i_autocode in (70475, 70473, 70472, 70470, 70468, 70465, 70464, 70462, 70463)
+				where co.i_autocode in (70595, 70591, 70592)
 				
 				order by 1 desc
 				";
