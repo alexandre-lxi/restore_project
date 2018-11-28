@@ -19,7 +19,8 @@ function threat()
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
 				where s_reference = 'blob'
-				and dt_created > '2018-10-15'";
+				and dt_created > '2018-10-15'
+				limit 1";
 
 
 		$rqt = $pdo->prepare($sql);
@@ -34,32 +35,40 @@ function threat()
 			$fileext = pathinfo($cont->s_filetoprocess, PATHINFO_EXTENSION);
 			$blobfname = $oridir.$id.'.blob';
 			$newfname =  $oridir.$id.'.'.$fileext;
+			$ref = $id.'.'.$fileext;
 
-			print("\t".'Fileext: '.$fileext."\n");
-			print("\t".'Blob: '.$blobfname."\n");
-			print("\t".'New: '.$newfname."\n");
+			print("\t\t".'Fileext: '.$fileext."\n");
+			print("\t\t".'Blob: '.$blobfname."\n");
+			print("\t\t".'New: '.$newfname."\n");
+			print("\t\t".'Ref: '.$ref."\n");
 
 			if (file_exists($blobfname)){
 				print("\t".'Move file: '.$blobfname."\n");
-				//exec('mv '.$blobfname.' '.$newfname);
+//				exec('mv '.$blobfname.' '.$newfname);
+
+				if (file_exists($newfname)){
+					print("\t".'Update Database file: '.$blobfname."\n");
+					$sql = "update container set s_reference = :ref where i_autocode = :code";
+
+					$ins = $pdo->prepare($sql);
+					$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+					$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
+					$ins->execute();
+
+					$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
+
+					$ins = $pdo->prepare($sql);
+					$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+					$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
+					$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
+					$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
+					$ins->execute();
+				}
+
 			}else{
 				print("\t".'NO FILE TO MOVE'."\n");
 			}
 
-
-			//            exec('mv ')
-
-
-			//            $sql = "insert into topic0_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
-			//                VALUES (:i_autocode, :i_level, :i_leftidx, :i_rightidx, :s_label)";
-			//
-			//            $ins = $pdo->prepare($sql);
-			//            $ins->bindValue(':i_autocode', $topic->i_autocode, PDO::PARAM_INT);
-			//            $ins->bindValue(':i_level', $topic->i_level, PDO::PARAM_INT);
-			//            $ins->bindValue(':i_leftidx', $lft, PDO::PARAM_INT);
-			//            $ins->bindValue(':i_rightidx', $rgt, PDO::PARAM_INT);
-			//            $ins->bindValue(':s_label', $topic->s_label, PDO::PARAM_STR);
-			//            $ins->execute();
 
 			//            print_r($pdo->errorInfo());
 		}
