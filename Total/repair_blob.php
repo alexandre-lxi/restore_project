@@ -18,9 +18,10 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode = 70595
+				where s_reference = 'blob'
+				and dt_created > '2018-10-15'
 				order by 1 desc
-				limit 1";
+				limit 2";
 
 
 		$rqt = $pdo->prepare($sql);
