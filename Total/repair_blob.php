@@ -20,6 +20,7 @@ function threat()
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
 				where s_reference = 'blob'
 				and dt_created > '2018-10-15'
+				and i_autocode = 70593
 				limit 1";
 
 
