@@ -84,7 +84,7 @@ function threat()
 						print("\t\t".'Convert : '.$convert."\n");
 						exec($convert);
 					}
-				}
+
 
 
 				print("\t".'Update Database file: '.$ref."\n");
