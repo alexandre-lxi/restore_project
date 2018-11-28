@@ -18,7 +18,7 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode in (70596, 70595)
+				where co.i_autocode = 70595
 				order by 1 desc
 				limit 1";
 
