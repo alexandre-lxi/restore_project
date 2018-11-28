@@ -56,7 +56,7 @@ function threat()
 			if (file_exists($newfname)){
 				print("\t".'Convert file: '.$newfname."\n");
 
-				if ($fileext = 'mp4'){
+				if ($fileext == 'mp4'){
 
 					$convert 	= "ffmpeg -i \"".$newfname."\" -ss 10 -vframes 1 -s 1920x1080 \"".$tmpdir.$id.'.jpg'."\"";
 					print("\t\t".'Convert : '.$convert."\n");
