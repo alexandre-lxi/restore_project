@@ -118,7 +118,7 @@ function threat()
 					$ipt->setImg($newfname);
 					$lst = $ipt->readIPTC();
 
-					var_dump($lst);
+					$title = $lst['ip_name'];
 				}
 
 				if ($title !== false){
