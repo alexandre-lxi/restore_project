@@ -72,7 +72,11 @@ function threat()
 			if (file_exists($newfname)){
 				print("\t".'Convert file: '.$newfname."\n");
 
-				insertIptc($newfname, $cont->id);
+
+				$stringedPDF = file_get_contents($newfname, true);
+
+				preg_match('/(?<=Title )\S(?:(?<=\().+?(?=\))|(?<=\[).+?(?=\]))./', $stringedPDF, $title);
+				echo $all = $title[0];
 
 //				if ($fileext == 'mp4'){
 //
