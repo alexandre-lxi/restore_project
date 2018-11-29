@@ -76,7 +76,7 @@ function threat()
 				$stringedPDF = file_get_contents($newfname, true);
 
 				preg_match('/(?<=Title )\S(?:(?<=\().+?(?=\))|(?<=\[).+?(?=\]))./', $stringedPDF, $title);
-				echo $all = $title[0];
+				print_r($title);
 
 //				if ($fileext == 'mp4'){
 //
