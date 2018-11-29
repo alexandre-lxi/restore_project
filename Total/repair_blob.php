@@ -105,19 +105,21 @@ function threat()
 
 				}
 				else{
-						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
-						print("\t\t".'Convert : '.$convert."\n");
-						exec($convert);
+//						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
+//						print("\t\t".'Convert : '.$convert."\n");
+//						exec($convert);
+//
+//
+//						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
+//						print("\t\t".'Convert : '.$convert."\n");
+//						exec($convert);
 
+					$ipt  = new iptc();
+					$ipt->setImg($newfname);
+					$lst = $ipt->readIPTC();
 
-						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
-						print("\t\t".'Convert : '.$convert."\n");
-						exec($convert);
-
-					$getID3 = new getID3();
-					$fileinfo = $getID3->analyze($newfname);
-					var_dump($fileinfo);
-					}
+					var_dump($lst);
+				}
 
 				if ($title !== false){
 					print("\t".'Update Database file: '.$ref."\n");
