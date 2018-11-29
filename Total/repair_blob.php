@@ -21,11 +21,13 @@ function threat()
 		);
 
 		$sql = "select co.i_autocode id, co.*, cq.*
-				from container  co
-          join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode in (70423, 70466)
-				
-				order by 1 desc
+		from container co
+				join image_infofr ifr on ifr.i_foreigncode = co.i_autocode
+	join conversion_queue cq on cq.i_containercode = co.i_autocode
+where ifr.s_objectname = 'blob'
+and co.dt_created > '2018-10-01'
+and co.s_reference <> 'blob'
+and co.i_autocode = 70423
 				";
 
 
@@ -78,11 +80,7 @@ function threat()
 //					print("\t\t".'Convert : '.$convert."\n");
 //					exec($convert);
 
-
-					$getID3 = new getID3();
-					$fileinfo = $getID3->analyze($newfname);
-
-					var_dump($fileinfo);
+					$title = $ref;
 
 
 				}elseif($fileext == 'zip') {
@@ -119,12 +117,9 @@ function threat()
 //						print("\t\t".'Convert : '.$convert."\n");
 //						exec($convert);
 
-					$ipt = new iptc();
-					$ipt->setImg($newfname);
-
-					$ipts  = $ipt->readIPTC();
-
-					print_r($ipts);
+					$getID3 = new getID3();
+					$fileinfo = $getID3->analyze($newfname);
+					var_dump($fileinfo);
 					}
 //
 //
