@@ -27,7 +27,7 @@ function threat()
 where ifr.s_objectname = 'blob'
 and co.dt_created > '2018-10-01'
 and co.s_reference <> 'blob'
-and co.i_autocode = 70423
+and co.i_autocode <> 70423
 				";
 
 
