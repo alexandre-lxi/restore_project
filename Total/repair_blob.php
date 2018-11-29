@@ -75,6 +75,8 @@ function threat()
 
 				$stringedPDF = file_get_contents($newfname, true);
 
+				var_dump($stringedPDF);
+
 				preg_match('/(?<=Title )\S(?:(?<=\().+?(?=\))|(?<=\[).+?(?=\]))./', $stringedPDF, $title);
 				print_r($title);
 
