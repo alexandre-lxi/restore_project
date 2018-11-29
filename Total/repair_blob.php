@@ -1,6 +1,7 @@
 <?php
 
 include 'PDFInfo.php';
+include 'iptc.php';
 
 function threat()
 {
@@ -20,7 +21,7 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode in (70461)
+				where co.i_autocode in (70481)
 				
 				order by 1 desc
 				";
@@ -42,6 +43,7 @@ function threat()
 			$blobfname = $oridir.$id.'.blob';
 			$newfname =  $oridir.$id.'.'.$fileext;
 			$ref = $id.'.'.$fileext;
+			$title = false;
 
 			print("\t\t".'Fileext: '.$fileext."\n");
 			print("\t\t".'Blob: '.$blobfname."\n");
@@ -103,33 +105,44 @@ function threat()
 //						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 //						print("\t\t".'Convert : '.$convert."\n");
 //						exec($convert);
+
+					$ipt = new iptc();
+					$ipt->setImg($newfname);
+
+					$ipts  = $ipt->readIPTC();
+
+					print_r($ipts);
 					}
 //
 //
 //
 				print("\t".'Update Database file: '.$ref."\n");
-//				$sql = "update container set s_reference = :ref where i_autocode = :code";
-//
-//				$ins = $pdo->prepare($sql);
-//				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-//				$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
-//				$ins->execute();
-//
-//				$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
-//
-//				$ins = $pdo->prepare($sql);
-//				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-//				$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
-//				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
-//				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
-//				$ins->execute();
-
-				$sql = "update image_infofr set s_objectname = :title where i_foreigncode = :code";
+				$sql = "update container set s_reference = :ref where i_autocode = :code";
 
 				$ins = $pdo->prepare($sql);
 				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-				$ins->bindValue(':title', $title, PDO::PARAM_STR);
+				$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
 				$ins->execute();
+
+				$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
+
+				$ins = $pdo->prepare($sql);
+				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+				$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
+				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
+				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
+				$ins->execute();
+
+
+				if ($title !== false){
+					$sql = "update image_infofr set s_objectname = :title where i_foreigncode = :code";
+
+					$ins = $pdo->prepare($sql);
+					$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+					$ins->bindValue(':title', $title, PDO::PARAM_STR);
+					$ins->execute();
+				}
+
 
 			}
 
