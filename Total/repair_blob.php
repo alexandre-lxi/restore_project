@@ -59,13 +59,9 @@ function threat()
 				print("\t".'Convert file: '.$newfname."\n");
 
 
-				$pdf = new PDFInfo($newfname);
 
-				var_dump($pdf);
+				if ($fileext == 'mp4'){
 
-
-//				if ($fileext == 'mp4'){
-//
 //					$convert 	= "ffmpeg -i \"".$newfname."\" -ss 10 -vframes 1 -s 1920x1080 \"".$tmpdir.$id.'.jpg'."\"";
 //					print("\t\t".'Convert : '.$convert."\n");
 //					exec($convert);
@@ -77,14 +73,14 @@ function threat()
 //					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 //					print("\t\t".'Convert : '.$convert."\n");
 //					exec($convert);
-//				}elseif($fileext == 'zip') {
+				}elseif($fileext == 'zip') {
 //					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $webdir.$id.'.jpg');
 //					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $thumbdir.$id.'.jpg');
-//				}
-//				elseif($fileext == 'pptx') {
+				}
+				elseif($fileext == 'pptx') {
 //					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $webdir.$id.'.jpg');
 //					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $thumbdir.$id.'.jpg');
-//				}elseif($fileext == 'pdf'){
+				}elseif($fileext == 'pdf'){
 //					$convert = "sudo /var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
 //					print("\t\t".'Convert : '.$convert."\n");
 //					exec($convert);
@@ -93,8 +89,12 @@ function threat()
 //					print("\t\t".'Convert : '.$convert."\n");
 //					exec($convert);
 //					rename($tmpdir.$id.'.jpg', $thumbdir.$id.'.jpg');
-//				}
-//				else{
+
+					$pdf = new PDFInfo($newfname);
+					$title = $pdf->title;
+
+				}
+				else{
 //						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
 //						print("\t\t".'Convert : '.$convert."\n");
 //						exec($convert);
@@ -103,11 +103,11 @@ function threat()
 //						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
 //						print("\t\t".'Convert : '.$convert."\n");
 //						exec($convert);
-//					}
+					}
 //
 //
 //
-//				print("\t".'Update Database file: '.$ref."\n");
+				print("\t".'Update Database file: '.$ref."\n");
 //				$sql = "update container set s_reference = :ref where i_autocode = :code";
 //
 //				$ins = $pdo->prepare($sql);
@@ -123,6 +123,14 @@ function threat()
 //				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
 //				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
 //				$ins->execute();
+
+				$sql = "update image_infofr set s_objectname = :title where i_foreigncode = :code";
+
+				$ins = $pdo->prepare($sql);
+				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+				$ins->bindValue(':title', $title, PDO::PARAM_STR);
+				$ins->execute();
+
 			}
 
 			//            print_r($pdo->errorInfo());
