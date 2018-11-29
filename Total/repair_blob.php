@@ -1,5 +1,21 @@
 <?php
 
+include_once 'iptc.php';
+
+function insertIptc($file, $item)
+{
+
+	$cc 	= new iptc();
+	$cc->setImg($file);
+
+	$ipt = $cc->readIPTC();
+
+	var_dump($ipt);die;
+
+
+
+}
+
 function threat()
 {
 	$VALEUR_hote = '127.0.0.1';
@@ -18,7 +34,7 @@ function threat()
 		$sql = "select co.i_autocode id, co.*, cq.*
 				from container  co
           join conversion_queue cq on cq.i_containercode = co.i_autocode 
-				where co.i_autocode in (70595, 70591, 70592)
+				where co.i_autocode in (70461)
 				
 				order by 1 desc
 				";
@@ -56,65 +72,67 @@ function threat()
 			if (file_exists($newfname)){
 				print("\t".'Convert file: '.$newfname."\n");
 
-				if ($fileext == 'mp4'){
+				insertIptc($newfname, $cont->id);
 
-					$convert 	= "ffmpeg -i \"".$newfname."\" -ss 10 -vframes 1 -s 1920x1080 \"".$tmpdir.$id.'.jpg'."\"";
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
-
-					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
-
-					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
-				}elseif($fileext == 'zip') {
-					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $webdir.$id.'.jpg');
-					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $thumbdir.$id.'.jpg');
-				}
-				elseif($fileext == 'pptx') {
-					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $webdir.$id.'.jpg');
-					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $thumbdir.$id.'.jpg');
-				}elseif($fileext == 'pdf'){
-					$convert = "sudo /var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
-					rename($tmpdir.$id.'.jpg', $webdir.$id.'.jpg');
-					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 280 280  \"".$newfname."\"";
-					print("\t\t".'Convert : '.$convert."\n");
-					exec($convert);
-					rename($tmpdir.$id.'.jpg', $thumbdir.$id.'.jpg');
-				}
-				else{
-						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
-						print("\t\t".'Convert : '.$convert."\n");
-						exec($convert);
-
-
-						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
-						print("\t\t".'Convert : '.$convert."\n");
-						exec($convert);
-					}
-
-
-
-				print("\t".'Update Database file: '.$ref."\n");
-				$sql = "update container set s_reference = :ref where i_autocode = :code";
-
-				$ins = $pdo->prepare($sql);
-				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-				$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
-				$ins->execute();
-
-				$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
-
-				$ins = $pdo->prepare($sql);
-				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
-				$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
-				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
-				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
-				$ins->execute();
+//				if ($fileext == 'mp4'){
+//
+//					$convert 	= "ffmpeg -i \"".$newfname."\" -ss 10 -vframes 1 -s 1920x1080 \"".$tmpdir.$id.'.jpg'."\"";
+//					print("\t\t".'Convert : '.$convert."\n");
+//					exec($convert);
+//
+//					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
+//					print("\t\t".'Convert : '.$convert."\n");
+//					exec($convert);
+//
+//					$convert 	= 'convert '.$tmpdir.$id.'.jpg'.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
+//					print("\t\t".'Convert : '.$convert."\n");
+//					exec($convert);
+//				}elseif($fileext == 'zip') {
+//					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $webdir.$id.'.jpg');
+//					copy("/var/www/projects/total-1410-refontedam/back/ico/zip.jpg", $thumbdir.$id.'.jpg');
+//				}
+//				elseif($fileext == 'pptx') {
+//					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $webdir.$id.'.jpg');
+//					copy("/var/www/projects/total-1410-refontedam/back/ico/pptx.jpg", $thumbdir.$id.'.jpg');
+//				}elseif($fileext == 'pdf'){
+//					$convert = "sudo /var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 640 640  \"".$newfname."\"";
+//					print("\t\t".'Convert : '.$convert."\n");
+//					exec($convert);
+//					rename($tmpdir.$id.'.jpg', $webdir.$id.'.jpg');
+//					$convert = "/var/www/utils/nconvert/nconvert -out jpeg -o \"".$tmpdir.$id.'.jpg'."\" -ratio -resize 280 280  \"".$newfname."\"";
+//					print("\t\t".'Convert : '.$convert."\n");
+//					exec($convert);
+//					rename($tmpdir.$id.'.jpg', $thumbdir.$id.'.jpg');
+//				}
+//				else{
+//						$convert = 'convert '.$newfname.' -resize 640x640 -quality 95 '.$webdir.$id.'.jpg';
+//						print("\t\t".'Convert : '.$convert."\n");
+//						exec($convert);
+//
+//
+//						$convert = 'convert '.$newfname.' -resize 280x280 -quality 95 '.$thumbdir.$id.'.jpg';
+//						print("\t\t".'Convert : '.$convert."\n");
+//						exec($convert);
+//					}
+//
+//
+//
+//				print("\t".'Update Database file: '.$ref."\n");
+//				$sql = "update container set s_reference = :ref where i_autocode = :code";
+//
+//				$ins = $pdo->prepare($sql);
+//				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+//				$ins->bindValue(':ref', $ref, PDO::PARAM_STR);
+//				$ins->execute();
+//
+//				$sql = "update image_file set s_path = :fpath, s_filename = :fname, s_fileformat = :ext where i_foreigncode = :code";
+//
+//				$ins = $pdo->prepare($sql);
+//				$ins->bindValue(':code', $cont->id, PDO::PARAM_INT);
+//				$ins->bindValue(':fpath', $newfname, PDO::PARAM_STR);
+//				$ins->bindValue(':fname', $ref, PDO::PARAM_STR);
+//				$ins->bindValue(':ext', '.'.$fileext, PDO::PARAM_STR);
+//				$ins->execute();
 			}
 
 			//            print_r($pdo->errorInfo());
