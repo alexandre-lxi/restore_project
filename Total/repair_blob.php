@@ -2,6 +2,8 @@
 
 include 'PDFInfo.php';
 include 'iptc.php';
+include("/var/www/utils/getid3/getid3/getid3.php");
+
 
 function threat()
 {
@@ -77,12 +79,10 @@ function threat()
 //					exec($convert);
 
 
-					$ipt = new iptc();
-					$ipt->setImg($newfname);
+					$getID3 = new getID3();
+					$fileinfo = $getID3->analyze($newfname);
 
-					$ipts  = $ipt->readIPTC();
-
-					print_r($ipts);
+					var_dump($fileinfo);
 
 
 				}elseif($fileext == 'zip') {
