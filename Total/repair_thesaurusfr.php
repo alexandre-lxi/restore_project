@@ -40,7 +40,12 @@ function threat()
 
 
 			if ($topic->i_level > $lvl){
-				$lvl = $topic->i_level;
+				if ($topic->i_level > $lvl+1){
+					$lvl = $lvl+1;
+				}else{
+					$lvl = $topic->i_level;
+				}
+
 
 				if (array_key_exists($lvl-1, $tabs)){
 					$lft = $tabs[$lvl-1]['rgt'];
@@ -128,7 +133,7 @@ function threat()
 
 			$ins = $pdo->prepare($sql);
 			$ins->bindValue(':i_autocode', $topic->i_autocode, PDO::PARAM_INT);
-			$ins->bindValue(':i_level', $topic->i_level, PDO::PARAM_INT);
+			$ins->bindValue(':i_level', $lvl, PDO::PARAM_INT);
 			$ins->bindValue(':i_leftidx', $lft, PDO::PARAM_INT);
 			$ins->bindValue(':i_rightidx', $rgt, PDO::PARAM_INT);
 			$ins->bindValue(':s_label', $topic->s_label, PDO::PARAM_STR);
