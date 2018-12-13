@@ -132,13 +132,10 @@ function threat()
 
 			//            print_r($pdo->errorInfo());
 		}
-
-
-	} catch (PDOException $Exception) {
+	} catch (Exception $Exception) {
 		// PHP Fatal Error. Second Argument Has To Be An Integer, But PDOException::getCode Returns A
 		// String.
-		echo $Exception->getMessage().' : '.$Exception->getCode();
-		die;
+		print ($Exception->getMessage().' : '.$Exception->getCode());
 	}
 }
 
