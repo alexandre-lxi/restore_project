@@ -17,7 +17,7 @@ function threat()
 
 		$sql = "select *
                 from topic0                
-                where i_leftidx >= 9788
+                where i_leftidx >= 5
                 and i_level >=2
                 order by i_leftidx";
 
@@ -27,7 +27,7 @@ function threat()
 
 		$topics = $rqt->fetchAll(PDO::FETCH_OBJ);
 
-		$lft = 9788;
+		$lft = 5;
 		$rgt = $lft+1;
 		$lvl = 0;
 
@@ -53,7 +53,7 @@ function threat()
 				for ($i = $lvl-1; $i >=2; $i--){
 					$tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
 
-					$sql = "update topic0_restore set i_rightidx = :rgt
+					$sql = "update thesaurusfr_restore set i_rightidx = :rgt
                     where i_autocode = :i_autocode";
 					$upd = $pdo->prepare($sql);
 					$upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
@@ -77,7 +77,7 @@ function threat()
 				for ($i = $lvl-1; $i >=2; $i--){
 					$tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
 
-					$sql = "update topic0_restore set i_rightidx = :rgt
+					$sql = "update thesaurusfr_restore set i_rightidx = :rgt
                     where i_autocode = :i_autocode";
 					$upd = $pdo->prepare($sql);
 					$upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
@@ -103,7 +103,7 @@ function threat()
 				for ($i = $lvl-1; $i >=2; $i--){
 					$tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
 
-					$sql = "update topic0_restore set i_rightidx = :rgt
+					$sql = "update thesaurusfr_restore set i_rightidx = :rgt
                     where i_autocode = :i_autocode";
 					$upd = $pdo->prepare($sql);
 					$upd->bindValue(':i_autocode', $tabs[$i]['id'], PDO::PARAM_INT);
@@ -116,7 +116,7 @@ function threat()
 			print( str_repeat("\t", $topic->i_level-2 )."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
 
 
-			$sql = "insert into topic0_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
+			$sql = "insert into thesaurusfr_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
                 VALUES (:i_autocode, :i_level, :i_leftidx, :i_rightidx, :s_label)";
 
 			$ins = $pdo->prepare($sql);
