@@ -20,7 +20,7 @@ function threat()
                 where i_leftidx >= 5
                 and i_level >=2
                 order by i_leftidx
-                limit 100";
+                limit 10";
 
 
 		$rqt = $pdo->prepare($sql);
@@ -36,6 +36,9 @@ function threat()
 
 
 		foreach ($topics as $topic) {
+			print( str_repeat("\t", $topic->i_level-2 )."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
+
+
 			if ($topic->i_level > $lvl){
 				$lvl = $topic->i_level;
 
@@ -114,7 +117,6 @@ function threat()
 			}
 
 			//            print_r($tabs);
-			print( str_repeat("\t", $topic->i_level-2 )."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
 
 
 			$sql = "insert into thesaurusfr_restore(i_autocode, i_level, i_leftidx, i_rightidx, s_label)
