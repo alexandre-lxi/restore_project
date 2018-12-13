@@ -20,7 +20,7 @@ function threat()
                 where i_leftidx >= 5
                 and i_level >=2
                 order by i_leftidx
-                limit 10";
+                ";
 
 
 		$rqt = $pdo->prepare($sql);
