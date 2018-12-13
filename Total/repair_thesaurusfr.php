@@ -30,7 +30,7 @@ function threat()
 
 		$lft = 5;
 		$rgt = $lft+1;
-		$lvl = 0;
+		$lvl = 1;
 
 		$tabs = array();
 
