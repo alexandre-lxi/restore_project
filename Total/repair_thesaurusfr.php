@@ -28,13 +28,13 @@ function threat()
 
 		$lft = 5;
 		$rgt = $lft+1;
-		$lvl = 1;
+		$lvl = 0;
 
 		$tabs = array();
 
 
 		foreach ($topics as $topic) {
-			print( str_repeat("\t", $topic->i_level-2 )."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
+			print( str_repeat("\t", $topic->i_level)."lvl:".$topic->i_level." label:". utf8_encode($topic->s_label)." lft:".$lft." rgt:".$rgt."\n");
 
 
 			if ($topic->i_level > $lvl){
