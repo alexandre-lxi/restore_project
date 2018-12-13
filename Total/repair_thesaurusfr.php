@@ -57,6 +57,10 @@ function threat()
 				for ($i = $lvl-1; $i >=2; $i--){
 					$tabs[$i]['rgt'] = $tabs[$i+1]['rgt']+1;
 
+					if (!array_key_exists('id', $tabs[$i])){
+						print_r($tabs);
+					}
+
 					$sql = "update thesaurusfr_restore set i_rightidx = :rgt
                     where i_autocode = :i_autocode";
 					$upd = $pdo->prepare($sql);
