@@ -16,7 +16,7 @@ function threat()
 		);
 
 		$sql = "select *
-                from topic0                
+                from thesaurusfr                
                 where i_leftidx >= 5
                 and i_level >=2
                 order by i_leftidx
